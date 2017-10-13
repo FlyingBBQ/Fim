@@ -8,3 +8,5 @@
 #define SCREEN_HEIGHT 480
 
 #define TILESIZE 16
+
+#define MAX_SPRITES 4

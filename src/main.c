@@ -5,7 +5,7 @@ int main(int argc, char *argv[])
 	int go;
 	
 	/* Start up SDL */
-	init("Parallel Realities Tutorial 1");
+	init("Fim the game");
 
 	/* Call the cleanup function when the program exits */
 	atexit(cleanup);
