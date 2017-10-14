@@ -1,6 +1,6 @@
-CFLAGS = -Wall -pedantic -Werror
+CFLAGS = -Wall -pedantic -Werror -g
 LFLAGS := $(shell sdl2-config --libs) -lSDL2_image
-OBJS = gfx.o init.o input.o main.o
+OBJS = sprites.o gfx.o init.o input.o main.o 
 PROG = game
 CXX = gcc
 

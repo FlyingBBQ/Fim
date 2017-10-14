@@ -22,9 +22,13 @@ SDL_Texture *loadImage(char *name)
         printf("Couldn't create texture %s\n", SDL_GetError());
     }
 
-    fim.iTexture = newTexture;
-    fim.iWidth = loadedImage->w;
-    fim.iHeight = loadedImage->h;
+    texture_map.iTexture = newTexture;
+    texture_map.iWidth = loadedImage->w;
+    texture_map.iHeight = loadedImage->h;
+
+    printf("loaded");
+    //set the clips for every texture
+    setClip();
 
     //Remove old loaded surface
     SDL_FreeSurface(loadedImage);
@@ -32,14 +36,22 @@ SDL_Texture *loadImage(char *name)
     return newTexture;
 }
 
-void render(int x, int y)
+//render function to put texture at position and with size. 
+void render(int x, int y, SDL_Rect *clip)
 {
     SDL_Rect dest;
 
+    if (clip == NULL)
+    {
+        printf("Couldn't create clip %s\n", SDL_GetError());
+    }
+
     dest.x = x;
     dest.y = y;
-    dest.w = fim.iWidth;
-    dest.h = fim.iHeight;
+    dest.w = clip->w;
+    dest.h = clip->h;
 
-    SDL_RenderCopy(gRenderer, fim.iTexture, NULL, &dest);
+    //renderer, source texture, source SDL_Rect structure (NULL for entire texture), destination SDL_Rect
+    SDL_RenderCopy(gRenderer, texture_map.iTexture, clip, &dest);
 }
+

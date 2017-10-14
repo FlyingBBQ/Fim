@@ -2,4 +2,5 @@
 
 extern SDL_Renderer *gRenderer;
 
-extern Entity fim;
+extern Entity texture_map;
+extern void setClip( void );

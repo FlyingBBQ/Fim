@@ -10,3 +10,11 @@
 #define TILESIZE 16
 
 #define MAX_SPRITES 4
+
+enum 
+{
+    TEX_sprite = 0,
+    TEX_bg,
+    TEX_grass,
+    TEX_water,
+};
