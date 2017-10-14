@@ -25,7 +25,6 @@ int main(int argc, char *argv[])
         render(0, 32, &gClips[TEX_grass]);
         render(16, 32, &gClips[TEX_grass]);
         render(texture_map.xpos, texture_map.ypos, &gClips[TEX_sprite]);
-        printf("%d\n", texture_map.xpos);
         SDL_RenderPresent(gRenderer);
 		
 		/* Sleep briefly to stop sucking up all the CPU time */
