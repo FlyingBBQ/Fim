@@ -13,7 +13,7 @@
 
 enum 
 {
-    TEX_sprite = 0,
+    TEX_sprite,
     TEX_bg,
     TEX_grass,
     TEX_water,

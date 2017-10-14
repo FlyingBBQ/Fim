@@ -2,7 +2,7 @@
 
 SDL_Window *gWindow;
 SDL_Renderer *gRenderer;
-SDL_Rect *gClips[MAX_SPRITES];
+SDL_Rect gClips[MAX_SPRITES];
 
 Entity texture_map;
 

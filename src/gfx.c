@@ -26,7 +26,6 @@ SDL_Texture *loadImage(char *name)
     texture_map.iWidth = loadedImage->w;
     texture_map.iHeight = loadedImage->h;
 
-    printf("loaded");
     //set the clips for every texture
     setClip();
 

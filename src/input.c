@@ -15,12 +15,12 @@ void getInput()
 		const Uint8 *keyState = SDL_GetKeyboardState(NULL);
         if (keyState[SDL_SCANCODE_H])
         {
-            texture_map.xpos -= TILESIZE;
+            texture_map.xpos -= TILESIZE/2;
             if(texture_map.xpos < 0) {texture_map.xpos = 0;}
         }
         else if (keyState[SDL_SCANCODE_J])
         {
-            texture_map.ypos += TILESIZE;
+            texture_map.ypos += TILESIZE/2;
             if(texture_map.ypos + texture_map.iHeight >= SCREEN_HEIGHT) 
             {
                 texture_map.ypos = SCREEN_HEIGHT - texture_map.iHeight+1;
@@ -28,12 +28,12 @@ void getInput()
         }
         else if (keyState[SDL_SCANCODE_K])
         {
-            texture_map.ypos -= TILESIZE;
+            texture_map.ypos -= TILESIZE/2;
             if(texture_map.ypos < 0) {texture_map.ypos = 0;}
         }
         else if (keyState[SDL_SCANCODE_L])
         {
-            texture_map.xpos += TILESIZE;
+            texture_map.xpos += TILESIZE/2;
             if(texture_map.xpos + texture_map.iWidth >= SCREEN_WIDTH) 
             {
                 texture_map.xpos = SCREEN_WIDTH - texture_map.iWidth+1;
@@ -43,5 +43,6 @@ void getInput()
         {
             //nothing
         }
+        SDL_Delay(1);
 	}
 }

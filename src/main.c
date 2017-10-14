@@ -15,16 +15,17 @@ int main(int argc, char *argv[])
 	/* Loop indefinitely for messages */
 	while (go == 1)
 	{
-        printf("start");
 		getInput();
 
         SDL_RenderClear(gRenderer);
 
         //Draw the image on the screen
         loadImage("gfx/sprite.png");
-        //render(xpos, ypos, NULL);
-        render(0, 0, gClips[TEX_sprite]);
-        //render(0, 30, &gClips[TEX_grass]);
+        render(0, 16, &gClips[TEX_grass]);
+        render(0, 32, &gClips[TEX_grass]);
+        render(16, 32, &gClips[TEX_grass]);
+        render(texture_map.xpos, texture_map.ypos, &gClips[TEX_sprite]);
+        printf("%d\n", texture_map.xpos);
         SDL_RenderPresent(gRenderer);
 		
 		/* Sleep briefly to stop sucking up all the CPU time */
