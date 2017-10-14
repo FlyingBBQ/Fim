@@ -12,3 +12,5 @@ extern void getInput(void);
 extern SDL_Texture *loadImage(char *);
 extern void render(int, int, SDL_Rect *);
 extern void draw(void);
+extern void genLevel(void);
+extern void genPath(int);

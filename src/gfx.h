@@ -7,5 +7,4 @@ extern Entity texture_map;
 extern Tiles toTales[TILES];
 
 extern void setClip(void);
-extern void genLevel(void);
 

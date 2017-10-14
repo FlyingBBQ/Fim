@@ -15,6 +15,12 @@ int main(int argc, char *argv[])
 	/* Loop indefinitely for messages */
 	while (go == 1)
 	{
+        // generate the level and solutions
+        genLevel();
+        genPath(EAST);
+
+        while (1)
+        {
 		getInput();
 
         SDL_RenderClear(gRenderer);
@@ -27,6 +33,7 @@ int main(int argc, char *argv[])
 		
 		/* Sleep briefly to stop sucking up all the CPU time */
 		SDL_Delay(16);
+        }
 	}
 	
 	/* Exit the program */

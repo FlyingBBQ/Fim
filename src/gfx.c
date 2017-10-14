@@ -56,13 +56,6 @@ void render(int x, int y, SDL_Rect *clip)
 
 void draw(void)
 {
-    // set the tile parameters
-    genLevel();
-
-    // set some custom tiles
-    toTales[16].type = TEX_water;
-    toTales[67].type = TEX_grass;
-
     // loop through all tiles and draw them
     for (int i = 0; i < TILES; i++)
     {

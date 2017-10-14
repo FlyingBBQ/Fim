@@ -7,6 +7,8 @@ void genSol(int dir)
 
     // set the ending side
     sol[0] = dir;
+    printf("sol: ");
+    printf("%d", sol[0]);
     
     // loop through the path 
     for(int i = 1; i < SOLSIZE; i++)
@@ -15,7 +17,7 @@ void genSol(int dir)
         int r = rand() % 4;
 
         // assign a random direction for the solution path
-        switch(r)
+        switch (r)
         {
             case 0:
                 sol[i] = NORTH;
@@ -33,6 +35,66 @@ void genSol(int dir)
         printf("%d", sol[i]);
     }
     printf("\n");
+}
+
+void genPath(int dir)
+{
+    // generate the solution before generating the path
+    genSol(dir);
+
+    // generate random number for the final tile and ID position
+    int r_init = rand() % LEVELSIZE;
+    int r_pos = rand() % LEVELSIZE-1;
+    int posID;
+
+    for (int i = 0; i < SOLSIZE; i++)
+    {
+        switch (sol[i])
+        {
+            case NORTH:
+                // if it's the final tile
+                if (i == 0) 
+                {
+                    // update the array of collision tiles
+                    colTiles[0] = r_init; 
+                    toTales[colTiles[0]].type = TEX_water;
+                    // randomly move the player south to a position that can be reached with NORTH
+                    posID = colTiles[0]+(r_pos*LEVELSIZE);
+                }
+                else
+                {
+                    // put a tile NORTH of last player position
+                    colTiles[i] = posID-LEVELSIZE;
+                    toTales[colTiles[i]].type = TEX_grass;
+                    // randomly move the player south to a position that can be reached with NORTH
+                    int column = (TILES-colTiles[i]) / LEVELSIZE;
+                    int r = rand() % column; 
+                    posID = colTiles[i]+(r*LEVELSIZE);
+                }
+                break;
+            case EAST:
+                if (i == 0) 
+                {
+                    colTiles[0] = (LEVELSIZE-1)+(r_init*LEVELSIZE);
+                    toTales[colTiles[0]].type = TEX_water;
+                }
+                break;
+            case SOUTH:
+                if (i == 0) 
+                {
+                    colTiles[0] = r_init+(LEVELSIZE*(LEVELSIZE-1));
+                    toTales[colTiles[0]].type = TEX_water;
+                }
+                break;
+            case WEST:
+                if (i == 0) 
+                {
+                    colTiles[0] = r_init*LEVELSIZE;
+                    toTales[colTiles[0]].type = TEX_water;
+                }
+                break;
+        }
+    }
 }
 
 void genLevel(void)

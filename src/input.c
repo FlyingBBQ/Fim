@@ -38,7 +38,6 @@ void getInput()
             else if (keyState[SDL_SCANCODE_L])
             {
                 texture_map.xpos += TILESIZE;
-                genSol(EAST);
                 if(texture_map.xpos + texture_map.iWidth >= SCREEN_WIDTH) 
                 {
                     texture_map.xpos = SCREEN_WIDTH - texture_map.iWidth+1;
