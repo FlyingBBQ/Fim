@@ -21,9 +21,7 @@ int main(int argc, char *argv[])
 
         //Draw the image on the screen
         loadImage("gfx/sprite.png");
-        render(0, 16, &gClips[TEX_grass]);
-        render(0, 32, &gClips[TEX_grass]);
-        render(16, 32, &gClips[TEX_grass]);
+        draw();
         render(texture_map.xpos, texture_map.ypos, &gClips[TEX_sprite]);
         SDL_RenderPresent(gRenderer);
 		

@@ -54,3 +54,32 @@ void render(int x, int y, SDL_Rect *clip)
     SDL_RenderCopy(gRenderer, texture_map.iTexture, clip, &dest);
 }
 
+void draw(void)
+{
+    // set the tile parameters
+    genLevel();
+
+    // set some custom tiles
+    toTales[16].type = TEX_water;
+    toTales[67].type = TEX_grass;
+
+    // loop through all tiles and draw them
+    for (int i = 0; i < TILES; i++)
+    {
+        switch (toTales[i].type)
+        {
+            case TEX_sprite:
+                render(toTales[i].xT, toTales[i].yT, &gClips[TEX_sprite]); 
+                break;
+            case TEX_bg:
+                render(toTales[i].xT, toTales[i].yT, &gClips[TEX_bg]); 
+                break;
+            case TEX_grass:
+                render(toTales[i].xT, toTales[i].yT, &gClips[TEX_grass]); 
+                break;
+            case TEX_water:
+                render(toTales[i].xT, toTales[i].yT, &gClips[TEX_water]); 
+                break;
+        }
+    }
+}

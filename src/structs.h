@@ -6,3 +6,9 @@ typedef struct Entity
     int xpos, ypos;
     int iWidth, iHeight;
 } Entity;
+
+typedef struct Tiles
+{
+    int type;
+    int xT, yT;
+} Tiles;

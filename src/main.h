@@ -11,3 +11,4 @@ extern void cleanup(void);
 extern void getInput(void);
 extern SDL_Texture *loadImage(char *);
 extern void render(int, int, SDL_Rect *);
+extern void draw(void);
