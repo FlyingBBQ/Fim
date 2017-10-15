@@ -43,7 +43,7 @@ void genPath(int dir)
     genSol(dir);
 
     // generate random number for the final tile and ID position
-    int r_init = rand() % LEVELSIZE;
+    int r_init = 1 + (rand() % (LEVELSIZE-2));
     int r_pos = rand() % LEVELSIZE-1;
     int posID;
 
@@ -77,6 +77,14 @@ void genPath(int dir)
                 {
                     colTiles[0] = (LEVELSIZE-1)+(r_init*LEVELSIZE);
                     toTales[colTiles[0]].type = TEX_water;
+                    posID = colTiles[0]-r_pos;
+                }
+                else
+                {
+                    colTiles[i] = posID+1;
+                    toTales[colTiles[i]].type = TEX_grass;
+                    int r = rand() % (colTiles[i] % LEVELSIZE);
+                    posID = colTiles[i]-r;
                 }
                 break;
             case SOUTH:
@@ -84,6 +92,14 @@ void genPath(int dir)
                 {
                     colTiles[0] = r_init+(LEVELSIZE*(LEVELSIZE-1));
                     toTales[colTiles[0]].type = TEX_water;
+                    posID = colTiles[0]-(r_pos*LEVELSIZE);
+                }
+                else
+                {
+                    colTiles[i] = posID+LEVELSIZE;
+                    toTales[colTiles[i]].type = TEX_grass;
+                    int r = rand() % (colTiles[i] / LEVELSIZE);
+                    posID = colTiles[i]-(r*LEVELSIZE);
                 }
                 break;
             case WEST:
@@ -91,10 +107,20 @@ void genPath(int dir)
                 {
                     colTiles[0] = r_init*LEVELSIZE;
                     toTales[colTiles[0]].type = TEX_water;
+                    posID = colTiles[0]+r_pos;
+                }
+                else
+                {
+                    colTiles[i] = posID-1;
+                    toTales[colTiles[i]].type = TEX_grass;
+                    int r = rand() % (LEVELSIZE-(colTiles[i] % LEVELSIZE));
+                    posID = colTiles[i]+r;
                 }
                 break;
         }
     }
+    // set the player at the start of the path
+    toTales[posID].type = TEX_sprite;
 }
 
 void genLevel(void)

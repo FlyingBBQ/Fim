@@ -17,18 +17,20 @@ int main(int argc, char *argv[])
 	{
         // generate the level and solutions
         genLevel();
-        genPath(EAST);
+        genPath(WEST);
 
         while (1)
         {
 		getInput();
+        genLevel();
+        genPath(WEST);
 
         SDL_RenderClear(gRenderer);
 
         //Draw the image on the screen
         loadImage("gfx/sprite.png");
         draw();
-        render(texture_map.xpos, texture_map.ypos, &gClips[TEX_sprite]);
+        //render(texture_map.xpos, texture_map.ypos, &gClips[TEX_sprite]);
         SDL_RenderPresent(gRenderer);
 		
 		/* Sleep briefly to stop sucking up all the CPU time */
