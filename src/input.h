@@ -1,3 +1,3 @@
 #include "structs.h"
 
-extern Entity texture_map;
+extern struct Entity texture_map;

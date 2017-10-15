@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
         {
 		getInput();
         genLevel();
-        genPath(WEST);
+        genPath(NORTH);
 
         SDL_RenderClear(gRenderer);
 

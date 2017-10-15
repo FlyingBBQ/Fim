@@ -11,4 +11,6 @@ typedef struct Tiles
 {
     int type;
     int xT, yT;
+    int dir;
+    int border;
 } Tiles;
