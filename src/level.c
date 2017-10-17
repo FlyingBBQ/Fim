@@ -9,7 +9,7 @@ void genSol(int dir)
     sol[0] = dir;
     printf("sol: ");
     printf("%d", sol[0]);
-    
+
     // loop through the path 
     for(int i = 1; i < SOLSIZE; i++)
     {
@@ -67,9 +67,10 @@ void genPath(int dir)
                     colTiles[i] = posID-LEVELSIZE;
                     toTales[colTiles[i]].type = TEX_grass;
                     // randomly move the player south to a position that can be reached with NORTH
-                    int column = (TILES-colTiles[i]) / LEVELSIZE;
-                    int r = rand() % column; 
-                    posID = colTiles[i] + (r*LEVELSIZE) + LEVELSIZE;
+                    if (colSpace(posID, SOUTH) > 0)
+                    {
+                        posID += (1 + rand() % colSpace(posID, SOUTH)) * LEVELSIZE;
+                    }
                 }
                 break;
             case EAST:
@@ -83,10 +84,9 @@ void genPath(int dir)
                 {
                     colTiles[i] = posID+1;
                     toTales[colTiles[i]].type = TEX_grass;
-                    int r = rand() % (colTiles[i] % LEVELSIZE);
-                    if (colTiles[i] > r)
+                    if (rowSpace(posID, WEST) > 0)
                     {
-                        posID = colTiles[i] - r - 1;
+                        posID -= 1 + rand() % rowSpace(posID, WEST);
                     }
                 }
                 break;
@@ -96,16 +96,15 @@ void genPath(int dir)
                     colTiles[0] = r_init+(LEVELSIZE*(LEVELSIZE-1));
                     toTales[colTiles[0]].type = TEX_water;
                     posID = colTiles[0] - (r_pos*LEVELSIZE); 
-
-                    printf("%d: ", colTiles[0]);
-                    printf(": %d\n", posID);
                 }
                 else if (sol[i-1] != SOUTH)
                 {
                     colTiles[i] = posID+LEVELSIZE;
                     toTales[colTiles[i]].type = TEX_grass;
-                    int r = rand() % (colTiles[i] / LEVELSIZE);
-                    posID = colTiles[i] - (r*LEVELSIZE) - LEVELSIZE;
+                    if (colSpace(posID, NORTH) > 0)
+                    {
+                        posID -= (1 + rand() % colSpace(posID, NORTH)) * LEVELSIZE;
+                    }
                 }
                 break;
             case WEST:
@@ -119,8 +118,10 @@ void genPath(int dir)
                 {
                     colTiles[i] = posID-1;
                     toTales[colTiles[i]].type = TEX_grass;
-                    int r = rand() % (LEVELSIZE - 1 - (colTiles[i] % LEVELSIZE));
-                    posID = colTiles[i] + r + 1;
+                    if (rowSpace(posID, EAST) > 0)
+                    {
+                        posID += 1 + rand() % rowSpace(posID, EAST);
+                    }
                 }
                 break;
         }

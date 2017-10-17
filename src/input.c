@@ -17,53 +17,34 @@ void getInput()
         if (event.type == SDL_KEYDOWN)
         {
             const Uint8 *keyState = SDL_GetKeyboardState(NULL);
-            if (keyState[SDL_SCANCODE_H])
+            if (keyState[SDL_SCANCODE_LEFT])
             {
                 Fim.prev = Fim.pos;
-                while (toTales[Fim.pos-1].border != TRUE && toTales[Fim.pos-1].type != TEX_grass)
-                {
-                    Fim.pos -= 1;
-                }
+                Fim.pos -= rowSpace(Fim.pos, WEST);
                 Fim.moves -= 1;
             }
-            else if (keyState[SDL_SCANCODE_J])
+            else if (keyState[SDL_SCANCODE_DOWN])
             {
                 Fim.prev = Fim.pos;
-                if ((Fim.pos + LEVELSIZE) < TILES)
-                {
-                    while (toTales[Fim.pos+LEVELSIZE].border != TRUE && toTales[Fim.pos+LEVELSIZE].type != TEX_grass)
-                    {
-                        Fim.pos += LEVELSIZE;
-                    }
-                    Fim.moves -= 1;
-                }
+                Fim.pos += colSpace(Fim.pos, SOUTH) * LEVELSIZE;
+                Fim.moves -= 1;
             }
-            else if (keyState[SDL_SCANCODE_K])
+            else if (keyState[SDL_SCANCODE_UP])
             {
                 Fim.prev = Fim.pos;
-                if ((Fim.pos - LEVELSIZE) > 0)
-                {
-                    while (toTales[Fim.pos-LEVELSIZE].border != TRUE && toTales[Fim.pos-LEVELSIZE].type != TEX_grass)
-                    {
-                        Fim.pos -= LEVELSIZE;
-                    }
-                    Fim.moves -= 1;
-                }
+                Fim.pos -= colSpace(Fim.pos, NORTH) * LEVELSIZE;
+                Fim.moves -= 1;
             }
-            else if (keyState[SDL_SCANCODE_L])
+            else if (keyState[SDL_SCANCODE_RIGHT])
             {
                 Fim.prev = Fim.pos;
-                while (toTales[Fim.pos+1].border != TRUE && toTales[Fim.pos+1].type != TEX_grass)
-                {
-                    Fim.pos += 1;
-                }
+                Fim.pos += rowSpace(Fim.pos, EAST);
                 Fim.moves -= 1;
             }
             else
             {
                 //nothing
             }
-            printf("%d\n", Fim.pos);
         }
     }
 }

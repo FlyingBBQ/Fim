@@ -17,30 +17,33 @@ int main(int argc, char *argv[])
     while (go == 1)
     {
         // generate the level and solutions
-        genLevel();
-        genPath(NORTH);
-
-        alive = 1;
-
-        while (alive == 1)
+        for (int i = 0; i < 4; i++)
         {
-            getInput();
+            genLevel();
+            genPath(i);
 
-            SDL_RenderClear(gRenderer);
+            alive = 1;
 
-            //Draw the image on the screen
-            loadImage("gfx/sprite.png");
-            draw();
-            render(toTales[Fim.pos].xT, toTales[Fim.pos].yT, &gClips[TEX_sprite]);
-            SDL_RenderPresent(gRenderer);
-
-            if (Fim.moves <= 0)
+            while (alive == 1)
             {
-                alive = 0;
-            }
+                getInput();
 
-            /* Sleep briefly to stop sucking up all the CPU time */
-            SDL_Delay(16);
+                SDL_RenderClear(gRenderer);
+
+                //Draw the image on the screen
+                loadImage("gfx/sprite.png");
+                draw();
+                render(toTales[Fim.pos].xT, toTales[Fim.pos].yT, &gClips[TEX_sprite]);
+                SDL_RenderPresent(gRenderer);
+
+                if (Fim.moves <= 0)
+                {
+                    alive = 0;
+                }
+
+                /* Sleep briefly to stop sucking up all the CPU time */
+                SDL_Delay(16);
+            }
         }
     }
 
