@@ -12,41 +12,58 @@ void getInput()
         {
             exit(0);
         }
-        
+
         // only check for key down states, otherwise double execution
         if (event.type == SDL_KEYDOWN)
         {
             const Uint8 *keyState = SDL_GetKeyboardState(NULL);
             if (keyState[SDL_SCANCODE_H])
             {
-                texture_map.xpos -= TILESIZE;
-                if(texture_map.xpos < 0) {texture_map.xpos = 0;}
+                Fim.prev = Fim.pos;
+                while (toTales[Fim.pos-1].border != TRUE && toTales[Fim.pos-1].type != TEX_grass)
+                {
+                    Fim.pos -= 1;
+                }
+                Fim.moves -= 1;
             }
             else if (keyState[SDL_SCANCODE_J])
             {
-                texture_map.ypos += TILESIZE;
-                if(texture_map.ypos + texture_map.iHeight >= SCREEN_HEIGHT) 
+                Fim.prev = Fim.pos;
+                if ((Fim.pos + LEVELSIZE) < TILES)
                 {
-                    texture_map.ypos = SCREEN_HEIGHT - texture_map.iHeight+1;
+                    while (toTales[Fim.pos+LEVELSIZE].border != TRUE && toTales[Fim.pos+LEVELSIZE].type != TEX_grass)
+                    {
+                        Fim.pos += LEVELSIZE;
+                    }
+                    Fim.moves -= 1;
                 }
             }
             else if (keyState[SDL_SCANCODE_K])
             {
-                texture_map.ypos -= TILESIZE;
-                if(texture_map.ypos < 0) {texture_map.ypos = 0;}
+                Fim.prev = Fim.pos;
+                if ((Fim.pos - LEVELSIZE) > 0)
+                {
+                    while (toTales[Fim.pos-LEVELSIZE].border != TRUE && toTales[Fim.pos-LEVELSIZE].type != TEX_grass)
+                    {
+                        Fim.pos -= LEVELSIZE;
+                    }
+                    Fim.moves -= 1;
+                }
             }
             else if (keyState[SDL_SCANCODE_L])
             {
-                texture_map.xpos += TILESIZE;
-                if(texture_map.xpos + texture_map.iWidth >= SCREEN_WIDTH) 
+                Fim.prev = Fim.pos;
+                while (toTales[Fim.pos+1].border != TRUE && toTales[Fim.pos+1].type != TEX_grass)
                 {
-                    texture_map.xpos = SCREEN_WIDTH - texture_map.iWidth+1;
+                    Fim.pos += 1;
                 }
+                Fim.moves -= 1;
             }
             else
             {
                 //nothing
             }
+            printf("%d\n", Fim.pos);
         }
     }
 }

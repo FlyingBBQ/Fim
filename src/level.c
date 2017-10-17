@@ -63,13 +63,13 @@ void genPath(int dir)
                 }
                 else if (sol[i-1] != NORTH)
                 {
-                        // put a tile NORTH of last player position
-                        colTiles[i] = posID-LEVELSIZE;
-                        toTales[colTiles[i]].type = TEX_grass;
-                        // randomly move the player south to a position that can be reached with NORTH
-                        int column = (TILES-colTiles[i]) / LEVELSIZE;
-                        int r = rand() % column; 
-                        posID = colTiles[i] + (r*LEVELSIZE) + LEVELSIZE;
+                    // put a tile NORTH of last player position
+                    colTiles[i] = posID-LEVELSIZE;
+                    toTales[colTiles[i]].type = TEX_grass;
+                    // randomly move the player south to a position that can be reached with NORTH
+                    int column = (TILES-colTiles[i]) / LEVELSIZE;
+                    int r = rand() % column; 
+                    posID = colTiles[i] + (r*LEVELSIZE) + LEVELSIZE;
                 }
                 break;
             case EAST:
@@ -126,7 +126,8 @@ void genPath(int dir)
         }
     }
     // set the player at the start of the path
-    toTales[posID].type = TEX_sprite;
+    Fim.pos = posID;
+    Fim.moves = SOLSIZE;
 }
 
 void genLevel(void)
@@ -145,6 +146,12 @@ void genLevel(void)
         toTales[tileID].type = TEX_bg;
         toTales[tileID].xT = xpos;
         toTales[tileID].yT = ypos;
+        toTales[tileID].border = TRUE;
+        // set the border for the right column
+        if (tileID > 0)
+        {
+            toTales[tileID-1].border = TRUE;
+        }
 
         // first tile of the row is set, move xpos once
         xpos = TILESIZE;
@@ -166,7 +173,11 @@ void genLevel(void)
             toTales[tileID].type = TEX_bg;
             toTales[tileID].xT = xpos;
             toTales[tileID].yT = ypos;
-
+            // set the borders of the first and last row
+            if (tileID < LEVELSIZE || tileID > (TILES - LEVELSIZE))
+            {
+                toTales[tileID].border = TRUE;
+            }
             // increase xpos since traversing through the row
             xpos += TILESIZE;
 

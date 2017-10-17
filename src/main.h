@@ -5,6 +5,8 @@ SDL_Renderer *gRenderer;
 SDL_Rect gClips[MAX_SPRITES];
 
 struct Entity texture_map;
+struct Player Fim;
+extern struct Tiles toTales[TILES];
 
 extern void init(char *);
 extern void cleanup(void);

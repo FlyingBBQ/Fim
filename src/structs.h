@@ -14,3 +14,9 @@ typedef struct Tiles
     int dir;
     int border;
 } Tiles;
+
+typedef struct Player
+{
+    int prev, pos;
+    int moves;
+} Player;

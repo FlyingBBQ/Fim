@@ -1,3 +1,4 @@
 #include "structs.h"
 
-extern struct Entity texture_map;
+extern struct Player Fim;
+extern struct Tiles toTales[TILES];
