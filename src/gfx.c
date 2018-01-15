@@ -2,7 +2,7 @@
 
 SDL_Texture *loadImage(char *name)
 {
-    //load the image 
+    //load the image
     SDL_Surface *loadedImage = IMG_Load(name);
     if (loadedImage == NULL)
     {
@@ -35,7 +35,7 @@ SDL_Texture *loadImage(char *name)
     return newTexture;
 }
 
-//render function to put texture at position and with size. 
+//render function to put texture at position and with size.
 void render(int x, int y, SDL_Rect *clip)
 {
     SDL_Rect dest;
@@ -62,16 +62,16 @@ void draw(void)
         switch (toTales[i].type)
         {
             case TEX_sprite:
-                render(toTales[i].xT, toTales[i].yT, &gClips[TEX_sprite]); 
+                render(toTales[i].xT, toTales[i].yT, &gClips[TEX_sprite]);
                 break;
             case TEX_bg:
-                render(toTales[i].xT, toTales[i].yT, &gClips[TEX_bg]); 
+                render(toTales[i].xT, toTales[i].yT, &gClips[TEX_bg]);
                 break;
             case TEX_grass:
-                render(toTales[i].xT, toTales[i].yT, &gClips[TEX_grass]); 
+                render(toTales[i].xT, toTales[i].yT, &gClips[TEX_grass]);
                 break;
             case TEX_water:
-                render(toTales[i].xT, toTales[i].yT, &gClips[TEX_water]); 
+                render(toTales[i].xT, toTales[i].yT, &gClips[TEX_water]);
                 break;
         }
     }

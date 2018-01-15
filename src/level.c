@@ -10,7 +10,7 @@ void genSol(int dir)
     printf("sol: ");
     printf("%d", sol[0]);
 
-    // loop through the path 
+    // loop through the path
     for(int i = 1; i < SOLSIZE; i++)
     {
         // generate random number between 0-3
@@ -53,10 +53,10 @@ void genPath(int dir)
         {
             case NORTH:
                 // if it's the final tile
-                if (i == 0) 
+                if (i == 0)
                 {
                     // update the array of collision tiles
-                    colTiles[0] = r_init; 
+                    colTiles[0] = r_init;
                     toTales[colTiles[0]].type = TEX_water;
                     // randomly move the player south to a position that can be reached with NORTH
                     posID = colTiles[0] + (r_pos*LEVELSIZE);
@@ -74,7 +74,7 @@ void genPath(int dir)
                 }
                 break;
             case EAST:
-                if (i == 0) 
+                if (i == 0)
                 {
                     colTiles[0] = (LEVELSIZE-1)+(r_init*LEVELSIZE);
                     toTales[colTiles[0]].type = TEX_water;
@@ -91,11 +91,11 @@ void genPath(int dir)
                 }
                 break;
             case SOUTH:
-                if (i == 0) 
+                if (i == 0)
                 {
                     colTiles[0] = r_init+(LEVELSIZE*(LEVELSIZE-1));
                     toTales[colTiles[0]].type = TEX_water;
-                    posID = colTiles[0] - (r_pos*LEVELSIZE); 
+                    posID = colTiles[0] - (r_pos*LEVELSIZE);
                 }
                 else if (sol[i-1] != SOUTH)
                 {
@@ -108,7 +108,7 @@ void genPath(int dir)
                 }
                 break;
             case WEST:
-                if (i == 0) 
+                if (i == 0)
                 {
                     colTiles[0] = r_init*LEVELSIZE;
                     toTales[colTiles[0]].type = TEX_water;

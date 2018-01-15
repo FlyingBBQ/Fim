@@ -15,7 +15,7 @@
 #define LEVELSIZE 16
 
 // solution size
-#define SOLSIZE 4
+#define SOLSIZE 5
 
 #define SCREEN_WIDTH (TILESIZE*LEVELSIZE)
 #define SCREEN_HEIGHT (TILESIZE*LEVELSIZE)
