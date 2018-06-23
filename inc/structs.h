@@ -20,3 +20,5 @@ typedef struct Player
     int prev, pos;
     int moves;
 } Player;
+
+

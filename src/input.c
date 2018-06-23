@@ -17,25 +17,25 @@ void getInput()
         if (event.type == SDL_KEYDOWN)
         {
             const Uint8 *keyState = SDL_GetKeyboardState(NULL);
-            if (keyState[SDL_SCANCODE_LEFT])
+            if (keyState[SDL_SCANCODE_LEFT] || keyState[SDL_SCANCODE_A])
             {
                 Fim.prev = Fim.pos;
                 Fim.pos -= rowSpace(Fim.pos, WEST);
                 Fim.moves -= 1;
             }
-            else if (keyState[SDL_SCANCODE_DOWN])
+            else if (keyState[SDL_SCANCODE_DOWN] || keyState[SDL_SCANCODE_S])
             {
                 Fim.prev = Fim.pos;
                 Fim.pos += colSpace(Fim.pos, SOUTH) * LEVELSIZE;
                 Fim.moves -= 1;
             }
-            else if (keyState[SDL_SCANCODE_UP])
+            else if (keyState[SDL_SCANCODE_UP] || keyState[SDL_SCANCODE_W])
             {
                 Fim.prev = Fim.pos;
                 Fim.pos -= colSpace(Fim.pos, NORTH) * LEVELSIZE;
                 Fim.moves -= 1;
             }
-            else if (keyState[SDL_SCANCODE_RIGHT])
+            else if (keyState[SDL_SCANCODE_RIGHT] || keyState[SDL_SCANCODE_D])
             {
                 Fim.prev = Fim.pos;
                 Fim.pos += rowSpace(Fim.pos, EAST);

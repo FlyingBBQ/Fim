@@ -2,8 +2,8 @@
 
 int main(int argc, char *argv[])
 {
-    int go;
-    int alive;
+    int go = 0;
+    int alive = 0;
 
     /* Start up SDL */
     init("Fim the game");
@@ -11,10 +11,10 @@ int main(int argc, char *argv[])
     /* Call the cleanup function when the program exits */
     atexit(cleanup);
 
-    go = 1;
+    go = TRUE;
 
     /* Loop indefinitely for messages */
-    while (go == 1)
+    while (go) 
     {
         // generate the level and solutions
         for (int i = 0; i < 4; i++)
@@ -22,9 +22,9 @@ int main(int argc, char *argv[])
             genLevel();
             genPath(i);
 
-            alive = 1;
+            alive = TRUE;
 
-            while (alive == 1)
+            while (alive)
             {
                 getInput();
 
@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
 
                 if (Fim.moves <= 0)
                 {
-                    alive = 0;
+                    alive = FALSE;
                 }
 
                 /* Sleep briefly to stop sucking up all the CPU time */

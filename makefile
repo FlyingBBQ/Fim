@@ -1,20 +1,32 @@
-CFLAGS = -Wall -pedantic -Werror -g
-LFLAGS := $(shell sdl2-config --libs) -lSDL2_image
-OBJS = gfx.o init.o input.o sprites.o level.o collision.o main.o 
+#
+# Fim - makefile
+# Author: FlyingBBQ
+#
+
 PROG = game
+
 CXX = gcc
+CFLAGS = -Wall -pedantic -Werror -g -Iinc
+LFLAGS := $(shell sdl2-config --libs) -lSDL2_image
+
+SRCDIR   = src
+INCDIR   = inc
+OBJDIR   = bin
+
+SOURCES  := $(wildcard $(SRCDIR)/*.c)
+INCLUDES := $(wildcard $(INCDIR)/*.h)
+OBJECTS  := $(SOURCES:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 
 # top-level rule to create the program.
 all: $(PROG)
 
-# compiling other source files.
-%.o: src/%.c src/%.h src/defs.h src/structs.h
-	$(CXX) $(CFLAGS) -c -s $<
+# compiling the source files
+$(OBJECTS): $(OBJDIR)/%.o : $(SRCDIR)/%.c
+	$(CXX) $(CFLAGS) -c -s $< -o $@
 
-# linking the program.
-$(PROG): $(OBJS)
-	$(CXX) $(OBJS) -o $(PROG) $(LFLAGS)
+# linking the program 
+$(PROG): $(OBJECTS)
+	$(CXX) $(OBJECTS) $(LFLAGS) -o $(PROG)
 
-# cleaning everything that can be automatically recreated with "make".
 clean:
-	rm $(PROG) *.o
+	rm $(PROG) $(OBJDIR)/*.o

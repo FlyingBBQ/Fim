@@ -1,5 +1,21 @@
 #include "collision.h"
 
+int movePos(int pos, int dir, int steps)
+{
+    switch (dir)
+    {
+        case NORTH:
+            break;
+        case EAST:
+            break;
+        case SOUTH:
+            break;
+        case WEST:
+            break;
+    }
+    return 0;
+}
+
 // return the row
 int getRow(int id)
 {

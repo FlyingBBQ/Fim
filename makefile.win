@@ -1,0 +1,50 @@
+#
+# Fim - makefile.win
+# Author: FlyingBBQ
+#
+
+EXECUTABLE = Fim.exe
+
+SDL_ROOT_DIR  = /usr/x86_64-w64-mingw32/bin
+SDL2_CFLAGS   = `$(SDL_ROOT_DIR)/sdl2-config --cflags`
+SDL2_LDFLAGS  = `$(SDL_ROOT_DIR)/sdl2-config --libs` \
+			    -lSDL2_image.dll \
+			    -static-libgcc
+
+CXX       = /usr/bin/x86_64-w64-mingw32-gcc
+CXXFLAGS  = -g -pedantic -Wall -Werror \
+		    -Iinc $(SDL2_CFLAGS)
+
+LD        = /usr/bin/x86_64-w64-mingw32-gcc
+LDFLAGS   = $(SDL2_LDFLAGS)
+
+DISTDIR   = windows
+DLLSRCDIR = /usr/x86_64-w64-mingw32/bin
+DLLS      = SDL2.dll SDL2_image.dll libpng16-16.dll zlib1.dll
+
+SRCDIR = src
+INCDIR = inc
+OBJDIR = bin
+
+SOURCES  := $(wildcard $(SRCDIR)/*.c)
+INCLUDES := $(wildcard $(INCDIR)/*.h)
+OBJECTS  := $(SOURCES:$(SRCDIR)/%.c=$(OBJDIR)/%.o32)
+
+all: $(EXECUTABLE)
+
+# compiling the source files
+$(OBJECTS): $(OBJDIR)/%.o32 : $(SRCDIR)/%.c
+	$(CXX) $(CXXFLAGS) -c -s $< -o $@
+
+# linking the program 
+$(EXECUTABLE): $(OBJECTS)
+	$(LD) $(OBJECTS) $(LDFLAGS) -o $(DISTDIR)/$@
+
+# copy all needed .dlls to the distdir
+copydlls:
+	for f in $(DLLS); do \
+		cp $(DLLSRCDIR)/$$f $(DISTDIR); \
+	done
+
+clean:
+	rm $(DISTDIR)/* $(OBJDIR)/*.o32

@@ -1,0 +1,12 @@
+== TODO ==
+
+- Improve path generation
+    - isSolution bool
+    -
+- Spawn random dummy blocks
+- Parallelism of levels
+- Generate tests
+
+== DONE ==
+
++ Cross compile for Windows
