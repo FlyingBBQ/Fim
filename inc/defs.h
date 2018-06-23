@@ -25,7 +25,7 @@
 
 enum 
 {
-    TEX_sprite,
+    TEX_sprite = 1,
     TEX_bg,
     TEX_grass,
     TEX_water
@@ -33,7 +33,7 @@ enum
 
 enum
 {
-    NORTH,
+    NORTH = 1,
     EAST,
     SOUTH,
     WEST

@@ -13,22 +13,22 @@ void genSol(int dir)
     // loop through the path
     for(int i = 1; i < SOLSIZE; i++)
     {
-        // generate random number between 0-3
-        int r = rand() % 4;
+        // generate random number between 1-4
+        int r = 1 + rand() % 4;
 
         // assign a random direction for the solution path
         switch (r)
         {
-            case 0:
+            case 1:
                 sol[i] = NORTH;
                 break;
-            case 1:
+            case 2:
                 sol[i] = EAST;
                 break;
-            case 2:
+            case 3:
                 sol[i] = SOUTH;
                 break;
-            case 3:
+            case 4:
                 sol[i] = WEST;
                 break;
         }
@@ -55,72 +55,68 @@ void genPath(int dir)
                 // if it's the final tile
                 if (i == 0)
                 {
-                    // update the array of collision tiles
-                    colTiles[0] = r_init;
-                    toTales[colTiles[0]].type = TEX_water;
+                    // set the final tile
+                    posID = r_init;
+                    toTales[posID].type = TEX_water;
                     // randomly move the player south to a position that can be reached with NORTH
-                    posID = colTiles[0] + (r_pos*LEVELSIZE);
+                    posID = movePos(posID, SOUTH, r_pos);
                 }
                 else if (sol[i-1] != NORTH)
                 {
                     // put a tile NORTH of last player position
-                    colTiles[i] = posID-LEVELSIZE;
-                    toTales[colTiles[i]].type = TEX_grass;
+                    toTales[movePos(posID, NORTH, 1)].type = TEX_grass;
                     // randomly move the player south to a position that can be reached with NORTH
-                    if (colSpace(posID, SOUTH) > 0)
+                    if (moveSpace(posID, SOUTH) > 0)
                     {
-                        posID += (1 + rand() % colSpace(posID, SOUTH)) * LEVELSIZE;
+                        posID = movePos(posID, SOUTH, (1 + rand() % moveSpace(posID, SOUTH)));
                     }
                 }
                 break;
             case EAST:
                 if (i == 0)
                 {
-                    colTiles[0] = (LEVELSIZE-1)+(r_init*LEVELSIZE);
-                    toTales[colTiles[0]].type = TEX_water;
-                    posID = colTiles[0] - r_pos;
+                    posID = (LEVELSIZE-1)+(r_init*LEVELSIZE);
+                    toTales[posID].type = TEX_water;
+                    posID = movePos(posID, WEST, r_pos);
                 }
                 else if (sol[i-1] != EAST)
                 {
-                    colTiles[i] = posID+1;
-                    toTales[colTiles[i]].type = TEX_grass;
-                    if (rowSpace(posID, WEST) > 0)
+                    toTales[movePos(posID, EAST, 1)].type = TEX_grass;
+                    if (moveSpace(posID, WEST) > 0)
                     {
-                        posID -= 1 + rand() % rowSpace(posID, WEST);
+                        posID = movePos(posID, WEST, (1 + rand() % moveSpace(posID, WEST)));
                     }
                 }
                 break;
             case SOUTH:
                 if (i == 0)
                 {
-                    colTiles[0] = r_init+(LEVELSIZE*(LEVELSIZE-1));
-                    toTales[colTiles[0]].type = TEX_water;
-                    posID = colTiles[0] - (r_pos*LEVELSIZE);
+                    posID = r_init+(LEVELSIZE*(LEVELSIZE-1));
+                    toTales[posID].type = TEX_water;
+                    posID = movePos(posID, NORTH, r_pos);
                 }
                 else if (sol[i-1] != SOUTH)
                 {
-                    colTiles[i] = posID+LEVELSIZE;
-                    toTales[colTiles[i]].type = TEX_grass;
-                    if (colSpace(posID, NORTH) > 0)
+                    toTales[movePos(posID, SOUTH, 1)].type = TEX_grass;
+                    if (moveSpace(posID, NORTH) > 0)
                     {
-                        posID -= (1 + rand() % colSpace(posID, NORTH)) * LEVELSIZE;
+                        posID = movePos(posID, NORTH, (1 + rand() % moveSpace(posID, NORTH)));
                     }
                 }
                 break;
             case WEST:
                 if (i == 0)
                 {
-                    colTiles[0] = r_init*LEVELSIZE;
-                    toTales[colTiles[0]].type = TEX_water;
-                    posID = colTiles[0] + r_pos;
+                    posID = r_init*LEVELSIZE;
+                    toTales[posID].type = TEX_water;
+                    posID = movePos(posID, EAST, r_pos);
                 }
                 else if (sol[i-1] != WEST)
                 {
-                    colTiles[i] = posID-1;
-                    toTales[colTiles[i]].type = TEX_grass;
-                    if (rowSpace(posID, EAST) > 0)
+                    toTales[movePos(posID, WEST, 1)].type = TEX_grass;
+                    if (moveSpace(posID, EAST) > 0)
                     {
-                        posID += 1 + rand() % rowSpace(posID, EAST);
+                        posID = movePos(posID, EAST, (1 + rand() % moveSpace(posID, EAST)));
                     }
                 }
                 break;

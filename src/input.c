@@ -20,25 +20,29 @@ void getInput()
             if (keyState[SDL_SCANCODE_LEFT] || keyState[SDL_SCANCODE_A])
             {
                 Fim.prev = Fim.pos;
-                Fim.pos -= rowSpace(Fim.pos, WEST);
+                printf("moveSpace: %d\n ", moveSpace(Fim.pos, WEST));
+                Fim.pos  = movePos(Fim.pos, WEST, moveSpace(Fim.pos, WEST));
                 Fim.moves -= 1;
             }
             else if (keyState[SDL_SCANCODE_DOWN] || keyState[SDL_SCANCODE_S])
             {
                 Fim.prev = Fim.pos;
-                Fim.pos += colSpace(Fim.pos, SOUTH) * LEVELSIZE;
+                printf("moveSpace: %d\n ", moveSpace(Fim.pos, SOUTH));
+                Fim.pos  = movePos(Fim.pos, SOUTH, moveSpace(Fim.pos, SOUTH));
                 Fim.moves -= 1;
             }
             else if (keyState[SDL_SCANCODE_UP] || keyState[SDL_SCANCODE_W])
             {
                 Fim.prev = Fim.pos;
-                Fim.pos -= colSpace(Fim.pos, NORTH) * LEVELSIZE;
+                printf("moveSpace: %d\n ", moveSpace(Fim.pos, NORTH));
+                Fim.pos  = movePos(Fim.pos, NORTH, moveSpace(Fim.pos, NORTH));
                 Fim.moves -= 1;
             }
             else if (keyState[SDL_SCANCODE_RIGHT] || keyState[SDL_SCANCODE_D])
             {
                 Fim.prev = Fim.pos;
-                Fim.pos += rowSpace(Fim.pos, EAST);
+                printf("moveSpace: %d\n ", moveSpace(Fim.pos, EAST));
+                Fim.pos  = movePos(Fim.pos, EAST, moveSpace(Fim.pos, EAST));
                 Fim.moves -= 1;
             }
             else

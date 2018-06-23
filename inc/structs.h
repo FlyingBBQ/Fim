@@ -13,6 +13,7 @@ typedef struct Tiles
     int xT, yT;
     int dir;
     int border;
+    int solution;
 } Tiles;
 
 typedef struct Player
