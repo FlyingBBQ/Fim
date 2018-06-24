@@ -15,7 +15,7 @@
 #define LEVELSIZE 16
 
 // solution size
-#define SOLSIZE 5
+#define SOLSIZE 8
 
 #define SCREEN_WIDTH (TILESIZE*LEVELSIZE)
 #define SCREEN_HEIGHT (TILESIZE*LEVELSIZE)
@@ -23,7 +23,8 @@
 // total sprites taken from single texture
 #define MAX_SPRITES 4
 
-enum 
+// start enums at 1 to have 'default' 0 state
+enum
 {
     TEX_sprite = 1,
     TEX_bg,
@@ -39,6 +40,7 @@ enum
     WEST
 };
 
+// boolean for clarity
 enum
 {
     FALSE,

@@ -3,7 +3,7 @@
 # Author: FlyingBBQ
 #
 
-PROG = game
+PROG = Fim
 
 CXX = gcc
 CFLAGS = -Wall -pedantic -Werror -g -Iinc
@@ -24,7 +24,7 @@ all: $(PROG)
 $(OBJECTS): $(OBJDIR)/%.o : $(SRCDIR)/%.c
 	$(CXX) $(CFLAGS) -c -s $< -o $@
 
-# linking the program 
+# linking the program
 $(PROG): $(OBJECTS)
 	$(CXX) $(OBJECTS) $(LFLAGS) -o $(PROG)
 

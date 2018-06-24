@@ -1,5 +1,6 @@
 == TODO ==
 
+- Add victory/deaths
 - Improve path generation
     - isSolution bool
     -

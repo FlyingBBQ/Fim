@@ -6,5 +6,6 @@ int colTiles[SOLSIZE];
 
 extern int moveSpace(int, int);
 extern int movePos(int, int, int);
+extern int isSolution(int);
 
 extern struct Player Fim;

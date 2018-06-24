@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
                 //Draw the image on the screen
                 loadImage("gfx/sprite.png");
                 draw();
-                render(toTales[Fim.pos].xT, toTales[Fim.pos].yT, &gClips[TEX_sprite]);
+                render(toTales[Fim.pos].xT, toTales[Fim.pos].yT, &gClips[TEX_water]);
                 SDL_RenderPresent(gRenderer);
 
                 if (Fim.moves <= 0)

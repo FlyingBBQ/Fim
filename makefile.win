@@ -36,7 +36,7 @@ all: $(EXECUTABLE)
 $(OBJECTS): $(OBJDIR)/%.o32 : $(SRCDIR)/%.c
 	$(CXX) $(CXXFLAGS) -c -s $< -o $@
 
-# linking the program 
+# linking the program
 $(EXECUTABLE): $(OBJECTS)
 	$(LD) $(OBJECTS) $(LDFLAGS) -o $(DISTDIR)/$@
 

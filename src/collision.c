@@ -37,17 +37,26 @@ int isSolution(int pos)
     return toTales[pos].solution;
 }
 
-// collision check function
-// returns TRUE if either type, border or solution returns TRUE
+// Multiple collision check function
+// returns TRUE if any of type, border or solution returns TRUE
 int isCollision(int pos, int type, int border, int solution)
 {
-    int collision = FALSE;
-
-    if (type == getType(pos)) collision = TRUE;
-    if (border) collision = isBorder(pos);
-    if (solution) collision = isSolution(pos);
-
-    return collision;
+    if (type == getType(pos))
+    {
+        return TRUE;
+    }
+    else if (border && isBorder(pos))
+    {
+        return TRUE;
+    }
+    else if (solution && isSolution(pos))
+    {
+        return TRUE;
+    }
+    else
+    {
+        return FALSE;
+    }
 }
 
 // returns the available spaces in direction while not hitting grass or border
