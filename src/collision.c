@@ -1,6 +1,6 @@
 #include "collision.h"
 
-// basic directional movement function
+/* basic directional movement function */
 int movePos(int pos, int dir, int steps)
 {
     switch (dir)
@@ -21,49 +21,46 @@ int movePos(int pos, int dir, int steps)
     return pos;
 }
 
-// helper functions
+/* helper functions */
 int getType(int pos)
 {
     return toTales[pos].type;
 }
 
-int isBorder(int pos)
+bool isBorder(int pos)
 {
     return toTales[pos].border;
 }
 
-int isSolution(int pos)
+bool isSolution(int pos)
 {
     return toTales[pos].solution;
 }
 
-// Multiple collision check function
-// returns TRUE if any of type, border or solution returns TRUE
-int isCollision(int pos, int type, int border, int solution)
+/*
+ * Multiple collision check function
+ * returns true if any of type, border or solution returns true
+ */
+bool isCollision(int pos, int type, bool border, bool solution)
 {
     if (type == getType(pos))
-    {
-        return TRUE;
-    }
+        return true;
+
     else if (border && isBorder(pos))
-    {
-        return TRUE;
-    }
+        return true;
+
     else if (solution && isSolution(pos))
-    {
-        return TRUE;
-    }
+        return true;
+
     else
-    {
-        return FALSE;
-    }
+        return false;
 }
 
-// returns the available spaces in direction while not hitting grass or border
+/* returns the available spaces in direction while not hitting grass or border */
 int moveSpace(int pos, int dir)
 {
     int space = 0;
-    while (!isCollision(movePos(pos, dir, 1), TEX_grass, TRUE, FALSE))
+    while (!isCollision(movePos(pos, dir, 1), TEX_grass, true, false))
     {
         pos = movePos(pos, dir, 1);
         space++;
@@ -71,13 +68,13 @@ int moveSpace(int pos, int dir)
     return space;
 }
 
-// return the row
+/* return the row */
 int getRow(int id)
 {
     return (int)id / LEVELSIZE;
 }
 
-// return the column
+/* return the column */
 int getCol(int id)
 {
     return (int)id % LEVELSIZE;

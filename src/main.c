@@ -2,8 +2,8 @@
 
 int main(int argc, char *argv[])
 {
-    int go = 0;
-    int alive = 0;
+    bool go = false;
+    bool alive = false;
 
     /* Start up SDL */
     init("Fim the game");
@@ -11,18 +11,21 @@ int main(int argc, char *argv[])
     /* Call the cleanup function when the program exits */
     atexit(cleanup);
 
-    go = TRUE;
+    go = true;
 
     /* Loop indefinitely for messages */
-    while (go) 
+    while (go)
     {
-        // generate the level and solutions
+        /*
+         * generate the level and solutions
+         * loop through all directions to test generation
+         */
         for (int i = 0; i < 4; i++)
         {
             genLevel();
-            genPath(NORTH);
+            genPath(i);
 
-            alive = TRUE;
+            alive = true;
 
             while (alive)
             {
@@ -30,16 +33,16 @@ int main(int argc, char *argv[])
 
                 SDL_RenderClear(gRenderer);
 
-                //Draw the image on the screen
+                /* Draw the image on the screen */
                 loadImage("gfx/sprite.png");
                 draw();
-                render(toTales[Fim.pos].xT, toTales[Fim.pos].yT, &gClips[TEX_water]);
+                render(toTales[Fim.pos].xT,
+                       toTales[Fim.pos].yT,
+                       &gClips[TEX_water]);
                 SDL_RenderPresent(gRenderer);
 
                 if (Fim.moves <= 0)
-                {
-                    alive = FALSE;
-                }
+                    alive = false;
 
                 /* Sleep briefly to stop sucking up all the CPU time */
                 SDL_Delay(16);

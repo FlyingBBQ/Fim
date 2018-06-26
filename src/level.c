@@ -10,37 +10,38 @@ int oppositeDir(int dir)
 
 void genSol(int dir)
 {
-    // only call once to generate seed
+    /* only call once to generate seed */
     srand(time(NULL));
 
-    // set the ending side
+    /* set the ending side */
     sol[0] = dir;
     printf("\nsol: ");
     printf("%d", sol[0]);
 
-    // loop through the path
+    /* loop through the path */
     for(int i = 1; i < SOLSIZE; i++)
     {
-        // generate random number between 1-4
-        int r = 1 + rand() % 4;
-        while (r == oppositeDir(sol[i-1]) || (i > 1 && (r == sol[i-1] && r == sol[i-2])))
+        /* generate random number between 0-3 */
+        int r = rand() % 3;
+        while (r == oppositeDir(sol[i-1]) ||
+              (i > 1 && (r == sol[i-1] && r == sol[i-2])))
         {
-            r = 1 + rand() % 4;
+            r = rand() % 3;
         }
 
-        // assign a random direction for the solution path
+        /* assign a random direction for the solution path */
         switch (r)
         {
-            case 1:
+            case 0:
                 sol[i] = NORTH;
                 break;
-            case 2:
+            case 1:
                 sol[i] = EAST;
                 break;
-            case 3:
+            case 2:
                 sol[i] = SOUTH;
                 break;
-            case 4:
+            case 3:
                 sol[i] = WEST;
                 break;
         }
@@ -49,21 +50,23 @@ void genSol(int dir)
     printf("\n");
 }
 
+/* set TILE.solution true for the solution path */
 int solPath(int pos, int dir, int steps)
 {
     for (int i = 0; i < steps; i++)
     {
-        toTales[movePos(pos, dir, 1)].solution = TRUE;
+        toTales[movePos(pos, dir, 1)].solution = true;
         toTales[movePos(pos, dir, 1)].type = TEX_sprite;
         pos = movePos(pos, dir, 1);
     }
     return pos;
 }
 
+/* calculate the next move */
 int moveNext(int pos, int dir, int solCntr)
 {
     int space = moveSpace(pos, dir);
-    printf("space: %d\n", space);
+    //printf("space: %d\n", space);
     if (solCntr + 1 <= SOLSIZE && space > 0)
     {
         int tries = 6;
@@ -73,7 +76,6 @@ int moveNext(int pos, int dir, int solCntr)
             int tp = movePos(pos, dir, steps);
             if (!isSolution(movePos(tp, sol[solCntr + 1], 1)))
             {
-                printf("solpos\n");
                 toTales[movePos(tp, sol[solCntr + 1], 1)].type = TEX_grass;
                 return solPath(pos, dir, steps);
             }
@@ -87,113 +89,93 @@ int moveNext(int pos, int dir, int solCntr)
     return pos;
 }
 
+/* randomly set the final position 'sol[0]' */
+int finalPos(int dir)
+{
+    /*
+     * r_final: location on border for final tile/pos
+     * r_move: random move distance from r_final position
+     *         - possible bias
+     * pos: return the position
+     */
+    int bias = LEVELSIZE/4;
+    int r_final = 1 + (rand() % (LEVELSIZE-2));
+    int r_move  = bias + (rand() % (LEVELSIZE-2 - bias));
+    int pos = 0;
+
+    /* set random location on border for final pos */
+    switch (dir)
+    {
+        case NORTH:
+            pos = r_final;
+            break;
+        case EAST:
+            pos = (LEVELSIZE-1)+(r_final*LEVELSIZE);
+            break;
+        case SOUTH:
+            pos = r_final+(LEVELSIZE*(LEVELSIZE-1));
+            break;
+        case WEST:
+            pos = r_final*LEVELSIZE;
+            break;
+    }
+
+    /* set the final tile */
+    toTales[pos].type = TEX_water;
+
+    /* randomly move the player in the opposite direction*/
+    pos = solPath(pos, oppositeDir(dir), r_move);
+
+    /* put a tile for the next dir */
+    if (sol[1] != sol[0])
+        toTales[movePos(pos, sol[1], 1)].type = TEX_grass;
+
+    return pos;
+}
+
 void genPath(int dir)
 {
-    // generate the solution before generating the path
-    genSol(dir);
-
-    // generate random number for the final tile and ID position
-    int r_init = 1 + (rand() % (LEVELSIZE-2));
-    int r_pos = (LEVELSIZE/4) + (rand() % (LEVELSIZE-2 - LEVELSIZE/4));
     int posID = 0;
 
-    for (int i = 0; i < SOLSIZE; i++)
+    /* generate the solution before generating the path */
+    genSol(dir);
+
+    /* set the final position */
+    posID = finalPos(sol[0]);
+
+    for (int i = 1; i < SOLSIZE; i++)
     {
         printf("%d@ ", i);
         switch (sol[i])
         {
             case NORTH:
-                // if it's the final tile
-                if (i == 0)
-                {
-                    // set the final tile
-                    posID = r_init;
-                    toTales[posID].type = TEX_water;
-                    // randomly move the player south to a position that can be reached with NORTH
-                    posID = solPath(posID, SOUTH, r_pos);
-                    // put a tile for the next dir
-                    if (sol[i+1] != sol[i])
-                        toTales[movePos(posID, sol[i+1], 1)].type = TEX_grass;
-                }
-                // check if it's not the same dir
-                else if (sol[i-1] != NORTH)
-                {
-                    // put a tile NORTH of last player position
-                    //toTales[movePos(posID, NORTH, 1)].type = TEX_grass;
-                    // randomly move the player south to a position that can be reached with NORTH
+                /* check if it's not the same dir */
+                if (sol[i-1] != NORTH)
                     posID = moveNext(posID, SOUTH, i);
-                        //posID = solPath(posID, SOUTH, (1 + rand() % moveSpace(posID, SOUTH)));
-                        //posID = movePos(posID, SOUTH, (1 + rand() % moveSpace(posID, SOUTH)));
-                }
-                else
+                else if (i < SOLSIZE)
                     toTales[movePos(posID, sol[i+1], 1)].type = TEX_grass;
                 break;
             case EAST:
-                if (i == 0)
-                {
-                    posID = (LEVELSIZE-1)+(r_init*LEVELSIZE);
-                    toTales[posID].type = TEX_water;
-                    posID = movePos(posID, WEST, r_pos);
-                    if (sol[i+1] != sol[i])
-                        toTales[movePos(posID, sol[i+1], 1)].type = TEX_grass;
-                }
-                else if (sol[i-1] != EAST)
-                {
-                    //toTales[movePos(posID, EAST, 1)].type = TEX_grass;
+                if (sol[i-1] != EAST)
                     posID = moveNext(posID, WEST, i);
-                    //if (moveSpace(posID, WEST) > 0)
-                    //{
-                    //    posID = solPath(posID, WEST, (1 + rand() % moveSpace(posID, WEST)));
-                    //}
-                }
-                else
+                else if (i < SOLSIZE)
                     toTales[movePos(posID, sol[i+1], 1)].type = TEX_grass;
                 break;
             case SOUTH:
-                if (i == 0)
-                {
-                    posID = r_init+(LEVELSIZE*(LEVELSIZE-1));
-                    toTales[posID].type = TEX_water;
-                    posID = movePos(posID, NORTH, r_pos);
-                    if (sol[i+1] != sol[i])
-                        toTales[movePos(posID, sol[i+1], 1)].type = TEX_grass;
-                }
-                else if (sol[i-1] != SOUTH)
-                {
-                    //toTales[movePos(posID, SOUTH, 1)].type = TEX_grass;
+                if (sol[i-1] != SOUTH)
                     posID = moveNext(posID, NORTH, i);
-                    //if (moveSpace(posID, NORTH) > 0)
-                    //{
-                    //    posID = solPath(posID, NORTH, (1 + rand() % moveSpace(posID, NORTH)));
-                    //}
-                }
-                else
+                else if (i < SOLSIZE)
                     toTales[movePos(posID, sol[i+1], 1)].type = TEX_grass;
                 break;
             case WEST:
-                if (i == 0)
-                {
-                    posID = r_init*LEVELSIZE;
-                    toTales[posID].type = TEX_water;
-                    posID = movePos(posID, EAST, r_pos);
-                    if (sol[i+1] != sol[i])
-                        toTales[movePos(posID, sol[i+1], 1)].type = TEX_grass;
-                }
-                else if (sol[i-1] != WEST)
-                {
-                    //toTales[movePos(posID, WEST, 1)].type = TEX_grass;
+                if (sol[i-1] != WEST)
                     posID = moveNext(posID, EAST, i);
-                    //if (moveSpace(posID, EAST) > 0)
-                    //{
-                    //    posID = solPath(posID, EAST, (1 + rand() % moveSpace(posID, EAST)));
-                    //}
-                }
-                else
+                else if (i < SOLSIZE)
                     toTales[movePos(posID, sol[i+1], 1)].type = TEX_grass;
                 break;
         }
     }
-    // set the player at the start of the path
+    /* set the player at the start of the path */
     Fim.pos = posID;
     Fim.moves = SOLSIZE;
 }
@@ -204,28 +186,28 @@ void genLevel(void)
     int ypos = 0;
     int tileID = 0;
 
-    // set initialize all tiles, starting with the first column (topleft)
+    /* set initialize all tiles, starting with the first column (topleft) */
     for(int c = 0; c < LEVELSIZE; c++)
     {
-        // reset xpos every loop to start at the beginning
+        /* reset xpos every loop to start at the beginning */
         xpos = 0;
 
-        // set the tile type and position
+        /* set the tile type and position */
         toTales[tileID].type = TEX_bg;
         toTales[tileID].xT = xpos;
         toTales[tileID].yT = ypos;
-        toTales[tileID].border = TRUE;
-        // set the border for the right column
+        toTales[tileID].border = true;
+        /* set the border for the right column */
         if (tileID > 0)
         {
-            toTales[tileID-1].border = TRUE;
+            toTales[tileID-1].border = true;
         }
 
-        // first tile of the row is set, move xpos once
+        /* first tile of the row is set, move xpos once */
         xpos = TILESIZE;
 
-        // increase tileID for the next tile
-        if (tileID < TILES)
+        /* increase tileID for the next tile */
+        if (tileID < TOTAL_TILES)
         {
             tileID += 1;
         }
@@ -234,22 +216,22 @@ void genLevel(void)
             printf("tiles OoB\n");
         }
 
-        // set the tiles for the entire row
+        /* set the tiles for the entire row */
         for(int r = 0; r < LEVELSIZE-1; r++)
         {
-            // set the tile type and position
+            /* set the tile type and position */
             toTales[tileID].type = TEX_bg;
             toTales[tileID].xT = xpos;
             toTales[tileID].yT = ypos;
-            // set the borders of the first and last row
-            if (tileID < LEVELSIZE || tileID > (TILES - LEVELSIZE))
+            /* set the borders of the first and last row */
+            if (tileID < LEVELSIZE || tileID > (TOTAL_TILES - LEVELSIZE))
             {
-                toTales[tileID].border = TRUE;
+                toTales[tileID].border = true;
             }
-            // increase xpos since traversing through the row
+            /* increase xpos since traversing through the row */
             xpos += TILESIZE;
 
-            if (tileID < TILES)
+            if (tileID < TOTAL_TILES)
             {
                 tileID += 1;
             }
@@ -258,7 +240,7 @@ void genLevel(void)
                 printf("tiles OoB\n");
             }
         }
-        // row is done, increase ypos for next row
+        /* row is done, increase ypos for next row */
         ypos += TILESIZE;
     }
 }

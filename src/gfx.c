@@ -57,7 +57,7 @@ void render(int x, int y, SDL_Rect *clip)
 void draw(void)
 {
     // loop through all tiles and draw them
-    for (int i = 0; i < TILES; i++)
+    for (int i = 0; i < TOTAL_TILES; i++)
     {
         switch (toTales[i].type)
         {
