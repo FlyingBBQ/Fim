@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
                 draw();
                 render(toTales[Fim.pos].xT,
                        toTales[Fim.pos].yT,
-                       &gClips[TEX_water]);
+                       &gClips[TEX_sprite]);
                 SDL_RenderPresent(gRenderer);
 
                 if (Fim.moves <= 0)

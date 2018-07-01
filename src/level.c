@@ -2,10 +2,26 @@
 
 int oppositeDir(int dir)
 {
-    if (dir == 2)
-        return 4;
-    else
-        return (dir + 2) % 4;
+    return (dir + 2) % 4;
+}
+
+void printDir(int dir)
+{
+    switch (dir)
+    {
+        case NORTH:
+            printf("N");
+            break;
+        case EAST:
+            printf("E");
+            break;
+        case SOUTH:
+            printf("S");
+            break;
+        case WEST:
+            printf("W");
+            break;
+    }
 }
 
 void genSol(int dir)
@@ -15,18 +31,19 @@ void genSol(int dir)
 
     /* set the ending side */
     sol[0] = dir;
+    printf("##############################");
     printf("\nsol: ");
-    printf("%d", sol[0]);
+    printDir(sol[0]);
 
     /* loop through the path */
     for(int i = 1; i < SOLSIZE; i++)
     {
         /* generate random number between 0-3 */
-        int r = rand() % 3;
+        int r = rand() % 4;
         while (r == oppositeDir(sol[i-1]) ||
               (i > 1 && (r == sol[i-1] && r == sol[i-2])))
         {
-            r = rand() % 3;
+            r = rand() % 4;
         }
 
         /* assign a random direction for the solution path */
@@ -45,9 +62,10 @@ void genSol(int dir)
                 sol[i] = WEST;
                 break;
         }
-        printf("%d", sol[i]);
+        printf("-");
+        printDir(sol[i]);
     }
-    printf("\n");
+    printf("<--\n");
 }
 
 /* set TILE.solution true for the solution path */
@@ -56,12 +74,13 @@ int solPath(int pos, int dir, int steps)
     for (int i = 0; i < steps; i++)
     {
         toTales[movePos(pos, dir, 1)].solution = true;
-        toTales[movePos(pos, dir, 1)].type = TEX_sprite;
+        toTales[movePos(pos, dir, 1)].type = TEX_water;
         pos = movePos(pos, dir, 1);
     }
     return pos;
 }
 
+#if 0
 /* calculate the next move */
 int moveNext(int pos, int dir, int solCntr)
 {
@@ -90,71 +109,108 @@ int moveNext(int pos, int dir, int solCntr)
     }
     return pos;
 }
+#endif
+
+int bruteForce(int pos, int dir, int space, int solCntr)
+{
+    /* "brute force" for possible solution */
+    printf("BRUTE");
+    int solArr[LEVELSIZE]; // solution array
+    int numSol = 0;
+    int tp = movePos(pos, dir, 1); // move once
+    for (int i = 1; i < space; i++) // for free space
+    {
+        if (isSolution(movePos(tp, sol[solCntr + 1], 1)))
+        {
+            tp = movePos(tp, dir, 1);
+            printf("\tmove: %d ", tp);
+        }
+        else if (dir == sol[solCntr - 1] &&
+                getType(movePos(tp, sol[solCntr + 1], 1) == TEX_grass))
+        {
+            /* just move as it is already solPath */
+            return movePos(pos, dir, i);
+        }
+        else
+        {
+            /* store possible solution */
+            solArr[numSol] = i;
+            numSol++;
+            tp = movePos(tp, dir, 1);
+        }
+    }
+    printf("\tnumsol: %d\n", numSol);
+
+    if (numSol)
+    {
+        /* pick solution */
+        int r = rand() % numSol;
+        printf("\trand: %d\n", r);
+        /* move and place tile */
+        pos = solPath(pos, dir, solArr[r]);
+        if (sol[solCntr] != sol[solCntr + 1])
+        {
+            toTales[movePos(pos, sol[solCntr + 1], 1)].type = TEX_grass;
+            printf("place ");
+            printDir(sol[solCntr+1]);
+            printf("\n");
+        }
+    }
+    return pos;
+}
 
 int moveNext2(int pos, int dir, int solCntr)
 {
+    int space, steps, tp;
+
     /* check the available space in the direction */
-    int space = moveSpace(pos, dir);
+    space = moveSpace(pos, dir);
+    printf("\tFree space: %d\n", space);
 
     /*
      * Try to move random distance in direction
      * Temporary store possible new position in "tp"
      */
-    int steps = 1 + rand() % space;
-    int tp = movePos(pos, dir, steps);
-
-    /*
-     * Check if "tp" does not interfere with solution
-     * path in next direction.
-     */
-    if (!isSolution(movePos(tp, sol[solCntr + 1], 1)))
+    if (space && solCntr < SOLSIZE)
     {
-        /* set the tile and mark solution path */
-        toTales[movePos(tp, sol[solCntr + 1], 1)].type = TEX_grass;
-        return solPath(pos, dir, steps);
-    }
-    else if (space > 1)
-    {
-        /* "brute force" for possible solution */
-        int solArr[LEVELSIZE]; // solution array
-        int numSol = 0;
-        tp = movePos(pos, dir, 1); // move once
-        for (int i = 1; i < space; i++) // for free space
-        {
-            if (isSolution(movePos(tp, sol[solCntr + 1], 1)))
-            {
-                tp = movePos(tp, dir, 1);
-            }
-            else if (dir == sol[solCntr - 1] &&
-                    getType(movePos(tp, sol[solCntr + 1], 1) == TEX_grass))
-            {
-                /* just move as it is already solPath */
-                return movePos(pos, dir, i);
-            }
-            else
-            {
-                /* store possible solution */
-                solArr[numSol] = i;
-                numSol++;
-                tp = movePos(tp, dir, 1);
-            }
-        }
+        steps = 1 + (rand() % space);
+        printf("\tsteps: %d\n", steps);
+        tp = movePos(pos, dir, steps);
 
-        if (numSol && solCntr < SOLSIZE)
+        /*
+         * Check if "tp" does not interfere with solution
+         * path in next direction.
+         */
+        printf("\tcheck: ");
+        printDir(sol[solCntr+1]);
+        printf("\n");
+        if (!isSolution(movePos(tp, sol[solCntr + 1], 1)))
         {
-            /* pick solution */
-            int r = 1 + rand() % numSol;
-            /* move and place tile */
-            pos = solPath(pos, dir, solArr[r]);
-            toTales[movePos(pos, sol[solCntr + 1], 1)].type = TEX_grass;
-            return pos;
+            /* set the tile and mark solution path */
+            printf("HIT!\n");
+            toTales[movePos(tp, sol[solCntr + 1], 1)].type = TEX_grass;
+            printf("place ");
+            printDir(sol[solCntr+1]);
+            printf("\n");
+            return solPath(pos, dir, steps);
         }
-        else
+        else if (space > 1)
         {
-            /* stay at position, don't place tile */
-            return pos;
+            tp = bruteForce(pos, dir, space, solCntr);
+            return tp;
         }
     }
+
+    if (!isSolution(movePos(pos, sol[solCntr + 1], 1)) && (solCntr + 1) <= SOLSIZE)
+    {
+        printf("STAY!\n");
+        toTales[movePos(pos, sol[solCntr + 1], 1)].type = TEX_grass;
+        printf("place ");
+        printDir(sol[solCntr+1]);
+        printf("\n");
+    }
+
+    /* stay at position, don't place tile */
     return pos;
 }
 
@@ -195,6 +251,10 @@ int finalPos(int dir)
     /* randomly move the player in the opposite direction*/
     pos = solPath(pos, oppositeDir(dir), r_move);
 
+    printf("%d@ ", 0);
+    printDir(oppositeDir(sol[0]));
+    printf("\tsteps: %d\n", r_move);
+
     /* put a tile for the next dir */
     if (sol[0] != sol[1])
         toTales[movePos(pos, sol[1], 1)].type = TEX_grass;
@@ -212,40 +272,11 @@ void genPath(int dir)
     /* set the final position */
     posID = finalPos(sol[0]);
 
-    for (int i = 1; i < SOLSIZE - 1; i++)
+    for (int i = 1; i < SOLSIZE; i++)
     {
         printf("%d@ ", i);
+        printDir(oppositeDir(sol[i]));
         posID = moveNext2(posID, oppositeDir(sol[i]), i);
-#if 0
-        switch (sol[i])
-        {
-            case NORTH:
-                /* check if it's not the same dir */
-                if (sol[i-1] != NORTH)
-                    posID = moveNext(posID, SOUTH, i);
-                else if (i < SOLSIZE)
-                    toTales[movePos(posID, sol[i+1], 1)].type = TEX_grass;
-                break;
-            case EAST:
-                if (sol[i-1] != EAST)
-                    posID = moveNext(posID, WEST, i);
-                else if (i < SOLSIZE)
-                    toTales[movePos(posID, sol[i+1], 1)].type = TEX_grass;
-                break;
-            case SOUTH:
-                if (sol[i-1] != SOUTH)
-                    posID = moveNext(posID, NORTH, i);
-                else if (i < SOLSIZE)
-                    toTales[movePos(posID, sol[i+1], 1)].type = TEX_grass;
-                break;
-            case WEST:
-                if (sol[i-1] != WEST)
-                    posID = moveNext(posID, EAST, i);
-                else if (i < SOLSIZE)
-                    toTales[movePos(posID, sol[i+1], 1)].type = TEX_grass;
-                break;
-        }
-#endif
     }
     /* set the player at the start of the path */
     Fim.pos = posID;

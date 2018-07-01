@@ -18,7 +18,15 @@ int movePos(int pos, int dir, int steps)
             pos -= steps;
             break;
     }
-    return pos;
+    if (pos > TOTAL_TILES)
+    {
+        printf("movePos OOB\n");
+        return 0;
+    }
+    else
+    {
+        return pos;
+    }
 }
 
 /* helper functions */

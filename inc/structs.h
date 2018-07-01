@@ -10,8 +10,8 @@ typedef struct Entity
 typedef struct Tiles
 {
     int type;
-    int xT, yT;
-    int dir;
+    int xT;
+    int yT;
     int border;
     int solution;
 } Tiles;
