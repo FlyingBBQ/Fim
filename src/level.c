@@ -80,37 +80,6 @@ int solPath(int pos, int dir, int steps)
     return pos;
 }
 
-#if 0
-/* calculate the next move */
-int moveNext(int pos, int dir, int solCntr)
-{
-    /* check the available space in the direction */
-    int space = moveSpace(pos, dir);
-
-    //printf("space: %d\n", space);
-    if (solCntr + 1 <= SOLSIZE && space > 0)
-    {
-        int tries = 6;
-        for (int t = 0; t < tries; t++)
-        {
-            int steps = 1 + rand() % space;
-            int tp = movePos(pos, dir, steps);
-            if (!isSolution(movePos(tp, sol[solCntr + 1], 1)))
-            {
-                toTales[movePos(tp, sol[solCntr + 1], 1)].type = TEX_grass;
-                return solPath(pos, dir, steps);
-            }
-            else if (t == tries - 1)
-            {
-                printf("failed\n");
-            }
-            printf("Retry: %d, dir: %d\n", steps, dir);
-        }
-    }
-    return pos;
-}
-#endif
-
 int bruteForce(int pos, int dir, int space, int solCntr)
 {
     /* "brute force" for possible solution */
@@ -120,10 +89,16 @@ int bruteForce(int pos, int dir, int space, int solCntr)
     int tp = movePos(pos, dir, 1); // move once
     for (int i = 1; i < space; i++) // for free space
     {
-        if (isSolution(movePos(tp, sol[solCntr + 1], 1)))
+        printf("\tcheck: %d-", tp);
+        printDir(sol[solCntr+1]);
+
+        int ps = movePos(tp, sol[solCntr + 1], 1);
+        printf(" ps: %d\n", ps);
+        if (isSolution(ps))
         {
+            printf("T");
             tp = movePos(tp, dir, 1);
-            printf("\tmove: %d ", tp);
+            //printf("\tmove: %d ", tp);
         }
         else if (dir == sol[solCntr - 1] &&
                 getType(movePos(tp, sol[solCntr + 1], 1) == TEX_grass))
@@ -159,7 +134,7 @@ int bruteForce(int pos, int dir, int space, int solCntr)
     return pos;
 }
 
-int moveNext2(int pos, int dir, int solCntr)
+int moveNext(int pos, int dir, int solCntr)
 {
     int space, steps, tp;
 
@@ -173,7 +148,19 @@ int moveNext2(int pos, int dir, int solCntr)
      */
     if (space && solCntr < SOLSIZE)
     {
-        steps = 1 + (rand() % space);
+        if (sol[solCntr+1] == oppositeDir(sol[solCntr-1]) && space > 1) {
+            printf("X T R A\n");
+            //steps = rand() % (space + 1 - 2) + 2;
+            steps = 2 + rand() % (space - 1);
+        }
+        else if (space == 1) {
+            printf("stepspace\n");
+            steps = space;
+        }
+        else {
+            steps = 1 + rand() % space;
+        }
+
         printf("\tsteps: %d\n", steps);
         tp = movePos(pos, dir, steps);
 
@@ -181,7 +168,7 @@ int moveNext2(int pos, int dir, int solCntr)
          * Check if "tp" does not interfere with solution
          * path in next direction.
          */
-        printf("\tcheck: ");
+        printf("\tcheck: %d-", tp);
         printDir(sol[solCntr+1]);
         printf("\n");
         if (!isSolution(movePos(tp, sol[solCntr + 1], 1)))
@@ -196,8 +183,7 @@ int moveNext2(int pos, int dir, int solCntr)
         }
         else if (space > 1)
         {
-            tp = bruteForce(pos, dir, space, solCntr);
-            return tp;
+            return bruteForce(pos, dir, space, solCntr);
         }
     }
 
@@ -276,7 +262,7 @@ void genPath(int dir)
     {
         printf("%d@ ", i);
         printDir(oppositeDir(sol[i]));
-        posID = moveNext2(posID, oppositeDir(sol[i]), i);
+        posID = moveNext(posID, oppositeDir(sol[i]), i);
     }
     /* set the player at the start of the path */
     Fim.pos = posID;
@@ -289,7 +275,10 @@ void genLevel(void)
     int ypos = 0;
     int tileID = 0;
 
-    /* set initialize all tiles, starting with the first column (topleft) */
+    /* reset all tile values to 0 */
+    memset(toTales, 0, sizeof(toTales));
+
+    /* initialize all tiles, starting with the first column (topleft) */
     for(int c = 0; c < LEVELSIZE; c++)
     {
         /* reset xpos every loop to start at the beginning */
@@ -300,24 +289,19 @@ void genLevel(void)
         toTales[tileID].xT = xpos;
         toTales[tileID].yT = ypos;
         toTales[tileID].border = true;
+
         /* set the border for the right column */
         if (tileID > 0)
-        {
             toTales[tileID-1].border = true;
-        }
 
         /* first tile of the row is set, move xpos once */
         xpos = TILESIZE;
 
         /* increase tileID for the next tile */
         if (tileID < TOTAL_TILES)
-        {
             tileID += 1;
-        }
         else
-        {
             printf("tiles OoB\n");
-        }
 
         /* set the tiles for the entire row */
         for(int r = 0; r < LEVELSIZE-1; r++)
@@ -326,22 +310,18 @@ void genLevel(void)
             toTales[tileID].type = TEX_bg;
             toTales[tileID].xT = xpos;
             toTales[tileID].yT = ypos;
+
             /* set the borders of the first and last row */
             if (tileID < LEVELSIZE || tileID > (TOTAL_TILES - LEVELSIZE))
-            {
                 toTales[tileID].border = true;
-            }
+
             /* increase xpos since traversing through the row */
             xpos += TILESIZE;
 
             if (tileID < TOTAL_TILES)
-            {
                 tileID += 1;
-            }
             else
-            {
                 printf("tiles OoB\n");
-            }
         }
         /* row is done, increase ypos for next row */
         ypos += TILESIZE;

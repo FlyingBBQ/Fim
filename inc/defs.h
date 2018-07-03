@@ -9,13 +9,13 @@
 #define TILESIZE 16
 
 /* size of level in tiles for 1 side */
-#define LEVELSIZE 16
+#define LEVELSIZE 28
 
 /* total amount of tiles per level */
 #define TOTAL_TILES (LEVELSIZE * LEVELSIZE)
 
 /* solution size */
-#define SOLSIZE 5
+#define SOLSIZE 12
 
 #define SCREEN_WIDTH (TILESIZE*LEVELSIZE)
 #define SCREEN_HEIGHT (TILESIZE*LEVELSIZE)
@@ -41,4 +41,3 @@ enum
     SOUTH,
     WEST
 };
-
