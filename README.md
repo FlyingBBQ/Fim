@@ -1,6 +1,6 @@
 # Fim
 
-Fim is a 2D puzzle game with random-generated maps and parralel worlds.
+Fim is a 2D puzzle game with random-generated maps and parallel worlds. This is a WIP!
 
 Written in C with the SDL2 library
 
