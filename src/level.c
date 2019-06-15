@@ -36,8 +36,7 @@ void genSol(int dir)
     printDir(sol[0]);
 
     /* loop through the path */
-    for(int i = 1; i < SOLSIZE; i++)
-    {
+    for(int i = 1; i < SOLSIZE; i++) {
         /* generate random number between 0-3 */
         int r = rand() % 4;
         while (r == oppositeDir(sol[i-1]) ||
