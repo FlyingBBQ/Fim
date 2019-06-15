@@ -1,6 +1,6 @@
 #include "init.h"
 
-void 
+void
 init(char *title)
 {
     /* Initialise SDL Video */
@@ -39,7 +39,7 @@ init(char *title)
     SDL_SetRenderDrawColor(gRenderer, 10, 10, 10, 255);
 }
 
-void 
+void
 cleanup()
 {
     /* Shut down SDL */

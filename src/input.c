@@ -1,6 +1,6 @@
 #include "input.h"
 
-void 
+void
 getInput()
 {
     SDL_Event event;
@@ -14,7 +14,7 @@ getInput()
         if (event.type == SDL_KEYDOWN) {
             const Uint8 *keyState = SDL_GetKeyboardState(NULL);
             if (keyState[SDL_SCANCODE_LEFT] || keyState[SDL_SCANCODE_A]) {
-            } 
+            }
             else if (keyState[SDL_SCANCODE_DOWN] || keyState[SDL_SCANCODE_S]) {
             }
             else if (keyState[SDL_SCANCODE_UP] || keyState[SDL_SCANCODE_W]) {

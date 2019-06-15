@@ -1,6 +1,7 @@
 #include "gfx.h"
 
-SDL_Texture *loadImage(char *name)
+SDL_Texture*
+loadImage(char *name)
 {
     /* load the image */
     SDL_Surface *loadedImage = IMG_Load(name);
@@ -32,7 +33,8 @@ SDL_Texture *loadImage(char *name)
 }
 
 /* render function to put texture at position and with size. */
-void render(int x, int y, SDL_Rect *clip)
+void
+render(int x, int y, SDL_Rect *clip)
 {
     SDL_Rect dest;
 
@@ -44,12 +46,13 @@ void render(int x, int y, SDL_Rect *clip)
     dest.w = clip->w;
     dest.h = clip->h;
 
-    /* renderer, source texture, source SDL_Rect structure (NULL for entire texture), 
+    /* renderer, source texture, source SDL_Rect structure (NULL for entire texture),
      * destination SDL_Rect */
     SDL_RenderCopy(gRenderer, texture_map.iTexture, clip, &dest);
 }
 
-void draw(void)
+void
+draw(void)
 {
     /* loop through all tiles and draw them */
     for (int i = 0; i < TOTAL_TILES; i++) {
