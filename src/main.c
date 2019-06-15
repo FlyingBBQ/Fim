@@ -14,12 +14,9 @@ int main(int argc, char *argv[])
     go = true;
 
     /* Loop indefinitely for messages */
-    while (go)
-    {
-        /*
-         * generate the level and solutions
-         * loop through all directions to test generation
-         */
+    while (go) {
+        /* generate the level and solutions
+         * loop through all directions to test generation */
         alive = true;
 
         while (alive) {
