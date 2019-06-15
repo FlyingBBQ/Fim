@@ -3,30 +3,29 @@
 # Author: FlyingBBQ
 #
 
-PROG = Fim
+GAME = Fim
 
 CXX = gcc
-CFLAGS = -Wall -pedantic -Werror -g -Iinc
+CFLAGS = -Wall -pedantic -Werror -g
 LFLAGS := $(shell sdl2-config --libs) -lSDL2_image
 
-SRCDIR   = src
-INCDIR   = inc
-OBJDIR   = bin
+SRCDIR  = src
+OBJDIR  = bin
+TESTDIR = test
 
 SOURCES  := $(wildcard $(SRCDIR)/*.c)
-INCLUDES := $(wildcard $(INCDIR)/*.h)
 OBJECTS  := $(SOURCES:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 
 # top-level rule to create the program.
-all: $(PROG)
+all: $(GAME)
 
 # compiling the source files
 $(OBJECTS): $(OBJDIR)/%.o : $(SRCDIR)/%.c
 	$(CXX) $(CFLAGS) -c -s $< -o $@
 
 # linking the program
-$(PROG): $(OBJECTS)
-	$(CXX) $(OBJECTS) $(LFLAGS) -o $(PROG)
+$(GAME): $(OBJECTS)
+	$(CXX) $(OBJECTS) $(LFLAGS) -o $(GAME)
 
 clean:
-	rm $(PROG) $(OBJDIR)/*.o
+	rm $(GAME) $(OBJDIR)/*.o
