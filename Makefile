@@ -12,6 +12,7 @@ LFLAGS := $(shell sdl2-config --libs) -lSDL2_image
 TFLAGS := -lcmocka
 
 SRCDIR   = src
+DOCDIR   = docs
 TESTDIR  = test
 BUILDIR ?= build
 
@@ -34,7 +35,7 @@ $(BUILDIR)/%.o: %.c
 
 -include $(DEPS)
 
-.PHONY: clean run
+.PHONY: clean run test docs
 
 clean:
 	rm -rf $(BUILDIR)
@@ -44,3 +45,6 @@ run: $(BUILDIR)/$(GAME)
 
 test: $(BUILDIR)/$(TEST)
 	./$(BUILDIR)/$(TEST)
+
+docs: | Doxyfile
+	doxygen Doxyfile
