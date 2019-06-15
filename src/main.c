@@ -20,33 +20,26 @@ int main(int argc, char *argv[])
          * generate the level and solutions
          * loop through all directions to test generation
          */
-        for (int i = 0; i < 4; i++)
-        {
-            genLevel();
-            genPath(i);
+        alive = true;
 
-            alive = true;
+        while (alive) {
+            getInput();
 
-            while (alive)
-            {
-                getInput();
+            SDL_RenderClear(gRenderer);
 
-                SDL_RenderClear(gRenderer);
+            /* Draw the image on the screen */
+            loadImage("gfx/sprite.png");
+            draw();
+            render(toTales[Fim.pos].xT,
+                    toTales[Fim.pos].yT,
+                    &gClips[TEX_sprite]);
+            SDL_RenderPresent(gRenderer);
 
-                /* Draw the image on the screen */
-                loadImage("gfx/sprite.png");
-                draw();
-                render(toTales[Fim.pos].xT,
-                       toTales[Fim.pos].yT,
-                       &gClips[TEX_sprite]);
-                SDL_RenderPresent(gRenderer);
+            if (Fim.moves <= 0)
+                alive = false;
 
-                if (Fim.moves <= 0)
-                    alive = false;
-
-                /* Sleep briefly to stop sucking up all the CPU time */
-                SDL_Delay(16);
-            }
+            /* Sleep briefly to stop sucking up all the CPU time */
+            SDL_Delay(16);
         }
     }
 

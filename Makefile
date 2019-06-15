@@ -5,27 +5,31 @@
 
 GAME = Fim
 
-CXX = gcc
-CFLAGS = -Wall -pedantic -Werror -g
+CC = gcc
+CFLAGS = -Wall -pedantic -Werror -g -MMD -MP
 LFLAGS := $(shell sdl2-config --libs) -lSDL2_image
 
-SRCDIR  = src
-OBJDIR  = bin
-TESTDIR = test
+SRCDIR  = ./src
+TESTDIR = ./test
+BUILDIR ?= ./build
 
-SOURCES  := $(wildcard $(SRCDIR)/*.c)
-OBJECTS  := $(SOURCES:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
+SRCS = $(wildcard $(SRCDIR)/*.c)
+OBJS = $(SRCS:%.c=$(BUILDIR)/%.o)
+DEPS = $(OBJS:.o=.d)
 
-# top-level rule to create the program.
-all: $(GAME)
+$(BUILDIR)/$(GAME): $(OBJS)
+	$(CC) $(OBJS) -o $@ $(LFLAGS)
 
-# compiling the source files
-$(OBJECTS): $(OBJDIR)/%.o : $(SRCDIR)/%.c
-	$(CXX) $(CFLAGS) -c -s $< -o $@
+$(BUILDIR)/%.o: %.c
+	mkdir -p $(@D)
+	$(CC) $(CFLAGS) -c $< -o $@
 
-# linking the program
-$(GAME): $(OBJECTS)
-	$(CXX) $(OBJECTS) $(LFLAGS) -o $(GAME)
+-include $(DEPS)
+
+.PHONY: clean run
 
 clean:
-	rm $(GAME) $(OBJDIR)/*.o
+	rm -rf $(BUILDIR)
+
+run: $(BUILDIR)/$(GAME)
+	./$(BUILDIR)/$(GAME)
