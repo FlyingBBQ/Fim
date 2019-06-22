@@ -1,6 +1,6 @@
 #include "main.h"
 
-int 
+int
 main(int argc, char *argv[])
 {
     bool go = false;

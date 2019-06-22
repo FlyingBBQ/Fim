@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_image.h"
 
@@ -23,8 +24,8 @@
 /* total sprites taken from single texture */
 #define MAX_SPRITES 4
 
-/* boolean compatible with C89 */
-typedef enum { false, true } bool;
+/* size of a map */
+#define MAP_SIZE 16
 
 enum
 {
@@ -34,10 +35,16 @@ enum
     TEX_water
 };
 
-enum
+typedef enum
 {
     NORTH,
     EAST,
     SOUTH,
     WEST
+} WAY;
+
+enum
+{
+        F_BORDER   = (1 << 0),
+        F_SOLUTION = (1 << 1)
 };
