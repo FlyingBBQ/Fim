@@ -11,19 +11,21 @@ typedef struct Player {
     int moves;
 } Player;
 
-typedef struct Tiles {
+
+
+typedef struct {
         int x;
         int y;
         int type;
         int flags;
 } Tiles;
 
-typedef struct Pos {
+typedef struct {
         int x;
         int y;
 } Pos;
 
-typedef struct Map {
+typedef struct {
         Tiles tiles[MAP_SIZE][MAP_SIZE];
         Pos fim;
 } Map;

@@ -38,9 +38,21 @@ movePos(Pos *fim, WAY way)
 }
 
 bool
-isFlag(Map *map, int flags)
+hasFlag(Tiles *tile, int flags)
 {
-        return (map->tiles[map->fim.x][map->fim.y].flags && flags);
+        return (tile->flags & flags);
+}
+
+void
+setFlag(Tiles *tile, int flags)
+{
+        tile->flags |= flags;
+}
+
+void
+unsetFlag(Tiles *tile, int flags)
+{
+        tile->flags &= ~flags;
 }
 
 int
@@ -48,11 +60,15 @@ freeSpace(Map map, WAY way)
 {
         int space = 0;
 
-        while (movePos(&map.fim, way)) {
-                if(!isFlag(&map, F_BORDER | F_SOLUTION)) {
+        while (movePos(&map.fim, way))
+        {
+                Tiles *tile = &map.tiles[map.fim.x][map.fim.y]; 
+                if(!hasFlag(tile, (F_BORDER | F_SOLUTION)))
+                {
                         space++;
                 }
-                else {
+                else
+                {
                         break;
                 }
         }

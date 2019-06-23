@@ -4,7 +4,7 @@
 #include <cmocka.h>
 
 extern const struct CMUnitTest test_map[2];
-extern const struct CMUnitTest test_move[2];
+extern const struct CMUnitTest test_move[8];
 
 /* run the test functions */
 int main(void) {
