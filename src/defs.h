@@ -7,7 +7,7 @@
 #include "SDL2/SDL_image.h"
 
 /* texture size per tile */
-#define TILESIZE 16
+#define TILE_SIZE 16
 
 /* size of level in tiles for 1 side */
 #define LEVELSIZE 28
@@ -18,8 +18,8 @@
 /* solution size */
 #define SOLSIZE 12
 
-#define SCREEN_WIDTH (TILESIZE*LEVELSIZE)
-#define SCREEN_HEIGHT (TILESIZE*LEVELSIZE)
+#define SCREEN_WIDTH (TILE_SIZE*LEVELSIZE)
+#define SCREEN_HEIGHT (TILE_SIZE*LEVELSIZE)
 
 /* total sprites taken from single texture */
 #define MAX_SPRITES 4
@@ -43,7 +43,7 @@ typedef enum
     WEST
 } WAY;
 
-enum
+enum Flags
 {
         F_BORDER   = (1 << 0),
         F_SOLUTION = (1 << 1)

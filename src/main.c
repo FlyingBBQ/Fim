@@ -12,6 +12,8 @@ main(int argc, char *argv[])
     /* Call the cleanup function when the program exits */
     atexit(cleanup);
 
+    loadImage("gfx/sprite.png");
+
     go = true;
 
     /* Loop indefinitely for messages */
@@ -20,17 +22,18 @@ main(int argc, char *argv[])
          * loop through all directions to test generation */
         alive = true;
 
+
         while (alive) {
             getInput();
 
             SDL_RenderClear(gRenderer);
 
             /* Draw the image on the screen */
-            loadImage("gfx/sprite.png");
+            genMap(map.tiles);
             draw();
-            render(toTales[Fim.pos].xT,
-                    toTales[Fim.pos].yT,
-                    &gClips[TEX_sprite]);
+
+            render(map.fim.x, map.fim.y, &gClips[TEX_sprite]);
+
             SDL_RenderPresent(gRenderer);
 
             if (Fim.moves <= 0)

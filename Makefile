@@ -8,7 +8,7 @@ TEST = Test
 
 CC = gcc
 CFLAGS = -Wall -pedantic -Werror -g -MMD -MP -ftest-coverage -fprofile-arcs
-LFLAGS := $(shell sdl2-config --libs) -lSDL2_image
+LFLAGS := $(shell sdl2-config --libs) -lSDL2_image -lgcov
 TFLAGS := -lcmocka -lgcov
 
 SRCDIR   = src

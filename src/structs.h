@@ -17,7 +17,7 @@ typedef struct {
         int x;
         int y;
         int type;
-        int flags;
+        unsigned int flags;
 } Tiles;
 
 typedef struct {
@@ -28,4 +28,5 @@ typedef struct {
 typedef struct {
         Tiles tiles[MAP_SIZE][MAP_SIZE];
         Pos fim;
+        int offset;
 } Map;

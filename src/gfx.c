@@ -1,5 +1,8 @@
 #include "gfx.h"
 
+/* texture is loaded once and "cached" here */
+static SDL_Texture *spritemap;
+
 SDL_Texture*
 loadImage(char *name)
 {
@@ -29,6 +32,8 @@ loadImage(char *name)
     /* Remove old loaded surface */
     SDL_FreeSurface(loadedImage);
 
+    spritemap = newTexture;
+
     return newTexture;
 }
 
@@ -48,27 +53,20 @@ render(int x, int y, SDL_Rect *clip)
 
     /* renderer, source texture, source SDL_Rect structure (NULL for entire texture),
      * destination SDL_Rect */
-    SDL_RenderCopy(gRenderer, texture_map.iTexture, clip, &dest);
+    SDL_RenderCopy(gRenderer, spritemap, clip, &dest);
 }
 
 void
 draw(void)
 {
-    /* loop through all tiles and draw them */
-    for (int i = 0; i < TOTAL_TILES; i++) {
-        switch (toTales[i].type) {
-        case TEX_sprite:
-            render(toTales[i].xT, toTales[i].yT, &gClips[TEX_sprite]);
-            break;
-        case TEX_bg:
-            render(toTales[i].xT, toTales[i].yT, &gClips[TEX_bg]);
-            break;
-        case TEX_grass:
-            render(toTales[i].xT, toTales[i].yT, &gClips[TEX_grass]);
-            break;
-        case TEX_water:
-            render(toTales[i].xT, toTales[i].yT, &gClips[TEX_water]);
-            break;
+        /* loop through all tiles and draw them */
+        for (int x = 0; x < MAP_SIZE; x++) 
+        {
+                for (int y = 0; y < MAP_SIZE; y++)
+                {
+                        render( map.tiles[x][y].x, 
+                                map.tiles[x][y].y, 
+                                &gClips[TEX_water] );
+                }
         }
-    }
 }

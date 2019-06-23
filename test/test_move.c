@@ -19,6 +19,11 @@ move_movePos_x(void **state)
 
         fim.x = MAP_SIZE;
         assert_false(movePos(&fim, SOUTH));
+        assert_true(movePos(&fim, NORTH));
+        assert_true(movePos(&fim, WEST));
+
+        /* default case */
+        assert_false(movePos(&fim, 42));
 }
 
 static void
