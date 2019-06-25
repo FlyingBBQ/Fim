@@ -11,16 +11,16 @@ move_movePos_x(void **state)
         Pos fim;
 
         fim.x = 0;
-        assert_false(movePos(&fim, NORTH));
+        assert_false(movePos(&fim, WEST));
 
         fim.x++;
-        assert_true(movePos(&fim, NORTH));
+        assert_true(movePos(&fim, WEST));
         assert_int_equal(fim.x, 0);
 
         fim.x = MAP_SIZE;
-        assert_false(movePos(&fim, SOUTH));
-        assert_true(movePos(&fim, NORTH));
+        assert_false(movePos(&fim, EAST));
         assert_true(movePos(&fim, WEST));
+        assert_true(movePos(&fim, NORTH));
 
         /* default case */
         assert_false(movePos(&fim, 42));
@@ -32,17 +32,17 @@ move_movePos_y(void **state)
         Pos fim;
 
         fim.y = 0;
-        assert_false(movePos(&fim, WEST));
+        assert_false(movePos(&fim, NORTH));
 
-        fim.y = MAP_SIZE;
-        assert_false(movePos(&fim, EAST));
+        fim.y = 15;
+        assert_false(movePos(&fim, SOUTH));
 
         fim.y--;
-        assert_true(movePos(&fim, EAST));
-        assert_int_equal(fim.y, MAP_SIZE);
+        assert_true(movePos(&fim, SOUTH));
+        assert_int_equal(fim.y, 15);
 
         fim.y = -1;
-        assert_false(movePos(&fim, WEST));
+        assert_false(movePos(&fim, NORTH));
 }
 
 static void
@@ -86,17 +86,17 @@ static void
 move_freeSpace_range(void **state)
 {
         Map map = {0};
-        assert_in_range(freeSpace(map, NORTH), 0, MAP_SIZE);
-        assert_in_range(freeSpace(map, EAST), 0, MAP_SIZE);
-        assert_in_range(freeSpace(map, SOUTH), 0, MAP_SIZE);
-        assert_in_range(freeSpace(map, WEST), 0, MAP_SIZE);
+        assert_in_range(freeSpace(map, NORTH), 0, MAP_SIZE-1);
+        assert_in_range(freeSpace(map, EAST), 0, MAP_SIZE-1);
+        assert_in_range(freeSpace(map, SOUTH), 0, MAP_SIZE-1);
+        assert_in_range(freeSpace(map, WEST), 0, MAP_SIZE-1);
 }
 
 static void
 move_freeSpace_steps(void **state)
 {
-        Map map = {0};
-        assert_int_equal(freeSpace(map, SOUTH), MAP_SIZE);
+        static Map map = {0};
+        assert_int_equal(freeSpace(map, SOUTH), (MAP_SIZE-1));
 
         assert_int_equal(map.fim.x, 0);
         assert_int_equal(map.fim.y, 0);

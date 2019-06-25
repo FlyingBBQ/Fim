@@ -29,12 +29,9 @@ genMap(Tiles tiles[MAP_SIZE][MAP_SIZE])
                 {
                         tiles[x][y].x = xClip;
                         tiles[x][y].y = yClip;
-
                         yClip += TILE_SIZE;
                 }
-
                 xClip += TILE_SIZE;
                 yClip = 0;
         }
-
 }

@@ -17,7 +17,7 @@ typedef struct {
         int x;
         int y;
         int type;
-        unsigned int flags;
+        unsigned char flags;
 } Tiles;
 
 typedef struct {

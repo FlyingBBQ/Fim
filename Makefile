@@ -7,9 +7,9 @@ GAME = Fim
 TEST = Test
 
 CC = gcc
-CFLAGS = -Wall -pedantic -Werror -g -MMD -MP -ftest-coverage -fprofile-arcs
-LFLAGS := $(shell sdl2-config --libs) -lSDL2_image -lgcov
-TFLAGS := -lcmocka -lgcov
+CFLAGS = -Wall -pedantic -Werror -g -MMD -MP 
+LFLAGS := $(shell sdl2-config --libs) -lSDL2_image # -lgcov
+TFLAGS := -lcmocka # -lgcov
 
 SRCDIR   = src
 DOCDIR   = docs
@@ -43,12 +43,18 @@ clean:
 run: $(BUILDIR)/$(GAME)
 	./$(BUILDIR)/$(GAME)
 
-test: $(BUILDIR)/$(TEST)
+build_test: CFLAGS += -ftest-coverage -fprofile-arcs
+build_test: LFLAGS += -lgcov
+build_test: TFLAGS += -lgcov
+build_test: $(BUILDIR)/$(TEST)
+
+test: build_test
 	./$(BUILDIR)/$(TEST)
 
 docs: | Doxyfile
 	doxygen Doxyfile
 
-covr: $(BUILDIR)/$(TEST)
+#covr: $(BUILDIR)/$(TEST)
+covr: build_test
 	./$(BUILDIR)/$(TEST) > /dev/null
 	gcovr $(BUILDIR)/$(TESTDIR) -r $(SRCDIR)

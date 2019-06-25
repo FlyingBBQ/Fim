@@ -8,30 +8,30 @@ movePos(Pos *fim, WAY way)
         switch (way)
         {
         case NORTH:
-                if (fim->x > 0)
+                if (fim->y > 0)
                 {
-                        fim->x--;
+                        fim->y--;
                         res = true;
                 }
                 break;
         case EAST:
-                if (fim->y < MAP_SIZE)
-                {
-                        fim->y++;
-                        res = true;
-                }
-                break;
-        case SOUTH:
-                if (fim->x < MAP_SIZE)
+                if (fim->x < (MAP_SIZE-1))
                 {
                         fim->x++;
                         res = true;
                 }
                 break;
-        case WEST:
-                if (fim->y > 0)
+        case SOUTH:
+                if (fim->y < (MAP_SIZE-1))
                 {
-                        fim->y--;
+                        fim->y++;
+                        res = true;
+                }
+                break;
+        case WEST:
+                if (fim->x > 0)
+                {
+                        fim->x--;
                         res = true;
                 }
                 break;
@@ -43,7 +43,7 @@ movePos(Pos *fim, WAY way)
 }
 
 bool
-hasFlag(Tiles *tile, int flags)
+hasFlag(Tiles *tile, unsigned char flags)
 {
         return (tile->flags & flags);
 }
@@ -79,6 +79,5 @@ freeSpace(Map map, WAY way)
                 memset(tile, 0, sizeof(Tiles));
         }
 
-        printf("SPACE %d\r\n", space);
         return space;
 }
