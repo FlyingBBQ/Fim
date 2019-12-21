@@ -35,7 +35,7 @@ $(BUILDIR)/%.o: %.c
 
 -include $(DEPS)
 
-.PHONY: clean run test docs covr
+.PHONY: clean run test docs covr format
 
 clean:
 	rm -rf $(BUILDIR)
@@ -58,3 +58,6 @@ docs: | Doxyfile
 covr: build_test
 	./$(BUILDIR)/$(TEST) > /dev/null
 	gcovr $(BUILDIR)/$(TESTDIR) -r $(SRCDIR)
+
+format:
+	astyle --project=astylerc $(SRCDIR)/*.c $(SRCDIR)/*.h
