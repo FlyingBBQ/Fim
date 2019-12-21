@@ -3,69 +3,70 @@
 /* texture is loaded once and "cached" here */
 static SDL_Texture *spritemap;
 
-SDL_Texture*
+SDL_Texture *
 loadImage(char *name)
 {
-    /* load the image */
-    SDL_Surface *loadedImage = IMG_Load(name);
-    if (loadedImage == NULL)
-        printf("Unable to load image %s SDL_image error: %s\n", name, IMG_GetError());
+        /* load the image */
+        SDL_Surface *loadedImage = IMG_Load(name);
+        if (loadedImage == NULL) {
+                printf("Unable to load image %s SDL_image error: %s\n", name, IMG_GetError());
+        }
 
-    /* Color key the image */
-    SDL_SetColorKey(loadedImage, SDL_TRUE, SDL_MapRGB(loadedImage->format, 0, 0, 0));
+        /* Color key the image */
+        SDL_SetColorKey(loadedImage, SDL_TRUE, SDL_MapRGB(loadedImage->format, 0, 0,
+                        0));
 
-    /* final texture */
-    SDL_Texture *newTexture = NULL;
+        /* final texture */
+        SDL_Texture *newTexture = NULL;
 
-    /* Create texture from surface pixels */
-    newTexture = SDL_CreateTextureFromSurface(gRenderer, loadedImage);
-    if (newTexture == NULL)
-        printf("Couldn't create texture %s\n", SDL_GetError());
+        /* Create texture from surface pixels */
+        newTexture = SDL_CreateTextureFromSurface(gRenderer, loadedImage);
+        if (newTexture == NULL) {
+                printf("Couldn't create texture %s\n", SDL_GetError());
+        }
 
-    texture_map.iTexture = newTexture;
-    texture_map.iWidth = loadedImage->w;
-    texture_map.iHeight = loadedImage->h;
+        texture_map.iTexture = newTexture;
+        texture_map.iWidth = loadedImage->w;
+        texture_map.iHeight = loadedImage->h;
 
-    /* set the clips for every texture */
-    setClip();
+        /* set the clips for every texture */
+        setClip();
 
-    /* Remove old loaded surface */
-    SDL_FreeSurface(loadedImage);
+        /* Remove old loaded surface */
+        SDL_FreeSurface(loadedImage);
 
-    spritemap = newTexture;
-
-    return newTexture;
+        spritemap = newTexture;
+        return newTexture;
 }
 
 /* render function to put texture at position and with size. */
 void
 render(int x, int y, SDL_Rect *clip)
 {
-    SDL_Rect dest;
+        SDL_Rect dest;
 
-    if (clip == NULL)
-        printf("Couldn't create clip %s\n", SDL_GetError());
-
-    dest.x = x;
-    dest.y = y;
-    dest.w = clip->w;
-    dest.h = clip->h;
-
-    /* renderer, source texture, source SDL_Rect structure (NULL for entire texture),
-     * destination SDL_Rect */
-    SDL_RenderCopy(gRenderer, spritemap, clip, &dest);
+        if (clip == NULL) {
+                printf("Couldn't create clip %s\n", SDL_GetError());
+        }
+        dest.x = x;
+        dest.y = y;
+        dest.w = clip->w;
+        dest.h = clip->h;
+        /*
+         * renderer, source texture, source SDL_Rect structure (NULL for entire texture),
+         * destination SDL_Rect
+         */
+        SDL_RenderCopy(gRenderer, spritemap, clip, &dest);
 }
 
 void
 draw(void)
 {
         /* loop through all tiles and draw them */
-        for (int x = 0; x < MAP_SIZE; x++) 
-        {
-                for (int y = 0; y < MAP_SIZE; y++)
-                {
-                        render( map.tiles[x][y].x, 
-                                map.tiles[x][y].y, 
+        for (int x = 0; x < MAP_SIZE; x++) {
+                for (int y = 0; y < MAP_SIZE; y++) {
+                        render( map.tiles[x][y].x,
+                                map.tiles[x][y].y,
                                 &gClips[TEX_water] );
                 }
         }

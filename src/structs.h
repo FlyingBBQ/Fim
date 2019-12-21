@@ -1,14 +1,14 @@
 #include "defs.h"
 
 typedef struct Entity {
-    SDL_Texture *iTexture;
-    int xpos, ypos;
-    int iWidth, iHeight;
+        SDL_Texture *iTexture;
+        int xpos, ypos;
+        int iWidth, iHeight;
 } Entity;
 
 typedef struct Player {
-    int prev, pos;
-    int moves;
+        int prev, pos;
+        int moves;
 } Player;
 
 

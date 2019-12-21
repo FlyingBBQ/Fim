@@ -5,32 +5,27 @@ movePos(Pos *fim, WAY way)
 {
         bool res = false;
 
-        switch (way)
-        {
+        switch (way) {
         case NORTH:
-                if (fim->y > 0)
-                {
+                if (fim->y > 0) {
                         fim->y--;
                         res = true;
                 }
                 break;
         case EAST:
-                if (fim->x < (MAP_SIZE-1))
-                {
+                if (fim->x < (MAP_SIZE - 1)) {
                         fim->x++;
                         res = true;
                 }
                 break;
         case SOUTH:
-                if (fim->y < (MAP_SIZE-1))
-                {
+                if (fim->y < (MAP_SIZE - 1)) {
                         fim->y++;
                         res = true;
                 }
                 break;
         case WEST:
-                if (fim->x > 0)
-                {
+                if (fim->x > 0) {
                         fim->x--;
                         res = true;
                 }
@@ -38,7 +33,6 @@ movePos(Pos *fim, WAY way)
         default:
                 break;
         }
-
         return res;
 }
 
@@ -65,19 +59,14 @@ freeSpace(Map map, WAY way)
 {
         int space = 0;
 
-        while (movePos(&map.fim, way))
-        {
+        while (movePos(&map.fim, way)) {
                 Tiles *tile = &map.tiles[map.fim.x][map.fim.y];
-                if(hasFlag(tile, (F_BORDER | F_SOLUTION)))
-                {
+                if (hasFlag(tile, (F_BORDER | F_SOLUTION))) {
                         break;
-                }
-                else
-                {
+                } else {
                         space++;
                 }
                 memset(tile, 0, sizeof(Tiles));
         }
-
         return space;
 }

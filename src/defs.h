@@ -27,24 +27,21 @@
 /* size of a map */
 #define MAP_SIZE 16
 
-enum
-{
-    TEX_sprite,
-    TEX_bg,
-    TEX_grass,
-    TEX_water
+enum {
+        TEX_sprite,
+        TEX_bg,
+        TEX_grass,
+        TEX_water
 };
 
-typedef enum
-{
-    NORTH,
-    EAST,
-    SOUTH,
-    WEST
+typedef enum {
+        NORTH,
+        EAST,
+        SOUTH,
+        WEST
 } WAY;
 
-enum Flags
-{
+enum Flags {
         F_BORDER   = (1 << 0),
         F_SOLUTION = (1 << 1)
 };
