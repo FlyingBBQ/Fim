@@ -2,5 +2,4 @@
 
 extern struct Player Fim;
 
-extern int moveSpace(int, int);
-extern int movePos(int, int, int);
+extern int move_pos(int, int, int);
