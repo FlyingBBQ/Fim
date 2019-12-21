@@ -1,39 +1,32 @@
 #include "move.h"
 
+static bool move_north(Pos *fim);
+static bool move_east(Pos *fim);
+static bool move_south(Pos *fim);
+static bool move_west(Pos *fim);
+
 bool
 movePos(Pos *fim, WAY way)
 {
-        bool res = false;
+        bool moved = false;
 
         switch (way) {
         case NORTH:
-                if (fim->y > 0) {
-                        fim->y--;
-                        res = true;
-                }
+                moved = move_north(fim);
                 break;
         case EAST:
-                if (fim->x < (MAP_SIZE - 1)) {
-                        fim->x++;
-                        res = true;
-                }
+                moved = move_east(fim);
                 break;
         case SOUTH:
-                if (fim->y < (MAP_SIZE - 1)) {
-                        fim->y++;
-                        res = true;
-                }
+                moved = move_south(fim);
                 break;
         case WEST:
-                if (fim->x > 0) {
-                        fim->x--;
-                        res = true;
-                }
+                moved = move_west(fim);
                 break;
         default:
                 break;
         }
-        return res;
+        return moved;
 }
 
 bool
@@ -70,3 +63,44 @@ freeSpace(Map map, WAY way)
         }
         return space;
 }
+
+static bool
+move_north(Pos *fim)
+{
+        if (fim->y > 0) {
+                fim->y--;
+                return true;
+        }
+        return false;
+}
+
+static bool
+move_east(Pos *fim)
+{
+        if (fim->x < (MAP_SIZE - 1)) {
+                fim->x++;
+                return true;
+        }
+        return false;
+}
+
+static bool
+move_south(Pos *fim)
+{
+        if (fim->y < (MAP_SIZE - 1)) {
+                fim->y++;
+                return true;
+        }
+        return false;
+}
+
+static bool
+move_west(Pos *fim)
+{
+        if (fim->x > 0) {
+                fim->x--;
+                return true;
+        }
+        return false;
+}
+
