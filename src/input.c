@@ -1,7 +1,8 @@
 #include "input.h"
+#include "move.h"
 
 void
-getInput()
+input_get(void)
 {
         SDL_Event event;
 

@@ -1,4 +1,5 @@
-#include "main.h"
+#include "gfx.h"
+#include "input.h"
 
 int
 main(void)
@@ -6,30 +7,28 @@ main(void)
         bool alive = false;
 
         /* Start up SDL */
-        init("Fim the game");
+        gfx_init("Fim the game");
+
         /* Call the cleanup function when the program exits */
-        atexit(cleanup);
-        /* load the image containing all the sprites */
-        loadImage("gfx/sprite.png");
+        atexit(gfx_cleanup);
+
+        /* create a new map */
+        Map map = map_new();
 
         alive = true;
         while (alive) {
-                getInput();
+                input_get();
 
                 /* Clear the screen */
-                SDL_RenderClear(gRenderer);
+                SDL_RenderClear(gfx_get_renderer());
 
                 /* Draw the image on the screen */
-                genMap(map.tiles);
-                draw();
+                gfx_draw(&map);
 
                 /* Render the screen and display it */
-                render(map.fim.x, map.fim.y, &gClips[TEX_sprite]);
-                SDL_RenderPresent(gRenderer);
+                gfx_render(map.fim.x, map.fim.y, &sprite_clips[TEX_sprite]);
+                SDL_RenderPresent(gfx_get_renderer());
 
-                if (Fim.moves <= 0) {
-                        //alive = false;
-                }
                 /* Sleep briefly to stop sucking up all the CPU time */
                 SDL_Delay(16);
         }
