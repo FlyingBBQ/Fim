@@ -1,4 +1,4 @@
 # ignore object files
 
 build/
-doxygen/
+docs/doxygen/

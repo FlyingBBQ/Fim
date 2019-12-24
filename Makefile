@@ -53,8 +53,8 @@ build_test: $(BUILDIR)/$(TEST)
 test: build_test
 	./$(BUILDIR)/$(TEST)
 
-docs: | Doxyfile
-	doxygen Doxyfile
+docs: | $(DOCDIR)/Doxyfile
+	doxygen $(DOCDIR)/Doxyfile
 
 #covr: $(BUILDIR)/$(TEST)
 covr: build_test
