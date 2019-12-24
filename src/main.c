@@ -1,7 +1,7 @@
 #include "main.h"
 
 int
-main(int argc, char *argv[])
+main(void)
 {
         bool alive = false;
 
