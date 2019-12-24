@@ -1,5 +1,6 @@
-#include <stdbool.h>
 #include "player.h"
+
+#include <stdbool.h>
 
 static unsigned int lives;
 static bool is_alive;
