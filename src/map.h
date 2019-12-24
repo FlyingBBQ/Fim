@@ -1,7 +1,27 @@
-#include "structs.h"
+#pragma once
 
-#define SOLUTION_SIZE 8
+#include "level.h"
+#include "sprites.h"
 
-int sol[SOLUTION_SIZE];
+/* size of a map */
+#define MAP_SIZE 16
 
-extern Map map;
+enum Flags {
+        F_BORDER   = (1 << 0),
+        F_SOLUTION = (1 << 1)
+};
+
+typedef struct {
+        int x;
+        int y;
+        int type;
+        unsigned char flags;
+} Tiles;
+
+typedef struct {
+        Tiles tiles[MAP_SIZE][MAP_SIZE];
+        Pos fim;
+        int offset;
+} Map;
+
+Map map_new(void);

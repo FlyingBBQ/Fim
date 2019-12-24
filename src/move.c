@@ -1,62 +1,12 @@
 #include "move.h"
 
-static bool move_north(Pos *fim);
-static bool move_east(Pos *fim);
-static bool move_south(Pos *fim);
-static bool move_west(Pos *fim);
-static bool has_flag(Tiles *tile, unsigned char flags);
+#include <stdbool.h>
+#include <string.h>
 
-bool
-move_pos(Pos *fim, WAY way)
+Way
+move_opposite(Way way)
 {
-        bool moved = false;
-
-        switch (way) {
-        case NORTH:
-                moved = move_north(fim);
-                break;
-        case EAST:
-                moved = move_east(fim);
-                break;
-        case SOUTH:
-                moved = move_south(fim);
-                break;
-        case WEST:
-                moved = move_west(fim);
-                break;
-        default:
-                break;
-        }
-        return moved;
-}
-
-int
-free_space(Map map, WAY way)
-{
-        int space = 0;
-
-        while (move_pos(&map.fim, way)) {
-                Tiles *tile = &map.tiles[map.fim.x][map.fim.y];
-                if (has_flag(tile, (F_BORDER | F_SOLUTION))) {
-                        break;
-                } else {
-                        space++;
-                }
-                memset(tile, 0, sizeof(Tiles));
-        }
-        return space;
-}
-
-void
-set_flag(Tiles *tile, int flags)
-{
-        tile->flags |= flags;
-}
-
-void
-unset_flag(Tiles *tile, int flags)
-{
-        tile->flags &= ~flags;
+        return (way + 2) % 4;
 }
 
 static bool
@@ -99,8 +49,62 @@ move_west(Pos *fim)
         return false;
 }
 
+bool
+move_position(Pos *fim, Way way)
+{
+        bool moved = false;
+
+        switch (way) {
+        case NORTH:
+                moved = move_north(fim);
+                break;
+        case EAST:
+                moved = move_east(fim);
+                break;
+        case SOUTH:
+                moved = move_south(fim);
+                break;
+        case WEST:
+                moved = move_west(fim);
+                break;
+        default:
+                break;
+        }
+        return moved;
+}
+
 static bool
 has_flag(Tiles *tile, unsigned char flags)
 {
         return (tile->flags & flags);
 }
+
+int
+move_check_free_space(Map map, Way way)
+{
+        int space = 0;
+
+        while (move_position(&map.fim, way)) {
+                Tiles *tile = &map.tiles[map.fim.x][map.fim.y];
+                if (has_flag(tile, (F_BORDER | F_SOLUTION))) {
+                        break;
+                } else {
+                        space++;
+                }
+                memset(tile, 0, sizeof(Tiles));
+        }
+        return space;
+}
+
+void
+set_flag(Tiles *tile, int flags)
+{
+        tile->flags |= flags;
+}
+
+void
+unset_flag(Tiles *tile, int flags)
+{
+        tile->flags &= ~flags;
+}
+

@@ -1,34 +1,28 @@
 #include "map.h"
 
-WAY
-oppositeWay(WAY way)
+static void
+map_generate_xy(Tiles tiles[MAP_SIZE][MAP_SIZE])
 {
-        return (way + 2) % 4;
-}
+        int clip_x = 0;
+        int clip_y = 0;
 
-void
-genSolution(int *solution)
-{
-        srand(time(NULL));
-
-        for (int i = 0; i < SOLUTION_SIZE; i++) {
-                solution[i] = rand() % 4;
-        }
-}
-
-void
-genMap(Tiles tiles[MAP_SIZE][MAP_SIZE])
-{
-        int xClip = 0;
-        int yClip = 0;
-
-        for (int x = 0; x < MAP_SIZE; x++) {
-                for (int y = 0; y < MAP_SIZE; y++) {
-                        tiles[x][y].x = xClip;
-                        tiles[x][y].y = yClip;
-                        yClip += TILE_SIZE;
+        for (int x = 0; x < MAP_SIZE; ++x) {
+                for (int y = 0; y < MAP_SIZE; ++y) {
+                        tiles[x][y].x = clip_x;
+                        tiles[x][y].y = clip_y;
+                        clip_y += TILE_SIZE;
                 }
-                xClip += TILE_SIZE;
-                yClip = 0;
+                clip_x += TILE_SIZE;
+                clip_y = 0;
         }
 }
+
+Map
+map_new(void)
+{
+        Map map = {0};
+
+        map_generate_xy(map.tiles);
+        return map;
+}
+

@@ -1,47 +1,95 @@
 #include "gfx.h"
 
-/* texture is loaded once and "cached" here */
 static SDL_Texture *spritemap;
+static SDL_Window *window;
+static SDL_Renderer *renderer;
 
-SDL_Texture *
-loadImage(char *name)
+static char *image_name = "gfx/sprite.png";
+
+static void
+gfx_load_image(void)
 {
         /* load the image */
-        SDL_Surface *loadedImage = IMG_Load(name);
-        if (loadedImage == NULL) {
-                printf("Unable to load image %s SDL_image error: %s\n", name, IMG_GetError());
+        SDL_Surface *loaded_image = IMG_Load(image_name);
+        if (loaded_image == NULL) {
+                printf("Unable to load image %s SDL_image error: %s\n", image_name,
+                       IMG_GetError());
         }
 
         /* Color key the image */
-        SDL_SetColorKey(loadedImage, SDL_TRUE, SDL_MapRGB(loadedImage->format, 0, 0,
+        SDL_SetColorKey(loaded_image, SDL_TRUE, SDL_MapRGB(loaded_image->format, 0, 0,
                         0));
 
-        /* final texture */
-        SDL_Texture *newTexture = NULL;
-
         /* Create texture from surface pixels */
-        newTexture = SDL_CreateTextureFromSurface(gRenderer, loadedImage);
-        if (newTexture == NULL) {
+        spritemap = SDL_CreateTextureFromSurface(renderer, loaded_image);
+        if (spritemap == NULL) {
                 printf("Couldn't create texture %s\n", SDL_GetError());
         }
 
-        texture_map.iTexture = newTexture;
-        texture_map.iWidth = loadedImage->w;
-        texture_map.iHeight = loadedImage->h;
-
         /* set the clips for every texture */
-        setClip();
+        sprites_set_clip();
 
         /* Remove old loaded surface */
-        SDL_FreeSurface(loadedImage);
+        SDL_FreeSurface(loaded_image);
+}
 
-        spritemap = newTexture;
-        return newTexture;
+void
+gfx_init(char *title)
+{
+        /* Initialise SDL Video */
+        if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+                printf("Could not initialize SDL: %s\n", SDL_GetError());
+                exit(1);
+        }
+
+        /* Open a 640 x 480 screen */
+        window = SDL_CreateWindow(title,
+                                  SDL_WINDOWPOS_UNDEFINED,
+                                  SDL_WINDOWPOS_UNDEFINED,
+                                  SCREEN_WIDTH, SCREEN_HEIGHT,
+                                  SDL_WINDOW_SHOWN);
+        if (window == NULL) {
+                printf("Couldn't create window: %s\n", SDL_GetError());
+                exit(1);
+        }
+
+        /* Initialize PNG loading */
+        int imgFlag = IMG_INIT_PNG;
+        if (!(IMG_Init(imgFlag) & imgFlag)) {
+                printf("Couldn't initialize IMG_INIT_PNG: %s\n", IMG_GetError());
+                exit(1);
+        }
+
+        /* Initialze renderer */
+        int rndrFlag = SDL_RENDERER_ACCELERATED;
+        renderer = SDL_CreateRenderer(window, -1, rndrFlag);
+        if (renderer == NULL) {
+                printf("Window could not be rendered %s\n", SDL_GetError());
+                exit(1);
+        }
+        SDL_SetRenderDrawColor(renderer, 10, 10, 10, 255);
+
+        /* load the image containing all the sprites */
+        gfx_load_image();
+}
+
+void
+gfx_cleanup(void)
+{
+        /* Shut down SDL */
+        SDL_DestroyRenderer(renderer);
+        SDL_DestroyWindow(window);
+
+        renderer = NULL;
+        window = NULL;
+
+        IMG_Quit();
+        SDL_Quit();
 }
 
 /* render function to put texture at position and with size. */
 void
-render(int x, int y, SDL_Rect *clip)
+gfx_render(int x, int y, SDL_Rect *clip)
 {
         SDL_Rect dest;
 
@@ -56,18 +104,24 @@ render(int x, int y, SDL_Rect *clip)
          * renderer, source texture, source SDL_Rect structure (NULL for entire texture),
          * destination SDL_Rect
          */
-        SDL_RenderCopy(gRenderer, spritemap, clip, &dest);
+        SDL_RenderCopy(renderer, spritemap, clip, &dest);
+}
+
+SDL_Renderer *
+gfx_get_renderer(void)
+{
+        return renderer;
 }
 
 void
-draw(void)
+gfx_draw(Map *map)
 {
         /* loop through all tiles and draw them */
         for (int x = 0; x < MAP_SIZE; x++) {
                 for (int y = 0; y < MAP_SIZE; y++) {
-                        render( map.tiles[x][y].x,
-                                map.tiles[x][y].y,
-                                &gClips[TEX_water] );
+                        gfx_render(map->tiles[x][y].x,
+                                   map->tiles[x][y].y,
+                                   &sprite_clips[TEX_water] );
                 }
         }
 }

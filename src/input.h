@@ -1,5 +1,3 @@
-#include "structs.h"
+#pragma once
 
-extern struct Player Fim;
-
-extern int move_pos(int, int, int);
+void input_get(void);
