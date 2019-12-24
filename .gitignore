@@ -1,5 +1,4 @@
 # ignore object files
 
 build/
-docs/
-.ccls-cache/
+doxygen/
