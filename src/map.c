@@ -1,5 +1,7 @@
 #include "map.h"
 
+static Map map = {0};
+
 static void
 map_generate_xy(Tiles tiles[MAP_SIZE][MAP_SIZE])
 {
@@ -17,12 +19,14 @@ map_generate_xy(Tiles tiles[MAP_SIZE][MAP_SIZE])
         }
 }
 
-Map
+void
 map_new(void)
 {
-        Map map = {0};
-
         map_generate_xy(map.tiles);
-        return map;
 }
 
+Map *
+map_get(void)
+{
+        return &map;
+}

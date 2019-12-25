@@ -73,6 +73,16 @@ move_position(Pos *fim, Way way)
         return moved;
 }
 
+void
+move_position_multiple(Pos *fim, Way way, unsigned int steps)
+{
+        for (unsigned int i = 0; i < steps; ++i) {
+                if (!move_position(fim, way)) {
+                        break;
+                }
+        }
+}
+
 static bool
 has_flag(Tiles *tile, unsigned char flags)
 {

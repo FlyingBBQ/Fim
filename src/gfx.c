@@ -87,7 +87,7 @@ gfx_cleanup(void)
         SDL_Quit();
 }
 
-/* render function to put texture at position and with size. */
+/* render function to put texture at position */
 void
 gfx_render(int x, int y, SDL_Rect *clip)
 {
@@ -107,6 +107,14 @@ gfx_render(int x, int y, SDL_Rect *clip)
         SDL_RenderCopy(renderer, spritemap, clip, &dest);
 }
 
+void
+gfx_render_player(Map *map)
+{
+        /* multiply with tilesize to move a tile instead of pixel */
+        gfx_render((map->fim.x * TILE_SIZE), (map->fim.y * TILE_SIZE),
+                   &sprite_clips[TEX_sprite]);
+}
+
 SDL_Renderer *
 gfx_get_renderer(void)
 {
@@ -119,9 +127,8 @@ gfx_draw(Map *map)
         /* loop through all tiles and draw them */
         for (int x = 0; x < MAP_SIZE; x++) {
                 for (int y = 0; y < MAP_SIZE; y++) {
-                        gfx_render(map->tiles[x][y].x,
-                                   map->tiles[x][y].y,
-                                   &sprite_clips[TEX_water] );
+                        gfx_render(map->tiles[x][y].x, map->tiles[x][y].y,
+                                   &sprite_clips[TEX_bg]);
                 }
         }
 }

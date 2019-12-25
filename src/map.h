@@ -24,4 +24,5 @@ typedef struct {
         int offset;
 } Map;
 
-Map map_new(void);
+void map_new(void);
+Map *map_get(void);
