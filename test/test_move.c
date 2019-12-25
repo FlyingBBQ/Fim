@@ -99,10 +99,10 @@ test_move_check_free_space_range(void **state)
 {
         Map map = {0};
 
-        assert_in_range(move_check_free_space(map, NORTH), 0, MAP_SIZE-1);
-        assert_in_range(move_check_free_space(map, EAST), 0, MAP_SIZE-1);
-        assert_in_range(move_check_free_space(map, SOUTH), 0, MAP_SIZE-1);
-        assert_in_range(move_check_free_space(map, WEST), 0, MAP_SIZE-1);
+        assert_in_range(move_check_free_space(map, NORTH), 0, MAP_SIZE - 1);
+        assert_in_range(move_check_free_space(map, EAST), 0, MAP_SIZE - 1);
+        assert_in_range(move_check_free_space(map, SOUTH), 0, MAP_SIZE - 1);
+        assert_in_range(move_check_free_space(map, WEST), 0, MAP_SIZE - 1);
 }
 
 static void
@@ -110,7 +110,7 @@ test_move_check_free_space_steps(void **state)
 {
         Map map = {0};
 
-        assert_int_equal(move_check_free_space(map, SOUTH), (MAP_SIZE-1));
+        assert_int_equal(move_check_free_space(map, SOUTH), (MAP_SIZE - 1));
         /* test if the player did not move */
         assert_int_equal(map.fim.x, 0);
         assert_int_equal(map.fim.y, 0);

@@ -62,4 +62,4 @@ covr: build_test
 	gcovr $(BUILDIR)/$(TESTDIR) -r $(SRCDIR)
 
 format:
-	astyle --project=astylerc $(SRCDIR)/*.c $(SRCDIR)/*.h
+	astyle --project=astylerc $(SRCDIR)/*.c $(SRCDIR)/*.h $(TESTDIR)/*.c
