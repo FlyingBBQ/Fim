@@ -16,6 +16,12 @@ test_level_generate_solution(void **state)
                 assert_in_range(solut[i], NORTH, WEST);
 }
 
-const struct CMUnitTest test_level[1] = {
+const struct CMUnitTest test_level[] = {
         cmocka_unit_test(test_level_generate_solution),
 };
+
+int 
+run_test_level(void)
+{
+        return cmocka_run_group_tests(test_level, NULL, NULL);
+}

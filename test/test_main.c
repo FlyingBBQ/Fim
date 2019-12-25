@@ -3,15 +3,14 @@
 #include <setjmp.h>
 #include <cmocka.h>
 
-extern const struct CMUnitTest test_level[1];
-extern const struct CMUnitTest test_move[9];
+extern int run_test_level(void);
+extern int run_test_move(void);
 
 /* run the test functions */
 int main(void) {
     int failed_tests = 0;
 
-    failed_tests += cmocka_run_group_tests(test_level, NULL, NULL);
-    failed_tests += cmocka_run_group_tests(test_move, NULL, NULL);
-
+    failed_tests += run_test_level();
+    failed_tests += run_test_move();
     return failed_tests;
 }
