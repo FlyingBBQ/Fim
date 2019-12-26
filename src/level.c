@@ -3,10 +3,10 @@
 #include <stdlib.h>
 #include <time.h>
 
-//static int solution[SOLUTION_SIZE];
+static unsigned int solution[SOLUTION_SIZE];
 
-void
-level_generate_solution(int *solution)
+static void
+level_generate_solution(unsigned int *solution)
 {
         srand(time(NULL));
 
@@ -15,3 +15,14 @@ level_generate_solution(int *solution)
         }
 }
 
+void
+level_new_solution(void)
+{
+        level_generate_solution(solution);
+}
+
+unsigned int *
+level_get_solution(void)
+{
+        return solution;
+}

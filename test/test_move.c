@@ -128,7 +128,7 @@ test_move_check_free_space_flag(void **state)
         assert_int_equal(move_check_free_space(map, SOUTH), 7);
 }
 
-const struct CMUnitTest test_move[] = {
+static const struct CMUnitTest test_move[] = {
         cmocka_unit_test(test_move_opposite),
         cmocka_unit_test(test_move_pos_x),
         cmocka_unit_test(test_move_pos_y),

@@ -9,7 +9,7 @@
 static void
 test_level_generate_solution(void **state)
 {
-        int solut[SOLUTION_SIZE];
+        unsigned int solut[SOLUTION_SIZE];
         level_generate_solution(solut);
 
         for (int i = 0; i < SOLUTION_SIZE; ++i) {
@@ -17,7 +17,7 @@ test_level_generate_solution(void **state)
         }
 }
 
-const struct CMUnitTest test_level[] = {
+static const struct CMUnitTest test_level[] = {
         cmocka_unit_test(test_level_generate_solution),
 };
 
