@@ -3,7 +3,6 @@
 static SDL_Texture *spritemap;
 static SDL_Window *window;
 static SDL_Renderer *renderer;
-
 static char *image_name = "gfx/sprite.png";
 
 static void
