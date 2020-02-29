@@ -1,7 +1,6 @@
 #include "move.h"
 
 #include <stdbool.h>
-#include <string.h>
 
 Way
 move_opposite(Way way)
@@ -95,7 +94,6 @@ move_check_free_space(Map map, Way way)
                 } else {
                         space++;
                 }
-                memset(tile, 0, sizeof(Tiles));
         }
         return space;
 }
