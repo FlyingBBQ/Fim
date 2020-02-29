@@ -119,4 +119,9 @@ move_to_way(Way const way)
 
         int steps = move_check_free_space(*map, way);
         move_position_multiple(&map->fim, way, steps);
+
+        if (move_get_collision(*map, way) & F_FINISH) {
+                puts("win\n");
+                player_game_over();
+        }
 }
