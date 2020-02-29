@@ -21,11 +21,13 @@ unset_flag(Tiles *tile, unsigned int const flags)
         tile->flags &= ~flags;
 }
 
-static void
+void
 map_set_tile_type(Tiles *tile)
 {
         if (has_flag(tile, F_FINISH)) {
                 tile->type = TEX_water;
+        } else if (has_flag(tile, F_BORDER)) {
+                tile->type = TEX_grass;
         } else {
                 tile->type = TEX_bg;
         }

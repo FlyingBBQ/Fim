@@ -2,6 +2,18 @@
 
 #include <assert.h>
 
+static void
+solver_prepare_step(Map *map, Way const way)
+{
+        Pos fim = map->fim;
+
+        if (move_position(&fim, way)) {
+                set_flag(&map->tiles[fim.x][fim.y], F_BORDER);
+        } else {
+                puts("failed to prepare");
+        }
+}
+
 void
 solver_step(Map *map, Way const way)
 {
@@ -18,7 +30,10 @@ solver_step_multiple(Map *map, unsigned int const solution_steps)
 
         unsigned int const *solution = level_get_solution();
 
-        for (unsigned int i = 0; i < solution_steps; ++i) {
+        /* The first step is already prepared */
+        solver_step(map, solution[0]);
+        for (unsigned int i = 1; i < solution_steps; ++i) {
+                solver_prepare_step(map, solution[i]);
                 solver_step(map, solution[i]);
         }
 }
@@ -40,6 +55,9 @@ solver_sanity_check(unsigned int const solution_steps)
                         solvable = true;
                 }
         }
-        assert(solvable);
+        //assert(solvable);
+        if (!solvable) {
+                puts("not solvable");
+        }
         return solvable;
 }
