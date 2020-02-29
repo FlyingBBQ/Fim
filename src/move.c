@@ -113,15 +113,8 @@ move_get_collision(Map map, Way const way)
 }
 
 void
-move_to_way(Way const way)
+move_to_way(Map *map, Way const way)
 {
-        Map *map = map_get();
-
         int steps = move_check_free_space(*map, way);
         move_position_multiple(&map->fim, way, steps);
-
-        if (move_get_collision(*map, way) & F_FINISH) {
-                puts("win\n");
-                player_game_over();
-        }
 }

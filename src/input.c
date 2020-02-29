@@ -21,7 +21,12 @@ input_handle_keydown(void)
         }
 
         if (0xDEAD != way) {
-                move_to_way(way);
+                Map *map = map_get();
+                move_to_way(map, way);
+                if (move_get_collision(*map, way) & F_FINISH) {
+                        puts("win");
+                        player_game_over();
+                }
         }
 }
 
