@@ -6,7 +6,7 @@
 GAME = Fim
 TEST = Test
 
-CC = gcc
+CC = gcc -std=c99
 CFLAGS = -Wall -Werror -Wextra -pedantic -g -MMD -MP 
 LFLAGS := $(shell sdl2-config --libs) -lSDL2_image # -lgcov
 TFLAGS := -lcmocka # -lgcov
@@ -22,6 +22,8 @@ TEST_SRCS = $(wildcard $(TESTDIR)/*.c)
 TEST_OBJS = $(TEST_SRCS:%.c=$(BUILDIR)/%.o)
 
 DEPS = $(OBJS:.o=.d)
+
+MAKEFLAGS := --jobs=$(shell nproc)
 
 mkdir_check = $(if $(wildcard $(@D)),,mkdir -p $(@D))
 
