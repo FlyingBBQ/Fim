@@ -31,3 +31,4 @@ Map *map_get(void);
 bool has_flag(Tiles const *tile, unsigned int const flags);
 void set_flag(Tiles *tile, unsigned int const flags);
 void unset_flag(Tiles *tile, unsigned int const flags);
+void map_set_tile_type(Tiles *tile);

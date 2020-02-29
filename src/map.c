@@ -41,7 +41,6 @@ map_generate_xy(Tiles tiles[][MAP_SIZE])
                 for (int y = 0; y < MAP_SIZE; ++y) {
                         tiles[x][y].x = clip_x;
                         tiles[x][y].y = clip_y;
-                        map_set_tile_type(&tiles[x][y]);
                         clip_y += TILE_SIZE;
                 }
                 clip_x += TILE_SIZE;
