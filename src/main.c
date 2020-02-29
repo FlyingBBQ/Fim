@@ -17,7 +17,10 @@ main(void)
         Map *map = map_get();
         unsigned int const *sol = level_get_solution();
 
+        /* move fim one step before initializing solver */
+        move_position(&map->fim, move_opposite(sol[0]));
         solver_step(map, sol[0]);
+        solver_sanity_check(0);
 
         while (player_is_alive()) {
                 input_get();
