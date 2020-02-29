@@ -3,13 +3,9 @@
 void
 solver_step(Map *map, Way const way)
 {
-        unsigned int free_space = 0;
-        unsigned int steps = 0;
+        unsigned int free_space = move_check_free_space(*map, move_opposite(way));
+        unsigned int steps = free_space ? (rand() % free_space) : 0;
 
-        free_space = move_check_free_space(*map, move_opposite(way));
-        if (free_space) {
-                steps = rand() % free_space;
-        }
         move_position_multiple(&map->fim, move_opposite(way), steps);
 }
 
