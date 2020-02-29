@@ -5,8 +5,6 @@
 int
 main(void)
 {
-        bool alive = false;
-
         /* Start up SDL */
         gfx_init("Fim the game");
 
@@ -21,8 +19,7 @@ main(void)
 
         solver_step(map, sol[0]);
 
-        alive = true;
-        while (alive) {
+        while (player_is_alive()) {
                 input_get();
 
                 /* Clear the screen */
