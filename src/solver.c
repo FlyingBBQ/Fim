@@ -33,6 +33,7 @@ solver_step_multiple(Map *map, unsigned int const solution_steps)
         /* The first step is already prepared */
         solver_step(map, solution[0]);
         for (unsigned int i = 1; i < solution_steps; ++i) {
+                /* Do not prepare if the direction is the same as the previous */
                 if (solution[i] != solution[i-1]) {
                         solver_prepare_step(map, solution[i]);
                 }
@@ -60,7 +61,8 @@ solver_sanity_check(unsigned int const solution_steps)
         }
         //assert(solvable);
         if (!solvable) {
-                puts("not solvable");
+                puts("not solvable, restarting..");
+                player_game_over();
         }
         return solvable;
 }

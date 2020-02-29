@@ -23,13 +23,14 @@ main(void)
 
                 Map *map = map_get();
                 unsigned int const *sol = level_get_solution();
+                unsigned int const solution_steps = SOLUTION_SIZE;
 
                 /* Move fim one step before initializing solver */
                 move_position(&map->fim, move_opposite(sol[0]));
 
                 /* Generate and test the map */
-                solver_step_multiple(map, 1);
-                solver_sanity_check(1);
+                solver_step_multiple(map, solution_steps);
+                solver_sanity_check(solution_steps);
 
                 while (player_is_alive()) {
                         input_get();
