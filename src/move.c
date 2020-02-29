@@ -89,7 +89,7 @@ move_check_free_space(Map map, Way const way)
 
         while (move_position(&map.fim, way)) {
                 Tiles *tile = &map.tiles[map.fim.x][map.fim.y];
-                if (has_flag(tile, (F_BORDER | F_SOLUTION))) {
+                if (has_flag(tile, (F_BORDER | F_FINISH))) {
                         break;
                 } else {
                         space++;
@@ -98,3 +98,16 @@ move_check_free_space(Map map, Way const way)
         return space;
 }
 
+unsigned int
+move_get_collision(Map map, Way const way)
+{
+        unsigned int collision = 0;
+
+        if (move_position(&map.fim, way)) {
+                collision = map.tiles[map.fim.x][map.fim.y].flags;        
+        } else {
+                /* if fim could not move, it reached the border = dead */
+                player_game_over();
+        }
+        return collision;
+}

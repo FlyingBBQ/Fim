@@ -16,3 +16,9 @@ player_is_alive(void)
 {
         return is_alive;
 }
+
+void
+player_game_over(void)
+{
+        is_alive = false;
+}
