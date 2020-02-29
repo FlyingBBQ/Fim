@@ -8,8 +8,17 @@ static unsigned int solution[SOLUTION_SIZE];
 static void
 level_generate_solution(unsigned int solution[])
 {
-        for (int i = 0; i < SOLUTION_SIZE; ++i) {
-                solution[i] = rand() % 4;
+        /* The first direction can be anywhere */
+        solution[0] = rand() % 4;
+        for (unsigned int i = 1; i < SOLUTION_SIZE; ++i) {
+                unsigned int r;
+                bool inverse_direction;
+                do {
+                        r = rand() % 4;
+                        inverse_direction = (r == ((solution[i - 1] + 2) % 4));
+                        /* Re-roll if an invalid solution is generated */
+                } while (inverse_direction);
+                solution[i] = r;
         }
 }
 

@@ -33,7 +33,9 @@ solver_step_multiple(Map *map, unsigned int const solution_steps)
         /* The first step is already prepared */
         solver_step(map, solution[0]);
         for (unsigned int i = 1; i < solution_steps; ++i) {
-                solver_prepare_step(map, solution[i]);
+                if (solution[i] != solution[i-1]) {
+                        solver_prepare_step(map, solution[i]);
+                }
                 solver_step(map, solution[i]);
         }
 }
@@ -53,6 +55,7 @@ solver_sanity_check(unsigned int const solution_steps)
                 if (move_get_collision(map, solution[i]) & F_FINISH) {
                         puts("solvable");
                         solvable = true;
+                        break;
                 }
         }
         //assert(solvable);
