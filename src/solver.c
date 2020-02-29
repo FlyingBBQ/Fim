@@ -1,7 +1,7 @@
 #include "solver.h"
 
 void
-solver_step(Map *map, Way way)
+solver_step(Map *map, Way const way)
 {
         unsigned int free_space = 0;
         unsigned int steps = 0;

@@ -11,7 +11,7 @@ typedef enum {
         WEST
 } Way;
 
-Way move_opposite(Way way);
-bool move_position(Pos *fim, Way way);
-void move_position_multiple(Pos *fim, Way way, unsigned int steps);
-int move_check_free_space(Map map, Way way);
+Way move_opposite(Way const way);
+bool move_position(Pos *fim, Way const way);
+void move_position_multiple(Pos *fim, Way const way, unsigned int const steps);
+unsigned int move_check_free_space(Map map, Way const way);

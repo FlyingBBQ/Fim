@@ -21,7 +21,7 @@ level_new_solution(void)
         level_generate_solution(solution);
 }
 
-unsigned int *
+unsigned int const *
 level_get_solution(void)
 {
         return solution;

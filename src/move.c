@@ -3,7 +3,7 @@
 #include <stdbool.h>
 
 Way
-move_opposite(Way way)
+move_opposite(Way const way)
 {
         return (way + 2) % 4;
 }
@@ -49,7 +49,7 @@ move_west(Pos *fim)
 }
 
 bool
-move_position(Pos *fim, Way way)
+move_position(Pos *fim, Way const way)
 {
         bool moved = false;
 
@@ -73,7 +73,7 @@ move_position(Pos *fim, Way way)
 }
 
 void
-move_position_multiple(Pos *fim, Way way, unsigned int steps)
+move_position_multiple(Pos *fim, Way const way, unsigned int const steps)
 {
         for (unsigned int i = 0; i < steps; ++i) {
                 if (!move_position(fim, way)) {
@@ -82,8 +82,8 @@ move_position_multiple(Pos *fim, Way way, unsigned int steps)
         }
 }
 
-int
-move_check_free_space(Map map, Way way)
+unsigned int
+move_check_free_space(Map map, Way const way)
 {
         int space = 0;
 

@@ -3,19 +3,19 @@
 static Map map = {0};
 
 bool
-has_flag(Tiles *tile, unsigned char flags)
+has_flag(Tiles const *tile, unsigned int const flags)
 {
         return (tile->flags & flags);
 }
 
 void
-set_flag(Tiles *tile, int flags)
+set_flag(Tiles *tile, unsigned int const flags)
 {
         tile->flags |= flags;
 }
 
 void
-unset_flag(Tiles *tile, int flags)
+unset_flag(Tiles *tile, unsigned int const flags)
 {
         tile->flags &= ~flags;
 }
@@ -49,7 +49,7 @@ map_generate_xy(Tiles tiles[][MAP_SIZE])
 }
 
 static void
-map_set_finish_tile(Map *map, unsigned int solution[])
+map_set_finish_tile(Map *map, unsigned int const solution[])
 {
         int finish_pos = rand() % MAP_SIZE;
 

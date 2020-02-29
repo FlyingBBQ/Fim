@@ -16,7 +16,7 @@ typedef struct {
         int x;
         int y;
         int type;
-        unsigned char flags;
+        unsigned int flags;
 } Tiles;
 
 typedef struct {
@@ -28,6 +28,6 @@ typedef struct {
 void map_new(void);
 Map *map_get(void);
 
-bool has_flag(Tiles *tile, unsigned char flags);
-void set_flag(Tiles *tile, int flags);
-void unset_flag(Tiles *tile, int flags);
+bool has_flag(Tiles const *tile, unsigned int const flags);
+void set_flag(Tiles *tile, unsigned int const flags);
+void unset_flag(Tiles *tile, unsigned int const flags);
