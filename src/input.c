@@ -6,22 +6,22 @@ input_handle_keydown(void)
 {
         /* Uint8 is a type from the SDL lib */
         const Uint8 *key_state = SDL_GetKeyboardState(NULL);
-        Map *map = map_get();
+        Way way = 0xDEAD;
 
         if (key_state[SDL_SCANCODE_LEFT] || key_state[SDL_SCANCODE_A]) {
-                int steps = move_check_free_space(*map, WEST);
-                move_position_multiple(&map->fim, WEST, steps);
+                way = WEST;
         } else if (key_state[SDL_SCANCODE_DOWN] || key_state[SDL_SCANCODE_S]) {
-                int steps = move_check_free_space(*map, SOUTH);
-                move_position_multiple(&map->fim, SOUTH, steps);
+                way = SOUTH;
         } else if (key_state[SDL_SCANCODE_UP] || key_state[SDL_SCANCODE_W]) {
-                int steps = move_check_free_space(*map, NORTH);
-                move_position_multiple(&map->fim, NORTH, steps);
+                way = NORTH;
         } else if (key_state[SDL_SCANCODE_RIGHT] || key_state[SDL_SCANCODE_D]) {
-                int steps = move_check_free_space(*map, EAST);
-                move_position_multiple(&map->fim, EAST, steps);
+                way = EAST;
         } else {
                 /* nothing */
+        }
+
+        if (0xDEAD != way) {
+                move_to_way(way);
         }
 }
 

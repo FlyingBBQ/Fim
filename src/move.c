@@ -104,10 +104,19 @@ move_get_collision(Map map, Way const way)
         unsigned int collision = 0;
 
         if (move_position(&map.fim, way)) {
-                collision = map.tiles[map.fim.x][map.fim.y].flags;        
+                collision = map.tiles[map.fim.x][map.fim.y].flags;
         } else {
                 /* if fim could not move, it reached the border = dead */
                 player_game_over();
         }
         return collision;
+}
+
+void
+move_to_way(Way const way)
+{
+        Map *map = map_get();
+
+        int steps = move_check_free_space(*map, way);
+        move_position_multiple(&map->fim, way, steps);
 }
