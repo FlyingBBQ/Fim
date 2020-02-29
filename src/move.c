@@ -83,12 +83,6 @@ move_position_multiple(Pos *fim, Way way, unsigned int steps)
         }
 }
 
-static bool
-has_flag(Tiles *tile, unsigned char flags)
-{
-        return (tile->flags & flags);
-}
-
 int
 move_check_free_space(Map map, Way way)
 {
@@ -104,17 +98,5 @@ move_check_free_space(Map map, Way way)
                 memset(tile, 0, sizeof(Tiles));
         }
         return space;
-}
-
-void
-set_flag(Tiles *tile, int flags)
-{
-        tile->flags |= flags;
-}
-
-void
-unset_flag(Tiles *tile, int flags)
-{
-        tile->flags &= ~flags;
 }
 

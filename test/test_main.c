@@ -5,6 +5,7 @@
 
 extern int run_test_level(void);
 extern int run_test_move(void);
+extern int run_test_map(void);
 
 int
 main(void)
@@ -14,5 +15,6 @@ main(void)
         /* run all the test functions */
         failed_tests += run_test_level();
         failed_tests += run_test_move();
+        failed_tests += run_test_map();
         return failed_tests;
 }

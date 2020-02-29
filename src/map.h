@@ -8,7 +8,8 @@
 
 enum Flags {
         F_BORDER   = (1 << 0),
-        F_SOLUTION = (1 << 1)
+        F_SOLUTION = (1 << 1),
+        F_FINISH   = (1 << 2)
 };
 
 typedef struct {
@@ -26,3 +27,7 @@ typedef struct {
 
 void map_new(void);
 Map *map_get(void);
+
+bool has_flag(Tiles *tile, unsigned char flags);
+void set_flag(Tiles *tile, int flags);
+void unset_flag(Tiles *tile, int flags);

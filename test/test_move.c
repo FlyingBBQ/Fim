@@ -59,42 +59,6 @@ test_move_pos_y(void **state)
 }
 
 static void
-test_has_flag(void **state)
-{
-        Tiles tile = {0};
-
-        tile.flags |= F_BORDER;
-        assert_true(has_flag(&tile, F_BORDER));
-        assert_false(has_flag(&tile, F_SOLUTION));
-
-        tile.flags |= F_SOLUTION;
-        assert_true(has_flag(&tile, F_SOLUTION));
-        assert_true(has_flag(&tile, F_BORDER));
-}
-
-static void
-test_set_flag(void **state)
-{
-        Tiles tile = {0};
-
-        set_flag(&tile, F_BORDER);
-        assert_int_equal(tile.flags, F_BORDER);
-
-        set_flag(&tile, F_SOLUTION);
-        assert_int_equal(tile.flags, (F_SOLUTION | F_BORDER));
-}
-
-static void
-test_unset_flag(void **state)
-{
-        Tiles tile = {0};
-
-        set_flag(&tile, (F_BORDER | F_SOLUTION));
-        unset_flag(&tile, F_BORDER);
-        assert_int_equal(tile.flags, F_SOLUTION);
-}
-
-static void
 test_move_check_free_space_range(void **state)
 {
         Map map = {0};
@@ -132,9 +96,6 @@ static const struct CMUnitTest test_move[] = {
         cmocka_unit_test(test_move_opposite),
         cmocka_unit_test(test_move_pos_x),
         cmocka_unit_test(test_move_pos_y),
-        cmocka_unit_test(test_has_flag),
-        cmocka_unit_test(test_set_flag),
-        cmocka_unit_test(test_unset_flag),
         cmocka_unit_test(test_move_check_free_space_range),
         cmocka_unit_test(test_move_check_free_space_steps),
         cmocka_unit_test(test_move_check_free_space_flag),
