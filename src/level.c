@@ -6,7 +6,7 @@
 static unsigned int solution[SOLUTION_SIZE];
 
 static void
-level_generate_solution(unsigned int *solution)
+level_generate_solution(unsigned int solution[])
 {
         srand(time(NULL));
 
