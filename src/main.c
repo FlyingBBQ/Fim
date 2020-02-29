@@ -11,32 +11,37 @@ main(void)
         /* Call the cleanup function when the program exits */
         atexit(gfx_cleanup);
 
-        /* create a new map */
-        map_new();
+        for (;;) {
+                /* Start a new level */
+                player_init();
+                map_new();
 
-        Map *map = map_get();
-        unsigned int const *sol = level_get_solution();
+                Map *map = map_get();
+                unsigned int const *sol = level_get_solution();
 
-        /* move fim one step before initializing solver */
-        move_position(&map->fim, move_opposite(sol[0]));
-        solver_step(map, sol[0]);
-        solver_sanity_check(0);
+                /* Move fim one step before initializing solver */
+                move_position(&map->fim, move_opposite(sol[0]));
 
-        while (player_is_alive()) {
-                input_get();
+                /* Generate and test the map */
+                solver_step_multiple(map, 1);
+                solver_sanity_check(1);
 
-                /* Clear the screen */
-                SDL_RenderClear(gfx_get_renderer());
+                while (player_is_alive()) {
+                        input_get();
 
-                /* Draw the image on the screen */
-                gfx_draw(map);
+                        /* Clear the screen */
+                        SDL_RenderClear(gfx_get_renderer());
 
-                /* Render the screen and display it */
-                gfx_render_player(map);
-                SDL_RenderPresent(gfx_get_renderer());
+                        /* Draw the image on the screen */
+                        gfx_draw(map);
 
-                /* Sleep briefly to stop sucking up all the CPU time */
-                SDL_Delay(16);
+                        /* Render the screen and display it */
+                        gfx_render_player(map);
+                        SDL_RenderPresent(gfx_get_renderer());
+
+                        /* Sleep briefly to stop sucking up all the CPU time */
+                        SDL_Delay(16);
+                }
         }
         /* Exit the program */
         exit(0);

@@ -22,3 +22,9 @@ player_game_over(void)
 {
         is_alive = false;
 }
+
+void
+player_init(void)
+{
+        is_alive = true;
+}
