@@ -1,6 +1,7 @@
 #include "map.h"
 
-static Map map = {0};
+static const Map empty_map = {0};
+static Map map;
 
 bool
 has_flag(Tiles const *tile, unsigned int const flags)
@@ -70,6 +71,7 @@ void
 map_new(void)
 {
         level_new_solution();
+        map = empty_map;
         map_set_finish_tile(&map, level_get_solution());
         map_generate_xy(map.tiles);
 }

@@ -1,6 +1,7 @@
 #include "level.h"
 
 #include <stdlib.h>
+#include <string.h>
 #include <time.h>
 
 static unsigned int solution[SOLUTION_SIZE];
@@ -18,6 +19,7 @@ level_generate_solution(unsigned int solution[])
 void
 level_new_solution(void)
 {
+        memset(solution, 0, sizeof(solution));
         level_generate_solution(solution);
 }
 
