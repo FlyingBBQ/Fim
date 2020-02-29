@@ -48,9 +48,28 @@ map_generate_xy(Tiles tiles[][MAP_SIZE])
         }
 }
 
+static void
+map_set_finish_tile(Map *map)
+{
+        bool is_x = rand() % 2;
+        bool is_start = rand() % 2;
+        int finish_pos = rand() % MAP_SIZE;
+
+        if (is_x) {
+                map->fim.x = is_start ? 0 : (MAP_SIZE - 1);
+                map->fim.y = finish_pos;
+        } else {
+                map->fim.y = is_start ? 0 : (MAP_SIZE - 1);
+                map->fim.x = finish_pos;
+        }
+        set_flag(&map->tiles[map->fim.x][map->fim.y], F_FINISH);
+}
+
 void
 map_new(void)
 {
+        level_new_solution();
+        map_set_finish_tile(&map);
         map_generate_xy(map.tiles);
 }
 
