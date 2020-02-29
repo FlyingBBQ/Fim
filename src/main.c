@@ -1,3 +1,5 @@
+#include <stdlib.h>
+#include <time.h>
 #include "gfx.h"
 #include "input.h"
 #include "solver.h"
@@ -10,6 +12,9 @@ main(void)
 
         /* Call the cleanup function when the program exits */
         atexit(gfx_cleanup);
+
+        /* Set the random level generation seed */
+        srand(time(NULL));
 
         for (;;) {
                 /* Start a new level */
