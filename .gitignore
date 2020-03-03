@@ -1,3 +1,6 @@
 # ignore object files
 
-bin/
+build/
+docs/doxygen/
+src/*.orig
+test/*.orig

@@ -1,24 +1,28 @@
 #include "sprites.h"
 
-void setClip( void )
+/* the array containing the clip of each sprite */
+SDL_Rect sprite_clips[MAX_SPRITES];
+
+void
+sprites_set_clip(void)
 {
-    gClips[TEX_sprite].x = TILESIZE;
-    gClips[TEX_sprite].y = 0;
-    gClips[TEX_sprite].w = TILESIZE;
-    gClips[TEX_sprite].h = TILESIZE;
-    
-    gClips[TEX_bg].x = 0;
-    gClips[TEX_bg].y = 0;
-    gClips[TEX_bg].w = TILESIZE;
-    gClips[TEX_bg].h = TILESIZE;
+        sprite_clips[TEX_sprite].x = TILE_SIZE;
+        sprite_clips[TEX_sprite].y = 0;
+        sprite_clips[TEX_sprite].w = TILE_SIZE;
+        sprite_clips[TEX_sprite].h = TILE_SIZE;
 
-    gClips[TEX_grass].x = 0;
-    gClips[TEX_grass].y = TILESIZE;
-    gClips[TEX_grass].w = TILESIZE;
-    gClips[TEX_grass].h = TILESIZE;
+        sprite_clips[TEX_bg].x = 0;
+        sprite_clips[TEX_bg].y = 0;
+        sprite_clips[TEX_bg].w = TILE_SIZE;
+        sprite_clips[TEX_bg].h = TILE_SIZE;
 
-    gClips[TEX_water].x = TILESIZE;
-    gClips[TEX_water].y = TILESIZE;
-    gClips[TEX_water].w = TILESIZE;
-    gClips[TEX_water].h = TILESIZE;
+        sprite_clips[TEX_grass].x = 0;
+        sprite_clips[TEX_grass].y = TILE_SIZE;
+        sprite_clips[TEX_grass].w = TILE_SIZE;
+        sprite_clips[TEX_grass].h = TILE_SIZE;
+
+        sprite_clips[TEX_water].x = TILE_SIZE;
+        sprite_clips[TEX_water].y = TILE_SIZE;
+        sprite_clips[TEX_water].w = TILE_SIZE;
+        sprite_clips[TEX_water].h = TILE_SIZE;
 }

@@ -1,0 +1,20 @@
+# bracing style
+--style=1tbs
+
+# indents
+--indent=spaces=8
+--min-conditional-indent=2
+
+# padding
+--pad-oper
+--pad-comma
+--pad-header
+
+# alignment
+--align-pointer=name
+--break-one-line-headers
+--break-return-type
+
+# code and indent length
+--max-continuation-indent=40
+--max-code-length=80

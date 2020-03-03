@@ -1,55 +1,54 @@
-#include "main.h"
+#include <stdlib.h>
+#include <time.h>
+#include "gfx.h"
+#include "input.h"
+#include "solver.h"
 
-int main(int argc, char *argv[])
+int
+main(void)
 {
-    bool go = false;
-    bool alive = false;
+        /* Start up SDL */
+        gfx_init("Fim the game");
 
-    /* Start up SDL */
-    init("Fim the game");
+        /* Call the cleanup function when the program exits */
+        atexit(gfx_cleanup);
 
-    /* Call the cleanup function when the program exits */
-    atexit(cleanup);
+        /* Set the random level generation seed */
+        srand(time(NULL));
 
-    go = true;
+        for (;;) {
+                /* Start a new level */
+                player_init();
+                map_new();
 
-    /* Loop indefinitely for messages */
-    while (go)
-    {
-        /*
-         * generate the level and solutions
-         * loop through all directions to test generation
-         */
-        for (int i = 0; i < 4; i++)
-        {
-            genLevel();
-            genPath(i);
+                Map *map = map_get();
+                unsigned int const *sol = level_get_solution();
+                unsigned int const solution_steps = SOLUTION_SIZE;
 
-            alive = true;
+                /* Move fim one step before initializing solver */
+                move_position(&map->fim, move_opposite(sol[0]));
 
-            while (alive)
-            {
-                getInput();
+                /* Generate and test the map */
+                solver_step_multiple(map, solution_steps);
+                solver_sanity_check(solution_steps);
 
-                SDL_RenderClear(gRenderer);
+                while (player_is_alive()) {
+                        input_get();
 
-                /* Draw the image on the screen */
-                loadImage("gfx/sprite.png");
-                draw();
-                render(toTales[Fim.pos].xT,
-                       toTales[Fim.pos].yT,
-                       &gClips[TEX_sprite]);
-                SDL_RenderPresent(gRenderer);
+                        /* Clear the screen */
+                        SDL_RenderClear(gfx_get_renderer());
 
-                if (Fim.moves <= 0)
-                    alive = false;
+                        /* Draw the image on the screen */
+                        gfx_draw(map);
 
-                /* Sleep briefly to stop sucking up all the CPU time */
-                SDL_Delay(16);
-            }
+                        /* Render the screen and display it */
+                        gfx_render_player(map);
+                        SDL_RenderPresent(gfx_get_renderer());
+
+                        /* Sleep briefly to stop sucking up all the CPU time */
+                        SDL_Delay(16);
+                }
         }
-    }
-
-    /* Exit the program */
-    exit(0);
+        /* Exit the program */
+        exit(0);
 }
