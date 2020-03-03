@@ -1,5 +1,3 @@
-# ignore object files
-
 build/
 docs/doxygen/
 src/*.orig
