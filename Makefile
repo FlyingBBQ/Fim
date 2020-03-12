@@ -7,9 +7,10 @@ GAME = Fim
 TEST = Test
 
 CC = gcc -std=c99
+OPT ?= -O2
 CFLAGS = -Wall -Werror -Wextra -Wshadow -Wundef -Wconversion -Wpedantic \
 		 -Wformat=2 -Wnull-dereference -Wlogical-op \
-		 -O2 -MMD -MP
+		 $(OPT) -MMD -MP
 LFLAGS := $(shell sdl2-config --libs) -lSDL2_image # -lgcov
 TFLAGS := -lcmocka # -lgcov
 
@@ -49,6 +50,7 @@ clean:
 run: $(BUILDIR)/$(GAME)
 	./$(BUILDIR)/$(GAME)
 
+build_test: OPT = -O0
 build_test: CFLAGS += -ftest-coverage -fprofile-arcs -Wno-unused-parameter
 build_test: LFLAGS += -lgcov
 build_test: TFLAGS += -lgcov
@@ -60,7 +62,6 @@ test: build_test
 docs: | $(DOCDIR)/Doxyfile
 	doxygen $(DOCDIR)/Doxyfile
 
-#covr: $(BUILDIR)/$(TEST)
 covr: build_test
 	./$(BUILDIR)/$(TEST) > /dev/null
 	gcovr $(BUILDIR)/$(TESTDIR) -r $(SRCDIR)
