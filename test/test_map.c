@@ -41,11 +41,45 @@ test_unset_flag(void **state)
         assert_int_equal(tile.flags, F_SOLUTION);
 }
 
+static void
+test_map_set_tile_type(void **state)
+{
+        Tiles tile = {0};
+
+        map_set_tile_type(&tile);
+        assert_int_equal(tile.type, TEX_bg);
+
+        set_flag(&tile, F_FINISH);
+        map_set_tile_type(&tile);
+        assert_int_equal(tile.type, TEX_water);
+}
+
+static void
+test_map_generate_xy(void **state)
+{
+        Tiles tiles[MAP_SIZE][MAP_SIZE] = {0};
+        unsigned int const max_size = TILE_SIZE * (MAP_SIZE - 1);
+
+        map_generate_xy(tiles);
+        assert_int_equal(tiles[0][MAP_SIZE - 1].x, 0);
+        assert_int_equal(tiles[0][MAP_SIZE - 1].y, max_size);
+        assert_int_equal(tiles[MAP_SIZE - 1][0].x, max_size);
+        assert_int_equal(tiles[MAP_SIZE - 1][0].y, 0);
+}
+
+static void
+test_map_new(void **state)
+{
+        map_new();
+}
 
 static const struct CMUnitTest test_map[] = {
         cmocka_unit_test(test_has_flag),
         cmocka_unit_test(test_set_flag),
         cmocka_unit_test(test_unset_flag),
+        cmocka_unit_test(test_map_set_tile_type),
+        cmocka_unit_test(test_map_generate_xy),
+        cmocka_unit_test(test_map_new),
 };
 
 int

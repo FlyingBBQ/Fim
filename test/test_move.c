@@ -57,7 +57,9 @@ test_move_pos_y(void **state)
         fim.y = 15;
         assert_false(move_position(&fim, SOUTH));
 
-        fim.y--;
+        assert_true(move_position(&fim, NORTH));
+        assert_int_equal(fim.y, 14);
+
         assert_true(move_position(&fim, SOUTH));
         assert_int_equal(fim.y, 15);
 
@@ -99,6 +101,34 @@ test_move_check_free_space_flag(void **state)
         assert_int_equal(move_check_free_space(map, SOUTH), 7);
 }
 
+static void
+test_move_get_collision(void **state)
+{
+        Map map = {0};
+        unsigned int collision = 0;
+
+        /* place a border flag south of 0,0 */
+        set_flag(&map.tiles[0][1], F_FINISH);
+        collision = move_get_collision(map, SOUTH);
+        assert_int_equal(collision, F_FINISH);
+
+        /* move to border for player_game_over() */
+        collision = move_get_collision(map, NORTH);
+}
+
+static void
+test_move_to_way(void **state)
+{
+        Map map = {0};
+
+        move_to_way(&map, EAST);
+        assert_int_equal(map.fim.x, MAP_SIZE - 1);
+
+        assert_int_equal(map.fim.y, 0);
+        move_to_way(&map, SOUTH);
+        assert_int_not_equal(map.fim.y, 0);
+}
+
 static const struct CMUnitTest test_move[] = {
         cmocka_unit_test(test_move_opposite),
         cmocka_unit_test(test_move_pos_x),
@@ -106,6 +136,8 @@ static const struct CMUnitTest test_move[] = {
         cmocka_unit_test(test_move_check_free_space_range),
         cmocka_unit_test(test_move_check_free_space_steps),
         cmocka_unit_test(test_move_check_free_space_flag),
+        cmocka_unit_test(test_move_get_collision),
+        cmocka_unit_test(test_move_to_way),
 };
 
 int

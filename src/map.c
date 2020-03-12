@@ -1,6 +1,6 @@
 #include "map.h"
 
-static const Map g_empty_map  = {0};
+static const Map g_empty_map = {0};
 static Map g_map;
 
 bool
