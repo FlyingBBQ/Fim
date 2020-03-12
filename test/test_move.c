@@ -5,6 +5,13 @@
 
 #include "../src/move.c"
 
+/* mock player_gamer_over() for move_get_collision() */
+void
+player_game_over(void)
+{
+        return;
+}
+
 static void
 test_move_opposite(void **state)
 {
@@ -21,7 +28,7 @@ test_move_opposite(void **state)
 static void
 test_move_pos_x(void **state)
 {
-        Pos fim;
+        Pos fim = {0};
 
         fim.x = 0;
         assert_false(move_position(&fim, WEST));
@@ -33,7 +40,7 @@ test_move_pos_x(void **state)
         fim.x = MAP_SIZE;
         assert_false(move_position(&fim, EAST));
         assert_true(move_position(&fim, WEST));
-        assert_true(move_position(&fim, NORTH));
+        assert_true(move_position(&fim, SOUTH));
 
         /* default case */
         assert_false(move_position(&fim, 42));
@@ -42,7 +49,7 @@ test_move_pos_x(void **state)
 static void
 test_move_pos_y(void **state)
 {
-        Pos fim;
+        Pos fim = {0};
 
         fim.y = 0;
         assert_false(move_position(&fim, NORTH));
