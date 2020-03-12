@@ -85,7 +85,7 @@ move_position_multiple(Pos *fim, Way const way, unsigned int const steps)
 unsigned int
 move_check_free_space(Map map, Way const way)
 {
-        int space = 0;
+        unsigned int space = 0;
 
         while (move_position(&map.fim, way)) {
                 Tiles *tile = &map.tiles[map.fim.x][map.fim.y];
@@ -115,6 +115,6 @@ move_get_collision(Map map, Way const way)
 void
 move_to_way(Map *map, Way const way)
 {
-        int steps = move_check_free_space(*map, way);
+        unsigned int steps = move_check_free_space(*map, way);
         move_position_multiple(&map->fim, way, steps);
 }

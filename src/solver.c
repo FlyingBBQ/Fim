@@ -18,7 +18,7 @@ void
 solver_step(Map *map, Way const way)
 {
         unsigned int free_space = move_check_free_space(*map, move_opposite(way));
-        unsigned int steps = free_space ? (rand() % free_space) : 0;
+        unsigned int steps = free_space ? ((unsigned int)rand() % free_space) : 0;
 
         move_position_multiple(&map->fim, move_opposite(way), steps);
 }
@@ -34,7 +34,7 @@ solver_step_multiple(Map *map, unsigned int const solution_steps)
         solver_step(map, solution[0]);
         for (unsigned int i = 1; i < solution_steps; ++i) {
                 /* Do not prepare if the direction is the same as the previous */
-                if (solution[i] != solution[i-1]) {
+                if (solution[i] != solution[i - 1]) {
                         solver_prepare_step(map, solution[i]);
                 }
                 solver_step(map, solution[i]);

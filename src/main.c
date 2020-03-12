@@ -14,7 +14,7 @@ main(void)
         atexit(gfx_cleanup);
 
         /* Set the random level generation seed */
-        srand(time(NULL));
+        srand((unsigned int)time(NULL));
 
         for (;;) {
                 /* Start a new level */

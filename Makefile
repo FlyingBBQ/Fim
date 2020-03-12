@@ -7,7 +7,8 @@ GAME = Fim
 TEST = Test
 
 CC = gcc -std=c99
-CFLAGS = -Wall -Werror -Wextra -pedantic -g -MMD -MP 
+CFLAGS = -Wall -Werror -Wextra -Wshadow -Wundef -Wconversion -Wpedantic \
+		 -Wformat=2 -Wnull-dereference -Wlogical-op -g -MMD -MP
 LFLAGS := $(shell sdl2-config --libs) -lSDL2_image # -lgcov
 TFLAGS := -lcmocka # -lgcov
 

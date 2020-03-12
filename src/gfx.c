@@ -60,7 +60,7 @@ gfx_init(char *title)
         }
 
         /* Initialze renderer */
-        int rndrFlag = SDL_RENDERER_ACCELERATED;
+        unsigned int rndrFlag = SDL_RENDERER_ACCELERATED;
         renderer = SDL_CreateRenderer(window, -1, rndrFlag);
         if (renderer == NULL) {
                 printf("Window could not be rendered %s\n", SDL_GetError());
