@@ -11,5 +11,6 @@ typedef enum {
         WEST
 } Direction;
 
+Direction opposite_direction(Direction const dir);
 void level_new_solution(void);
 unsigned int const *level_get_solution(void);

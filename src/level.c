@@ -5,6 +5,12 @@
 
 static unsigned int g_solution[SOLUTION_SIZE];
 
+Direction
+opposite_direction(Direction const dir)
+{
+        return (dir + 2) % 4;
+}
+
 static void
 level_generate_solution(unsigned int solution[])
 {

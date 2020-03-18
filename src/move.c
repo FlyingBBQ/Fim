@@ -2,12 +2,6 @@
 
 #include <stdbool.h>
 
-Direction
-move_opposite(Direction const dir)
-{
-        return (dir + 2) % 4;
-}
-
 static bool
 move_north(Pos *fim)
 {

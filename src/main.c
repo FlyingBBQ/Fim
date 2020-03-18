@@ -26,7 +26,7 @@ main(void)
                 unsigned int const solution_steps = SOLUTION_SIZE;
 
                 /* Move fim one step before initializing solver */
-                move_position(&map->fim, move_opposite(sol[0]));
+                move_position(&map->fim, opposite_direction(sol[0]));
 
                 /* Generate and test the map */
                 solver_step_multiple(map, solution_steps);

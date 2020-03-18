@@ -3,8 +3,21 @@
 #include <setjmp.h>
 #include <cmocka.h>
 
-#include "../src/move.h"
+//#include "../src/move.h"
 #include "../src/level.c"
+
+static void
+test_opposite_direction(void **state)
+{
+        assert_int_equal(opposite_direction(NORTH), SOUTH);
+        assert_int_equal(opposite_direction(SOUTH), NORTH);
+        assert_int_equal(opposite_direction(EAST), WEST);
+        assert_int_equal(opposite_direction(WEST), EAST);
+
+        for (int i = 0; i < WEST; i++) {
+                assert_in_range(opposite_direction(i), NORTH, WEST);
+        }
+}
 
 static void
 test_level_generate_solution(void **state)
@@ -18,6 +31,7 @@ test_level_generate_solution(void **state)
 }
 
 static const struct CMUnitTest test_level[] = {
+        cmocka_unit_test(test_opposite_direction),
         cmocka_unit_test(test_level_generate_solution),
 };
 

@@ -13,19 +13,6 @@ player_game_over(void)
 }
 
 static void
-test_move_opposite(void **state)
-{
-        assert_int_equal(move_opposite(NORTH), SOUTH);
-        assert_int_equal(move_opposite(SOUTH), NORTH);
-        assert_int_equal(move_opposite(EAST), WEST);
-        assert_int_equal(move_opposite(WEST), EAST);
-
-        for (int i = 0; i < WEST; i++) {
-                assert_in_range(move_opposite(i), NORTH, WEST);
-        }
-}
-
-static void
 test_move_pos_x(void **state)
 {
         Pos fim = {0};
@@ -130,7 +117,6 @@ test_move_to_direction(void **state)
 }
 
 static const struct CMUnitTest test_move[] = {
-        cmocka_unit_test(test_move_opposite),
         cmocka_unit_test(test_move_pos_x),
         cmocka_unit_test(test_move_pos_y),
         cmocka_unit_test(test_move_check_free_space_range),

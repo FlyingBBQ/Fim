@@ -17,10 +17,10 @@ solver_prepare_step(Map *map, Direction const dir)
 void
 solver_step(Map *map, Direction const dir)
 {
-        unsigned int free_space = move_check_free_space(*map, move_opposite(dir));
+        unsigned int free_space = move_check_free_space(*map, opposite_direction(dir));
         unsigned int steps = free_space ? ((unsigned int)rand() % free_space) : 0;
 
-        move_position_multiple(&map->fim, move_opposite(dir), steps);
+        move_position_multiple(&map->fim, opposite_direction(dir), steps);
 }
 
 void
