@@ -54,7 +54,6 @@ solver_sanity_check(unsigned int const solution_steps)
         for (unsigned int i = solution_steps - 1; i < SOLUTION_SIZE; --i) {
                 move_to_direction(&map, solution[i]);
                 if (move_get_collision(map, solution[i]) & F_FINISH) {
-                        puts("solvable");
                         solvable = true;
                         break;
                 }

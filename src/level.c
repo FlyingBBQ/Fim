@@ -18,12 +18,12 @@ level_generate_solution(unsigned int solution[])
         solution[0] = (unsigned int)rand() % 4u;
         for (unsigned int i = 1; i < SOLUTION_SIZE; ++i) {
                 unsigned int r;
-                bool inverse_direction;
+                bool invalid_direction;
                 do {
                         r = (unsigned int)rand() % 4;
-                        inverse_direction = (r == ((solution[i - 1] + 2) % 4));
+                        invalid_direction = (r == opposite_direction(solution[i - 1]));
                         /* Re-roll if an invalid solution is generated */
-                } while (inverse_direction);
+                } while (invalid_direction);
                 solution[i] = r;
         }
 }
