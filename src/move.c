@@ -2,46 +2,6 @@
 
 #include <stdbool.h>
 
-static bool
-move_north(Pos *fim)
-{
-        if (fim->y > 0) {
-                fim->y--;
-                return true;
-        }
-        return false;
-}
-
-static bool
-move_east(Pos *fim)
-{
-        if (fim->x < (MAP_SIZE - 1)) {
-                fim->x++;
-                return true;
-        }
-        return false;
-}
-
-static bool
-move_south(Pos *fim)
-{
-        if (fim->y < (MAP_SIZE - 1)) {
-                fim->y++;
-                return true;
-        }
-        return false;
-}
-
-static bool
-move_west(Pos *fim)
-{
-        if (fim->x > 0) {
-                fim->x--;
-                return true;
-        }
-        return false;
-}
-
 bool
 move_position(Pos *fim, Direction const dir)
 {
@@ -49,16 +9,28 @@ move_position(Pos *fim, Direction const dir)
 
         switch (dir) {
         case NORTH:
-                moved = move_north(fim);
+                if (fim->y > 0) {
+                        fim->y--;
+                        moved = true;
+                }
                 break;
         case EAST:
-                moved = move_east(fim);
+                if (fim->x < (MAP_SIZE - 1)) {
+                        fim->x++;
+                        moved = true;
+                }
                 break;
         case SOUTH:
-                moved = move_south(fim);
+                if (fim->y < (MAP_SIZE - 1)) {
+                        fim->y++;
+                        moved = true;
+                }
                 break;
         case WEST:
-                moved = move_west(fim);
+                if (fim->x > 0) {
+                        fim->x--;
+                        moved = true;
+                }
                 break;
         default:
                 break;
