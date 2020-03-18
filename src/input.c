@@ -6,24 +6,24 @@ input_handle_keydown(void)
 {
         /* Uint8 is a type from the SDL lib */
         const Uint8 *key_state = SDL_GetKeyboardState(NULL);
-        Way way = 0xDEAD;
+        Direction dir = 0xDEAD;
 
         if (key_state[SDL_SCANCODE_LEFT] || key_state[SDL_SCANCODE_A]) {
-                way = WEST;
+                dir = WEST;
         } else if (key_state[SDL_SCANCODE_DOWN] || key_state[SDL_SCANCODE_S]) {
-                way = SOUTH;
+                dir = SOUTH;
         } else if (key_state[SDL_SCANCODE_UP] || key_state[SDL_SCANCODE_W]) {
-                way = NORTH;
+                dir = NORTH;
         } else if (key_state[SDL_SCANCODE_RIGHT] || key_state[SDL_SCANCODE_D]) {
-                way = EAST;
+                dir = EAST;
         } else {
                 /* nothing */
         }
 
-        if (0xDEAD != way) {
+        if (0xDEAD != dir) {
                 Map *map = map_get();
-                move_to_way(map, way);
-                if (move_get_collision(*map, way) & F_FINISH) {
+                move_to_direction(map, dir);
+                if (move_get_collision(*map, dir) & F_FINISH) {
                         puts("win");
                         player_game_over();
                 }

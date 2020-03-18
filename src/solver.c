@@ -3,11 +3,11 @@
 #include <assert.h>
 
 static void
-solver_prepare_step(Map *map, Way const way)
+solver_prepare_step(Map *map, Direction const dir)
 {
         Pos fim = map->fim;
 
-        if (move_position(&fim, way)) {
+        if (move_position(&fim, dir)) {
                 set_flag(&map->tiles[fim.x][fim.y], F_BORDER);
         } else {
                 puts("failed to prepare");
@@ -15,12 +15,12 @@ solver_prepare_step(Map *map, Way const way)
 }
 
 void
-solver_step(Map *map, Way const way)
+solver_step(Map *map, Direction const dir)
 {
-        unsigned int free_space = move_check_free_space(*map, move_opposite(way));
+        unsigned int free_space = move_check_free_space(*map, move_opposite(dir));
         unsigned int steps = free_space ? ((unsigned int)rand() % free_space) : 0;
 
-        move_position_multiple(&map->fim, move_opposite(way), steps);
+        move_position_multiple(&map->fim, move_opposite(dir), steps);
 }
 
 void
@@ -52,7 +52,7 @@ solver_sanity_check(unsigned int const solution_steps)
         Map map = *map_get();
 
         for (unsigned int i = solution_steps - 1; i < SOLUTION_SIZE; --i) {
-                move_to_way(&map, solution[i]);
+                move_to_direction(&map, solution[i]);
                 if (move_get_collision(map, solution[i]) & F_FINISH) {
                         puts("solvable");
                         solvable = true;

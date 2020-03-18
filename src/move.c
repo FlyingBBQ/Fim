@@ -2,10 +2,10 @@
 
 #include <stdbool.h>
 
-Way
-move_opposite(Way const way)
+Direction
+move_opposite(Direction const dir)
 {
-        return (way + 2) % 4;
+        return (dir + 2) % 4;
 }
 
 static bool
@@ -49,11 +49,11 @@ move_west(Pos *fim)
 }
 
 bool
-move_position(Pos *fim, Way const way)
+move_position(Pos *fim, Direction const dir)
 {
         bool moved = false;
 
-        switch (way) {
+        switch (dir) {
         case NORTH:
                 moved = move_north(fim);
                 break;
@@ -73,21 +73,21 @@ move_position(Pos *fim, Way const way)
 }
 
 void
-move_position_multiple(Pos *fim, Way const way, unsigned int const steps)
+move_position_multiple(Pos *fim, Direction const dir, unsigned int const steps)
 {
         for (unsigned int i = 0; i < steps; ++i) {
-                if (!move_position(fim, way)) {
+                if (!move_position(fim, dir)) {
                         break;
                 }
         }
 }
 
 unsigned int
-move_check_free_space(Map map, Way const way)
+move_check_free_space(Map map, Direction const dir)
 {
         unsigned int space = 0;
 
-        while (move_position(&map.fim, way)) {
+        while (move_position(&map.fim, dir)) {
                 Tiles *tile = &map.tiles[map.fim.x][map.fim.y];
                 if (has_flag(tile, (F_BORDER | F_FINISH))) {
                         break;
@@ -99,11 +99,11 @@ move_check_free_space(Map map, Way const way)
 }
 
 unsigned int
-move_get_collision(Map map, Way const way)
+move_get_collision(Map map, Direction const dir)
 {
         unsigned int collision = 0;
 
-        if (move_position(&map.fim, way)) {
+        if (move_position(&map.fim, dir)) {
                 collision = map.tiles[map.fim.x][map.fim.y].flags;
         } else {
                 /* if fim could not move, it reached the border = dead */
@@ -113,8 +113,8 @@ move_get_collision(Map map, Way const way)
 }
 
 void
-move_to_way(Map *map, Way const way)
+move_to_direction(Map *map, Direction const dir)
 {
-        unsigned int steps = move_check_free_space(*map, way);
-        move_position_multiple(&map->fim, way, steps);
+        unsigned int steps = move_check_free_space(*map, dir);
+        move_position_multiple(&map->fim, dir, steps);
 }

@@ -117,15 +117,15 @@ test_move_get_collision(void **state)
 }
 
 static void
-test_move_to_way(void **state)
+test_move_to_direction(void **state)
 {
         Map map = {0};
 
-        move_to_way(&map, EAST);
+        move_to_direction(&map, EAST);
         assert_int_equal(map.fim.x, MAP_SIZE - 1);
 
         assert_int_equal(map.fim.y, 0);
-        move_to_way(&map, SOUTH);
+        move_to_direction(&map, SOUTH);
         assert_int_not_equal(map.fim.y, 0);
 }
 
@@ -137,7 +137,7 @@ static const struct CMUnitTest test_move[] = {
         cmocka_unit_test(test_move_check_free_space_steps),
         cmocka_unit_test(test_move_check_free_space_flag),
         cmocka_unit_test(test_move_get_collision),
-        cmocka_unit_test(test_move_to_way),
+        cmocka_unit_test(test_move_to_direction),
 };
 
 int
