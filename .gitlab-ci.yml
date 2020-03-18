@@ -1,11 +1,54 @@
-build:
-  image: docker:19.03.8
-  stage: build
-  services:
+image: docker:19.03.8
+services:
     - docker:19.03.8-dind
-  variables:
-    IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
-  script:
+
+stages:
+    - environment
+    - build
+    - test
+    - deploy
+
+variables:
+    CONTAINER_ENV: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
+    CONTAINER_TAG: $CI_REGISTRY_IMAGE:latest 
+
+before_script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
-    - docker build -t $IMAGE_TAG .
-    - docker push $IMAGE_TAG
+
+create container:
+    stage: environment
+    script:
+        - docker pull $CONTAINER_TAG || true
+        - docker build --cache-from $CONTAINER_TAG --tag $CONTAINER_ENV .
+        - docker push $CONTAINER_ENV
+
+build:
+    stage: build
+    script:
+        - docker pull $CONTAINER_ENV
+        - docker run --rm -v $(pwd):/root/project -w /root/project
+            $CONTAINER_ENV
+            make
+
+unit test:
+    stage: test
+    script:
+        - docker pull $CONTAINER_ENV
+        - docker run --rm -v $(pwd):/root/project -w /root/project
+            $CONTAINER_ENV
+            make test
+
+coverage:
+    stage: test
+    script:
+        - docker pull $CONTAINER_ENV
+        - docker run --rm -v $(pwd):/root/project -w /root/project
+            $CONTAINER_ENV
+            make covr
+
+push container:
+    stage: deploy
+    script:
+        - docker pull $CONTAINER_ENV
+        - docker tag $CONTAINER_ENV $CONTAINER_TAG
+        - docker push $CONTAINER_TAG
