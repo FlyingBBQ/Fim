@@ -58,14 +58,14 @@ map_set_finish_tile(Map *map, unsigned int const solution[])
         /* Check if the first position in the solution is odd */
         if (solution[0] & 1u) {
                 /* east || west */
-                map->fim.x = (EAST == solution[0]) ? (MAP_SIZE - 1) : 0;
-                map->fim.y = finish_pos;
+                map->player.x = (EAST == solution[0]) ? (MAP_SIZE - 1) : 0;
+                map->player.y = finish_pos;
         } else {
                 /* north || south */
-                map->fim.y = (NORTH == solution[0]) ? 0 : (MAP_SIZE - 1);
-                map->fim.x = finish_pos;
+                map->player.y = (NORTH == solution[0]) ? 0 : (MAP_SIZE - 1);
+                map->player.x = finish_pos;
         }
-        set_flag(&map->tiles[map->fim.x][map->fim.y], F_FINISH);
+        set_flag(&map->tiles[map->player.x][map->player.y], F_FINISH);
 }
 
 void

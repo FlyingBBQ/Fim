@@ -25,8 +25,8 @@ main(void)
                 unsigned int const *sol = level_get_solution();
                 unsigned int const solution_steps = SOLUTION_SIZE;
 
-                /* Move fim one step before initializing solver */
-                move_position(&map->fim, opposite_direction(sol[0]));
+                /* Move player one step before initializing solver */
+                move_position(&map->player, opposite_direction(sol[0]));
 
                 /* Generate and test the map */
                 solver_step_multiple(map, solution_steps);

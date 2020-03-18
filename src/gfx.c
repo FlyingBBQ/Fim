@@ -110,7 +110,7 @@ void
 gfx_render_player(Map *map)
 {
         /* multiply with tilesize to move a tile instead of pixel */
-        gfx_render((map->fim.x * TILE_SIZE), (map->fim.y * TILE_SIZE),
+        gfx_render((map->player.x * TILE_SIZE), (map->player.y * TILE_SIZE),
                    &sprite_clips[TEX_sprite]);
 }
 

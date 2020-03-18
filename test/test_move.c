@@ -15,43 +15,43 @@ player_game_over(void)
 static void
 test_move_pos_x(void **state)
 {
-        Pos fim = {0};
+        Pos player = {0};
 
-        fim.x = 0;
-        assert_false(move_position(&fim, WEST));
+        player.x = 0;
+        assert_false(move_position(&player, WEST));
 
-        fim.x++;
-        assert_true(move_position(&fim, WEST));
-        assert_int_equal(fim.x, 0);
+        player.x++;
+        assert_true(move_position(&player, WEST));
+        assert_int_equal(player.x, 0);
 
-        fim.x = MAP_SIZE;
-        assert_false(move_position(&fim, EAST));
-        assert_true(move_position(&fim, WEST));
-        assert_true(move_position(&fim, SOUTH));
+        player.x = MAP_SIZE;
+        assert_false(move_position(&player, EAST));
+        assert_true(move_position(&player, WEST));
+        assert_true(move_position(&player, SOUTH));
 
         /* default case */
-        assert_false(move_position(&fim, 42));
+        assert_false(move_position(&player, 42));
 }
 
 static void
 test_move_pos_y(void **state)
 {
-        Pos fim = {0};
+        Pos player = {0};
 
-        fim.y = 0;
-        assert_false(move_position(&fim, NORTH));
+        player.y = 0;
+        assert_false(move_position(&player, NORTH));
 
-        fim.y = 15;
-        assert_false(move_position(&fim, SOUTH));
+        player.y = 15;
+        assert_false(move_position(&player, SOUTH));
 
-        assert_true(move_position(&fim, NORTH));
-        assert_int_equal(fim.y, 14);
+        assert_true(move_position(&player, NORTH));
+        assert_int_equal(player.y, 14);
 
-        assert_true(move_position(&fim, SOUTH));
-        assert_int_equal(fim.y, 15);
+        assert_true(move_position(&player, SOUTH));
+        assert_int_equal(player.y, 15);
 
-        fim.y = -1;
-        assert_false(move_position(&fim, NORTH));
+        player.y = -1;
+        assert_false(move_position(&player, NORTH));
 }
 
 static void
@@ -72,8 +72,8 @@ test_move_check_free_space_steps(void **state)
 
         assert_int_equal(move_check_free_space(map, SOUTH), (MAP_SIZE - 1));
         /* test if the player did not move */
-        assert_int_equal(map.fim.x, 0);
-        assert_int_equal(map.fim.y, 0);
+        assert_int_equal(map.player.x, 0);
+        assert_int_equal(map.player.y, 0);
 }
 
 static void
@@ -109,11 +109,11 @@ test_move_to_direction(void **state)
         Map map = {0};
 
         move_to_direction(&map, EAST);
-        assert_int_equal(map.fim.x, MAP_SIZE - 1);
+        assert_int_equal(map.player.x, MAP_SIZE - 1);
 
-        assert_int_equal(map.fim.y, 0);
+        assert_int_equal(map.player.y, 0);
         move_to_direction(&map, SOUTH);
-        assert_int_not_equal(map.fim.y, 0);
+        assert_int_not_equal(map.player.y, 0);
 }
 
 static const struct CMUnitTest test_move[] = {

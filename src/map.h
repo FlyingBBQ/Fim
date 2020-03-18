@@ -21,7 +21,7 @@ typedef struct {
 
 typedef struct {
         Tiles tiles[MAP_SIZE][MAP_SIZE];
-        Pos fim;
+        Pos player;
         int offset;
 } Map;
 

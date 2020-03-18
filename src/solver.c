@@ -5,10 +5,10 @@
 static void
 solver_prepare_step(Map *map, Direction const dir)
 {
-        Pos fim = map->fim;
+        Pos player = map->player;
 
-        if (move_position(&fim, dir)) {
-                set_flag(&map->tiles[fim.x][fim.y], F_BORDER);
+        if (move_position(&player, dir)) {
+                set_flag(&map->tiles[player.x][player.y], F_BORDER);
         } else {
                 puts("failed to prepare");
         }
@@ -20,7 +20,7 @@ solver_step(Map *map, Direction const dir)
         unsigned int free_space = move_check_free_space(*map, opposite_direction(dir));
         unsigned int steps = free_space ? ((unsigned int)rand() % free_space) : 0;
 
-        move_position_multiple(&map->fim, opposite_direction(dir), steps);
+        move_position_multiple(&map->player, opposite_direction(dir), steps);
 }
 
 void
