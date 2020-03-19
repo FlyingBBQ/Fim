@@ -68,3 +68,7 @@ covr: build_test
 
 format:
 	astyle --project=astylerc $(SRCDIR)/*.c $(SRCDIR)/*.h $(TESTDIR)/*.c
+
+release: covr
+	CMOCKA_XML_FILE=$(BUILDIR)/%g.xml CMOCKA_MESSAGE_OUTPUT=xml ./$(BUILDIR)/$(TEST)
+	gcovr $(BUILDIR)/$(TESTDIR) -r $(SRCDIR) --html-details -o $(BUILDIR)/test.html
