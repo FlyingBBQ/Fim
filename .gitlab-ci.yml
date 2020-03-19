@@ -55,10 +55,10 @@ release:
             make release
     artifacts:
         paths: 
-            - ./*.html
+            - ./build/*.html
         expire_in: 1 week
         reports:
-            junit: ./*.xml
+            junit: ./build/*.xml
 
 push container:
     stage: deploy
