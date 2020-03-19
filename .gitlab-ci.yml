@@ -37,6 +37,11 @@ unit test:
         - docker run --rm -v $(pwd):/root/project -w /root/project
             $CONTAINER_ENV
             make test
+        - CMOCKA_XML_FILE=%g.xml CMOCKA_MESSAGE_OUTPUT=xml ./build/Test
+    artifacts:
+        reports:
+            junit: ./*.xml
+        expire_in: 1 day
 
 coverage:
     stage: test
@@ -45,6 +50,11 @@ coverage:
         - docker run --rm -v $(pwd):/root/project -w /root/project
             $CONTAINER_ENV
             make covr
+        - gcovr build/test -r src --html-details -o test.html
+    artifacts:
+        paths: 
+            - ./*.html
+        expire_in: 1 day
 
 push container:
     stage: deploy
