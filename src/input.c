@@ -22,7 +22,7 @@ input_handle_keydown(void)
 
         if (0xDEAD != dir) {
                 Map *map = map_get();
-                move_to_direction(map, dir);
+                move_in_direction(map, dir);
                 if (move_get_collision(*map, dir) & F_FINISH) {
                         puts("win");
                         player_game_over();

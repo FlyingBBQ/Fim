@@ -52,7 +52,7 @@ solver_sanity_check(unsigned int const solution_steps)
         Map map = *map_get();
 
         for (unsigned int i = solution_steps - 1; i < SOLUTION_SIZE; --i) {
-                move_to_direction(&map, solution[i]);
+                move_in_direction(&map, solution[i]);
                 if (move_get_collision(map, solution[i]) & F_FINISH) {
                         solvable = true;
                         break;

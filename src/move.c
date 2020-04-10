@@ -80,7 +80,7 @@ move_get_collision(Map map, Direction const dir)
 }
 
 void
-move_to_direction(Map *map, Direction const dir)
+move_in_direction(Map *map, Direction const dir)
 {
         unsigned int steps = move_check_free_space(*map, dir);
         move_position_multiple(&map->player, dir, steps);
