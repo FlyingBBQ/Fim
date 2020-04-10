@@ -2,8 +2,6 @@
 
 #include "map.h"
 
-#include <stdbool.h>
-
 Direction opposite_direction(Direction const dir);
 bool move_position(Pos *player, Direction const dir);
 void move_position_multiple(Pos *player, Direction const dir,

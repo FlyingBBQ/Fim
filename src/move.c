@@ -1,7 +1,5 @@
 #include "move.h"
 
-#include <stdbool.h>
-
 bool
 move_position(Pos *player, Direction const dir)
 {

@@ -1,4 +1,5 @@
 #include "input.h"
+
 #include "move.h"
 
 static void
@@ -16,6 +17,8 @@ input_handle_keydown(void)
                 dir = NORTH;
         } else if (key_state[SDL_SCANCODE_RIGHT] || key_state[SDL_SCANCODE_D]) {
                 dir = EAST;
+        } else if (key_state[SDL_SCANCODE_ESCAPE]) {
+                exit(0);
         } else {
                 /* nothing */
         }
