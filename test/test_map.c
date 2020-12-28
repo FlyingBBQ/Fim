@@ -6,7 +6,7 @@
 #include "../src/map.c"
 
 static void
-test_has_flag(void **state)
+test_has_flag(void ** state)
 {
         Tiles tile = {0};
 
@@ -20,7 +20,7 @@ test_has_flag(void **state)
 }
 
 static void
-test_set_flag(void **state)
+test_set_flag(void ** state)
 {
         Tiles tile = {0};
 
@@ -32,7 +32,7 @@ test_set_flag(void **state)
 }
 
 static void
-test_unset_flag(void **state)
+test_unset_flag(void ** state)
 {
         Tiles tile = {0};
 
@@ -42,7 +42,7 @@ test_unset_flag(void **state)
 }
 
 static void
-test_map_set_tile_type(void **state)
+test_map_set_tile_type(void ** state)
 {
         Tiles tile = {0};
 
@@ -55,7 +55,7 @@ test_map_set_tile_type(void **state)
 }
 
 static void
-test_map_generate_xy(void **state)
+test_map_generate_xy(void ** state)
 {
         Tiles tiles[MAP_SIZE][MAP_SIZE] = {0};
         unsigned int const max_size = TILE_SIZE * (MAP_SIZE - 1);
@@ -68,7 +68,7 @@ test_map_generate_xy(void **state)
 }
 
 static void
-test_map_new(void **state)
+test_map_new(void ** state)
 {
         map_new();
 }

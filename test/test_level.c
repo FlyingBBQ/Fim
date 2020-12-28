@@ -7,7 +7,7 @@
 #include "../src/level.c"
 
 static void
-test_opposite_direction(void **state)
+test_opposite_direction(void ** state)
 {
         assert_int_equal(opposite_direction(NORTH), SOUTH);
         assert_int_equal(opposite_direction(SOUTH), NORTH);
@@ -20,7 +20,7 @@ test_opposite_direction(void **state)
 }
 
 static void
-test_level_generate_solution(void **state)
+test_level_generate_solution(void ** state)
 {
         unsigned int solut[SOLUTION_SIZE];
         level_generate_solution(solut);

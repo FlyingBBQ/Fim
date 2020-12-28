@@ -13,7 +13,7 @@ player_game_over(void)
 }
 
 static void
-test_move_pos_x(void **state)
+test_move_pos_x(void ** state)
 {
         Pos player = {0};
 
@@ -34,7 +34,7 @@ test_move_pos_x(void **state)
 }
 
 static void
-test_move_pos_y(void **state)
+test_move_pos_y(void ** state)
 {
         Pos player = {0};
 
@@ -55,7 +55,7 @@ test_move_pos_y(void **state)
 }
 
 static void
-test_move_check_free_space_range(void **state)
+test_move_check_free_space_range(void ** state)
 {
         Map map = {0};
 
@@ -66,7 +66,7 @@ test_move_check_free_space_range(void **state)
 }
 
 static void
-test_move_check_free_space_steps(void **state)
+test_move_check_free_space_steps(void ** state)
 {
         Map map = {0};
 
@@ -77,10 +77,10 @@ test_move_check_free_space_steps(void **state)
 }
 
 static void
-test_move_check_free_space_flag(void **state)
+test_move_check_free_space_flag(void ** state)
 {
         Map map = {0};
-        Tiles *tile = &map.tiles[0][8];
+        Tiles * tile = &map.tiles[0][8];
 
         set_flag(tile, F_BORDER);
         assert_int_equal(tile->flags, F_BORDER);
@@ -89,7 +89,7 @@ test_move_check_free_space_flag(void **state)
 }
 
 static void
-test_move_get_collision(void **state)
+test_move_get_collision(void ** state)
 {
         Map map = {0};
         unsigned int collision = 0;
@@ -104,7 +104,7 @@ test_move_get_collision(void **state)
 }
 
 static void
-test_move_in_direction(void **state)
+test_move_in_direction(void ** state)
 {
         Map map = {0};
 

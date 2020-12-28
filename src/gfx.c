@@ -1,15 +1,15 @@
 #include "gfx.h"
 
-static SDL_Texture *spritemap;
-static SDL_Window *window;
-static SDL_Renderer *renderer;
-static char *image_name = "gfx/sprite.png";
+static SDL_Texture * spritemap;
+static SDL_Window * window;
+static SDL_Renderer * renderer;
+static char * image_name = "gfx/sprite.png";
 
 static void
 gfx_load_image(void)
 {
         /* load the image */
-        SDL_Surface *loaded_image = IMG_Load(image_name);
+        SDL_Surface * loaded_image = IMG_Load(image_name);
         if (loaded_image == NULL) {
                 printf("Unable to load image %s SDL_image error: %s\n", image_name,
                        IMG_GetError());
@@ -33,7 +33,7 @@ gfx_load_image(void)
 }
 
 void
-gfx_init(char *title)
+gfx_init(char * title)
 {
         /* Initialise SDL Video */
         if (SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -88,7 +88,7 @@ gfx_cleanup(void)
 
 /* render function to put texture at position */
 void
-gfx_render(int x, int y, SDL_Rect *clip)
+gfx_render(int x, int y, SDL_Rect * clip)
 {
         SDL_Rect dest;
 
@@ -107,7 +107,7 @@ gfx_render(int x, int y, SDL_Rect *clip)
 }
 
 void
-gfx_render_player(Map *map)
+gfx_render_player(Map * map)
 {
         /* multiply with tilesize to move a tile instead of pixel */
         gfx_render((map->player.x * TILE_SIZE), (map->player.y * TILE_SIZE),
@@ -121,7 +121,7 @@ gfx_get_renderer(void)
 }
 
 void
-gfx_draw(Map *map)
+gfx_draw(Map * map)
 {
         /* loop through all tiles and draw them */
         for (int x = 0; x < MAP_SIZE; x++) {

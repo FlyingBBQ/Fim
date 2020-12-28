@@ -1,7 +1,7 @@
 #include "move.h"
 
 bool
-move_position(Pos *player, Direction const dir)
+move_position(Pos * player, Direction const dir)
 {
         bool moved = false;
 
@@ -37,7 +37,7 @@ move_position(Pos *player, Direction const dir)
 }
 
 void
-move_position_multiple(Pos *player, Direction const dir,
+move_position_multiple(Pos * player, Direction const dir,
                        unsigned int const steps)
 {
         for (unsigned int i = 0; i < steps; ++i) {
@@ -53,7 +53,7 @@ move_check_free_space(Map map, Direction const dir)
         unsigned int space = 0;
 
         while (move_position(&map.player, dir)) {
-                Tiles *tile = &map.tiles[map.player.x][map.player.y];
+                Tiles * tile = &map.tiles[map.player.x][map.player.y];
                 if (has_flag(tile, (F_BORDER | F_FINISH))) {
                         break;
                 } else {
@@ -78,7 +78,7 @@ move_get_collision(Map map, Direction const dir)
 }
 
 void
-move_in_direction(Map *map, Direction const dir)
+move_in_direction(Map * map, Direction const dir)
 {
         unsigned int steps = move_check_free_space(*map, dir);
         move_position_multiple(&map->player, dir, steps);
