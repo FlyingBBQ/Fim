@@ -1,6 +1,6 @@
 #pragma once
 
-#include "level.h"
+#include "player.h"
 #include "sprites.h"
 
 /* size of a map */
@@ -12,6 +12,13 @@ enum Flags {
         F_FINISH   = (1 << 2)
 };
 
+typedef enum {
+        NORTH,
+        EAST,
+        SOUTH,
+        WEST
+} Direction;
+
 typedef struct {
         int x;
         int y;
@@ -20,15 +27,18 @@ typedef struct {
 } Tiles;
 
 typedef struct {
-        Tiles tiles[MAP_SIZE][MAP_SIZE];
         Pos player;
         int offset;
+        size_t map_size;
+        Tiles ** tiles;
 } Map;
 
-void map_new(void);
-Map *map_get(void);
+Map * map_new(size_t const map_size, Direction const finish_dir);
+void map_clean(Map * map);
 
-bool has_flag(Tiles const *tile, unsigned int const flags);
-void set_flag(Tiles *tile, unsigned int const flags);
-void unset_flag(Tiles *tile, unsigned int const flags);
-void map_set_tile_type(Tiles *tile);
+Direction opposite_direction(Direction const dir);
+
+bool has_flag(Tiles const * tile, unsigned int const flags);
+void set_flag(Tiles * tile, unsigned int const flags);
+void unset_flag(Tiles * tile, unsigned int const flags);
+void map_set_tile_type(Tiles * tile);
