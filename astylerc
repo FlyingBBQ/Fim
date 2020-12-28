@@ -11,7 +11,8 @@
 --pad-header
 
 # alignment
---align-pointer=name
+--align-pointer=middle
+--align-reference=name
 --break-one-line-headers
 --break-return-type
 
