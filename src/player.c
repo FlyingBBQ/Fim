@@ -2,13 +2,13 @@
 
 #include <stdbool.h>
 
-static unsigned int lives;
 static bool is_alive = true;
+static bool quit_game = false;
 
-unsigned int
-player_lives_left(void)
+void
+player_init(void)
 {
-        return lives;
+        is_alive = true;
 }
 
 bool
@@ -24,7 +24,13 @@ player_game_over(void)
 }
 
 void
-player_init(void)
+player_quit_game(void)
 {
-        is_alive = true;
+        quit_game = true;
+}
+
+bool
+player_is_quitting(void)
+{
+        return quit_game;
 }

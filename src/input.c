@@ -1,12 +1,14 @@
 #include "input.h"
 
+#include "map.h"
 #include "move.h"
+#include "player.h"
 
 static void
-input_handle_keydown(void)
+input_handle_keydown(Map * map)
 {
         /* Uint8 is a type from the SDL lib */
-        const Uint8 *key_state = SDL_GetKeyboardState(NULL);
+        const Uint8 * key_state = SDL_GetKeyboardState(NULL);
         Direction dir = 0xDEAD;
 
         if (key_state[SDL_SCANCODE_LEFT] || key_state[SDL_SCANCODE_A]) {
@@ -18,13 +20,13 @@ input_handle_keydown(void)
         } else if (key_state[SDL_SCANCODE_RIGHT] || key_state[SDL_SCANCODE_D]) {
                 dir = EAST;
         } else if (key_state[SDL_SCANCODE_ESCAPE]) {
-                exit(0);
+                player_quit_game();
+                player_game_over();
         } else {
                 /* nothing */
         }
 
         if (0xDEAD != dir) {
-                Map *map = map_get();
                 move_in_direction(map, dir);
                 if (move_get_collision(*map, dir) & F_FINISH) {
                         puts("win");
@@ -34,18 +36,18 @@ input_handle_keydown(void)
 }
 
 void
-input_get(void)
+input_get(Map * map)
 {
         SDL_Event event;
 
         /* Loop through waiting messages and process them */
         while (SDL_PollEvent(&event)) {
                 if (event.type == SDL_QUIT) {
-                        exit(0);
+                        player_quit_game();
                 }
                 /* only check for key down states, otherwise double execution */
                 if (event.type == SDL_KEYDOWN) {
-                        input_handle_keydown();
+                        input_handle_keydown(map);
                 }
         }
 }

@@ -1,16 +1,15 @@
 #pragma once
 
-#include "player.h"
+#include <stddef.h>
+#include "map.h"
 
-#define SOLUTION_SIZE 8
+typedef struct {
+        unsigned int const * solution;
+        size_t solution_size;
+        Map ** maps;
+        size_t nr_of_maps;
+        size_t map_size;
+} Level;
 
-typedef enum {
-        NORTH,
-        EAST,
-        SOUTH,
-        WEST
-} Direction;
-
-Direction opposite_direction(Direction const dir);
-void level_new_solution(void);
-unsigned int const *level_get_solution(void);
+Level * level_new(size_t solution_size, size_t nr_of_maps, size_t map_size);
+void level_clean(Level * level);

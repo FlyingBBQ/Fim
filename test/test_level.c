@@ -1,37 +1,32 @@
 #include <stdarg.h>
 #include <stddef.h>
+#include <stdlib.h>
 #include <setjmp.h>
 #include <cmocka.h>
 
-//#include "../src/move.h"
 #include "../src/level.c"
 
-static void
-test_opposite_direction(void **state)
+/* Mock solver_run() for create_maps() */
+bool
+solver_run(Map * map, unsigned int const * solution,
+           size_t const solution_size)
 {
-        assert_int_equal(opposite_direction(NORTH), SOUTH);
-        assert_int_equal(opposite_direction(SOUTH), NORTH);
-        assert_int_equal(opposite_direction(EAST), WEST);
-        assert_int_equal(opposite_direction(WEST), EAST);
-
-        for (int i = 0; i < WEST; i++) {
-                assert_in_range(opposite_direction(i), NORTH, WEST);
-        }
+        return true;
 }
 
 static void
-test_level_generate_solution(void **state)
+test_level_generate_solution(void ** state)
 {
-        unsigned int solut[SOLUTION_SIZE];
-        level_generate_solution(solut);
+        size_t const solution_size = 8;
+        unsigned int solution[solution_size];
+        generate_solution((unsigned int *)&solution, solution_size);
 
-        for (int i = 0; i < SOLUTION_SIZE; ++i) {
-                assert_in_range(solut[i], NORTH, WEST);
+        for (size_t i = 0; i < solution_size; ++i) {
+                assert_in_range(solution[i], NORTH, WEST);
         }
 }
 
 static const struct CMUnitTest test_level[] = {
-        cmocka_unit_test(test_opposite_direction),
         cmocka_unit_test(test_level_generate_solution),
 };
 

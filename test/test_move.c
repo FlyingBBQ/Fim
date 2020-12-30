@@ -12,50 +12,79 @@ player_game_over(void)
         return;
 }
 
-static void
-test_move_pos_x(void **state)
+/* static implementations of tile functions */
+static Tiles **
+tiles_new(size_t const map_size)
 {
-        Pos player = {0};
+        Tiles ** tiles = calloc(map_size, sizeof(Tiles *));
+        if (tiles == NULL) {
+                return NULL;
+        }
+        for (size_t i = 0; i < map_size; ++i) {
+                tiles[i] = calloc(map_size, sizeof(Tiles));
+                if (tiles[i] == NULL) {
+                        free(tiles);
+                        return NULL;
+                }
+        }
+        return tiles;
+}
 
-        player.x = 0;
-        assert_false(move_position(&player, WEST));
+static void
+tiles_clean(Tiles ** tiles, size_t const map_size)
+{
+        for (size_t i = 0; i < map_size; ++i) {
+                free(tiles[i]);
+        }
+        free(tiles);
+}
 
-        player.x++;
-        assert_true(move_position(&player, WEST));
-        assert_int_equal(player.x, 0);
+static void
+test_move_pos_x(void ** state)
+{
+        Map map = {0};
+        map.map_size = 16;
 
-        player.x = MAP_SIZE;
-        assert_false(move_position(&player, EAST));
-        assert_true(move_position(&player, WEST));
-        assert_true(move_position(&player, SOUTH));
+        map.player.x = 0;
+        assert_false(move_position(&map, WEST));
+
+        map.player.x++;
+        assert_true(move_position(&map, WEST));
+        assert_int_equal(map.player.x, 0);
+
+        map.player.x = 16;
+        assert_false(move_position(&map, EAST));
+        assert_true(move_position(&map, WEST));
+        assert_true(move_position(&map, SOUTH));
 
         /* default case */
-        assert_false(move_position(&player, 42));
+        assert_false(move_position(&map, 42));
 }
 
 static void
-test_move_pos_y(void **state)
+test_move_pos_y(void ** state)
 {
-        Pos player = {0};
+        Map map = {0};
+        map.map_size = 16;
 
-        player.y = 0;
-        assert_false(move_position(&player, NORTH));
+        map.player.y = 0;
+        assert_false(move_position(&map, NORTH));
 
-        player.y = 15;
-        assert_false(move_position(&player, SOUTH));
+        map.player.y = 15;
+        assert_false(move_position(&map, SOUTH));
 
-        assert_true(move_position(&player, NORTH));
-        assert_int_equal(player.y, 14);
+        assert_true(move_position(&map, NORTH));
+        assert_int_equal(map.player.y, 14);
 
-        assert_true(move_position(&player, SOUTH));
-        assert_int_equal(player.y, 15);
+        assert_true(move_position(&map, SOUTH));
+        assert_int_equal(map.player.y, 15);
 
-        player.y = -1;
-        assert_false(move_position(&player, NORTH));
+        map.player.y = -1;
+        assert_false(move_position(&map, NORTH));
 }
 
 static void
-test_move_check_free_space_range(void **state)
+test_move_check_free_space_range(void ** state)
 {
         Map map = {0};
 
@@ -66,32 +95,42 @@ test_move_check_free_space_range(void **state)
 }
 
 static void
-test_move_check_free_space_steps(void **state)
+test_move_check_free_space_steps(void ** state)
 {
         Map map = {0};
+        map.map_size = 16;
+        map.tiles = tiles_new(map.map_size);
 
-        assert_int_equal(move_check_free_space(map, SOUTH), (MAP_SIZE - 1));
+        assert_int_equal(move_check_free_space(map, SOUTH), (map.map_size - 1));
         /* test if the player did not move */
         assert_int_equal(map.player.x, 0);
         assert_int_equal(map.player.y, 0);
+
+        tiles_clean(map.tiles, map.map_size);
 }
 
 static void
-test_move_check_free_space_flag(void **state)
+test_move_check_free_space_flag(void ** state)
 {
         Map map = {0};
-        Tiles *tile = &map.tiles[0][8];
+        map.map_size = 16;
+        map.tiles = tiles_new(map.map_size);
+        Tiles * tile = &map.tiles[0][8];
 
         set_flag(tile, F_BORDER);
         assert_int_equal(tile->flags, F_BORDER);
 
         assert_int_equal(move_check_free_space(map, SOUTH), 7);
+
+        tiles_clean(map.tiles, map.map_size);
 }
 
 static void
-test_move_get_collision(void **state)
+test_move_get_collision(void ** state)
 {
         Map map = {0};
+        map.map_size = 16;
+        map.tiles = tiles_new(map.map_size);
         unsigned int collision = 0;
 
         /* place a border flag south of 0,0 */
@@ -101,19 +140,25 @@ test_move_get_collision(void **state)
 
         /* move to border for player_game_over() */
         collision = move_get_collision(map, NORTH);
+
+        tiles_clean(map.tiles, map.map_size);
 }
 
 static void
-test_move_in_direction(void **state)
+test_move_in_direction(void ** state)
 {
         Map map = {0};
+        map.map_size = 16;
+        map.tiles = tiles_new(map.map_size);
 
         move_in_direction(&map, EAST);
-        assert_int_equal(map.player.x, MAP_SIZE - 1);
+        assert_int_equal(map.player.x, map.map_size - 1);
 
         assert_int_equal(map.player.y, 0);
         move_in_direction(&map, SOUTH);
         assert_int_not_equal(map.player.y, 0);
+
+        tiles_clean(map.tiles, map.map_size);
 }
 
 static const struct CMUnitTest test_move[] = {

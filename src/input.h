@@ -1,3 +1,5 @@
 #pragma once
 
-void input_get(void);
+#include "map.h"
+
+void input_get(Map * map);
