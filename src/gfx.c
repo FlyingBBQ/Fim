@@ -78,9 +78,11 @@ gfx_cleanup(void)
         /* Shut down SDL */
         SDL_DestroyRenderer(renderer);
         SDL_DestroyWindow(window);
+        SDL_DestroyTexture(spritemap);
 
         renderer = NULL;
         window = NULL;
+        spritemap = NULL;
 
         IMG_Quit();
         SDL_Quit();
