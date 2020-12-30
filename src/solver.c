@@ -6,10 +6,8 @@
 static void
 solver_prepare_step(Map * map, Direction const dir)
 {
-        Pos player = map->player;
-
-        if (move_position(&player, dir)) {
-                set_flag(&map->tiles[player.x][player.y], F_BORDER);
+        if (move_position(map, dir)) {
+                set_flag(&map->tiles[map->player.x][map->player.y], F_BORDER);
         } else {
                 puts("failed to prepare");
         }
@@ -21,13 +19,13 @@ solver_step(Map * map, Direction const dir)
         unsigned int free_space = move_check_free_space(*map, opposite_direction(dir));
         unsigned int steps = free_space ? ((unsigned int)rand() % free_space) : 0;
 
-        move_position_multiple(&map->player, opposite_direction(dir), steps);
+        move_position_multiple(map, opposite_direction(dir), steps);
 }
 
 bool
 solver_initialize(Map * map, Direction const finish_dir)
 {
-        return move_position(&map->player, opposite_direction(finish_dir));
+        return move_position(map, opposite_direction(finish_dir));
 }
 
 void
@@ -46,11 +44,9 @@ solver_step_multiple(Map * map, unsigned int const * solution,
 }
 
 bool
-solver_sanity_check(Map * map, unsigned int const * solution,
+solver_sanity_check(Map map_copy, unsigned int const * solution,
                     size_t const solution_size)
 {
-        /* get a local copy of the map to not overwrite the actual pos */
-        Map map_copy = *map;
         bool solvable = false;
 
         for (size_t i = solution_size - 1; i < solution_size; --i) {
@@ -68,5 +64,5 @@ solver_run(Map * map, unsigned int const * solution, size_t const solution_size)
 {
         solver_initialize(map, solution[0]);
         solver_step_multiple(map, solution, solution_size);
-        return solver_sanity_check(map, solution, solution_size);
+        return solver_sanity_check(*map, solution, solution_size);
 }

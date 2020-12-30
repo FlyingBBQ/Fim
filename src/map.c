@@ -87,6 +87,7 @@ tiles_new(size_t const map_size)
         for (size_t i = 0; i < map_size; ++i) {
                 tiles[i] = calloc(map_size, sizeof(Tiles));
                 if (tiles[i] == NULL) {
+                        free(tiles);
                         return NULL;
                 }
         }

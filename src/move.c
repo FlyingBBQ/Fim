@@ -1,32 +1,33 @@
 #include "move.h"
 
 bool
-move_position(Pos * player, Direction const dir)
+move_position(Map * map, Direction const dir)
 {
         bool moved = false;
+        int const map_size = (int)map->map_size;
 
         switch (dir) {
         case NORTH:
-                if (player->y > 0) {
-                        player->y--;
+                if (map->player.y > 0) {
+                        map->player.y--;
                         moved = true;
                 }
                 break;
         case EAST:
-                if (player->x < (MAP_SIZE - 1)) {
-                        player->x++;
+                if (map->player.x < (map_size - 1)) {
+                        map->player.x++;
                         moved = true;
                 }
                 break;
         case SOUTH:
-                if (player->y < (MAP_SIZE - 1)) {
-                        player->y++;
+                if (map->player.y < (map_size - 1)) {
+                        map->player.y++;
                         moved = true;
                 }
                 break;
         case WEST:
-                if (player->x > 0) {
-                        player->x--;
+                if (map->player.x > 0) {
+                        map->player.x--;
                         moved = true;
                 }
                 break;
@@ -37,23 +38,23 @@ move_position(Pos * player, Direction const dir)
 }
 
 void
-move_position_multiple(Pos * player, Direction const dir,
+move_position_multiple(Map * map, Direction const dir,
                        unsigned int const steps)
 {
         for (unsigned int i = 0; i < steps; ++i) {
-                if (!move_position(player, dir)) {
+                if (!move_position(map, dir)) {
                         break;
                 }
         }
 }
 
 unsigned int
-move_check_free_space(Map map, Direction const dir)
+move_check_free_space(Map map_copy, Direction const dir)
 {
         unsigned int space = 0;
 
-        while (move_position(&map.player, dir)) {
-                Tiles * tile = &map.tiles[map.player.x][map.player.y];
+        while (move_position(&map_copy, dir)) {
+                Tiles * tile = &map_copy.tiles[map_copy.player.x][map_copy.player.y];
                 if (has_flag(tile, (F_BORDER | F_FINISH))) {
                         break;
                 } else {
@@ -64,12 +65,12 @@ move_check_free_space(Map map, Direction const dir)
 }
 
 unsigned int
-move_get_collision(Map map, Direction const dir)
+move_get_collision(Map map_copy, Direction const dir)
 {
         unsigned int collision = 0;
 
-        if (move_position(&map.player, dir)) {
-                collision = map.tiles[map.player.x][map.player.y].flags;
+        if (move_position(&map_copy, dir)) {
+                collision = map_copy.tiles[map_copy.player.x][map_copy.player.y].flags;
         } else {
                 /* if player could not move, it reached the border = dead */
                 player_game_over();
@@ -81,5 +82,5 @@ void
 move_in_direction(Map * map, Direction const dir)
 {
         unsigned int steps = move_check_free_space(*map, dir);
-        move_position_multiple(&map->player, dir, steps);
+        move_position_multiple(map, dir, steps);
 }
