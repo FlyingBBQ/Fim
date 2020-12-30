@@ -124,8 +124,8 @@ void
 gfx_draw(Map * map)
 {
         /* loop through all tiles and draw them */
-        for (int x = 0; x < MAP_SIZE; x++) {
-                for (int y = 0; y < MAP_SIZE; y++) {
+        for (size_t x = 0; x < map->map_size; x++) {
+                for (size_t y = 0; y < map->map_size; y++) {
                         map_set_tile_type(&map->tiles[x][y]);
                         gfx_render(map->tiles[x][y].x, map->tiles[x][y].y,
                                    &sprite_clips[map->tiles[x][y].type]);
