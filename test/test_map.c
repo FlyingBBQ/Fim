@@ -55,31 +55,46 @@ test_map_set_tile_type(void ** state)
 }
 
 static void
-test_map_generate_xy(void ** state)
+test_opposite_direction(void ** state)
 {
-        Tiles tiles[MAP_SIZE][MAP_SIZE] = {0};
-        unsigned int const max_size = TILE_SIZE * (MAP_SIZE - 1);
+        assert_int_equal(opposite_direction(NORTH), SOUTH);
+        assert_int_equal(opposite_direction(SOUTH), NORTH);
+        assert_int_equal(opposite_direction(EAST), WEST);
+        assert_int_equal(opposite_direction(WEST), EAST);
 
-        map_generate_xy(tiles);
-        assert_int_equal(tiles[0][MAP_SIZE - 1].x, 0);
-        assert_int_equal(tiles[0][MAP_SIZE - 1].y, max_size);
-        assert_int_equal(tiles[MAP_SIZE - 1][0].x, max_size);
-        assert_int_equal(tiles[MAP_SIZE - 1][0].y, 0);
+        for (int i = 0; i < WEST; i++) {
+                assert_in_range(opposite_direction(i), NORTH, WEST);
+        }
 }
 
 static void
-test_map_new(void ** state)
+test_map_generate_xy(void ** state)
 {
-        map_new();
+        size_t const map_size = 16;
+        unsigned int const max_size = (unsigned int)(TILE_SIZE * (map_size - 1));
+
+        Map map = {
+                .map_size = map_size,
+                .tiles = tiles_new(map_size),
+                .offset = 0,
+        };
+
+        map_generate_xy(&map);
+        assert_int_equal(map.tiles[0][map_size - 1].x, 0);
+        assert_int_equal(map.tiles[0][map_size - 1].y, max_size);
+        assert_int_equal(map.tiles[map_size - 1][0].x, max_size);
+        assert_int_equal(map.tiles[map_size - 1][0].y, 0);
+
+        tiles_clean(map.tiles, map.map_size);
 }
 
 static const struct CMUnitTest test_map[] = {
         cmocka_unit_test(test_has_flag),
         cmocka_unit_test(test_set_flag),
         cmocka_unit_test(test_unset_flag),
+        cmocka_unit_test(test_opposite_direction),
         cmocka_unit_test(test_map_set_tile_type),
         cmocka_unit_test(test_map_generate_xy),
-        cmocka_unit_test(test_map_new),
 };
 
 int
