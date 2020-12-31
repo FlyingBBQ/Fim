@@ -13,13 +13,25 @@ solver_prepare_step(Map * map, Direction const dir)
         }
 }
 
+static void
+create_solution_path(Map * map, Direction const dir, unsigned int const steps)
+{
+        for (unsigned int i = 0; i < steps; ++i) {
+                if (move_position(map, dir)) {
+                        set_flag(&map->tiles[map->player.x][map->player.y], F_SOLUTION);
+                } else {
+                        break;
+                }
+        }
+}
+
 void
 solver_step(Map * map, Direction const dir)
 {
         unsigned int free_space = move_check_free_space(*map, opposite_direction(dir));
         unsigned int steps = free_space ? ((unsigned int)rand() % free_space) : 0;
 
-        move_position_multiple(map, opposite_direction(dir), steps);
+        create_solution_path(map, opposite_direction(dir), steps);
 }
 
 bool
