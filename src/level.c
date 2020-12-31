@@ -49,8 +49,9 @@ create_maps(size_t const nr_of_maps, size_t const map_size,
         for (size_t i = 0; i < nr_of_maps; ++i) {
                 bool solvable = false;
                 unsigned int tries = MAX_RETRIES;
+                int offset = (int)((map_size * TILE_SIZE) + map_size);
                 do {
-                        maps[i] = map_new(map_size, solution[0]);
+                        maps[i] = map_new(map_size, solution[0], (i == 1) ? offset : 0);
                         if (maps[i] == NULL) {
                                 continue;
                         }
@@ -63,6 +64,7 @@ create_maps(size_t const nr_of_maps, size_t const map_size,
                 if (tries == 0) {
                         printf("Failed %i times to solve map, create new solution\n", MAX_RETRIES);
                         maps = NULL;
+                        break;
                 }
         }
         return maps;
@@ -92,13 +94,15 @@ level_new(size_t const solution_size, size_t const nr_of_maps,
         }
         level->solution_size = solution_size;
         level->nr_of_maps = nr_of_maps;
-        level->map_size = map_size;
         return level;
 }
 
 void
 level_clean(Level * level)
 {
+        if (level == NULL) {
+                return;
+        }
         free((void *)level->solution);
         for (size_t i = 0; i < level->nr_of_maps; ++i) {
                 map_clean(level->maps[i]);

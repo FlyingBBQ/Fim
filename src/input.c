@@ -5,7 +5,19 @@
 #include "player.h"
 
 static void
-input_handle_keydown(Map * map)
+input_handle_movement(Map ** maps, size_t const nr_of_maps, Direction const dir)
+{
+        for (size_t i = 0; i < nr_of_maps; ++i) { 
+                move_in_direction(maps[i], dir);
+                if (move_get_collision(*maps[i], dir) & F_FINISH) {
+                        puts("Win");
+                        player_game_over();
+                }
+        }
+}
+
+static void
+input_handle_keydown(Map ** maps, size_t const nr_of_maps)
 {
         /* Uint8 is a type from the SDL lib */
         const Uint8 * key_state = SDL_GetKeyboardState(NULL);
@@ -26,17 +38,13 @@ input_handle_keydown(Map * map)
                 /* nothing */
         }
 
-        if (0xDEAD != dir) {
-                move_in_direction(map, dir);
-                if (move_get_collision(*map, dir) & F_FINISH) {
-                        puts("Win");
-                        player_game_over();
-                }
+        if (dir != 0xDEAD) {
+                input_handle_movement(maps, nr_of_maps, dir);
         }
 }
 
 void
-input_get(Map * map)
+input_get(Map ** maps, size_t const nr_of_maps)
 {
         SDL_Event event;
 
@@ -45,9 +53,9 @@ input_get(Map * map)
                 if (event.type == SDL_QUIT) {
                         player_quit_game();
                 }
-                /* only check for key down states, otherwise double execution */
+                /* Only check for key down states, otherwise double execution */
                 if (event.type == SDL_KEYDOWN) {
-                        input_handle_keydown(map);
+                        input_handle_keydown(maps, nr_of_maps);
                 }
         }
 }

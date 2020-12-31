@@ -117,6 +117,9 @@ tiles_new(size_t const map_size)
 static void
 tiles_clean(Tiles ** tiles, size_t const map_size)
 {
+        if (tiles == NULL) {
+                return;
+        }
         for (size_t i = 0; i < map_size; ++i) {
                 free(tiles[i]);
         }
@@ -124,7 +127,7 @@ tiles_clean(Tiles ** tiles, size_t const map_size)
 }
 
 Map *
-map_new(size_t const map_size, Direction const finish_dir)
+map_new(size_t const map_size, Direction const finish_dir, int offset)
 {
         Map * map = malloc(sizeof(Map));
         if (map == NULL) {
@@ -132,7 +135,7 @@ map_new(size_t const map_size, Direction const finish_dir)
                 return NULL;
         }
         memset(map, 0, sizeof(Map));
-        map->offset = 0;
+        map->offset = offset;
         map->map_size = map_size;
         map->tiles = tiles_new(map_size);
         if (map->tiles == NULL) {
@@ -148,6 +151,9 @@ map_new(size_t const map_size, Direction const finish_dir)
 void
 map_clean(Map * map)
 {
+        if (map == NULL) {
+                return;
+        }
         tiles_clean(map->tiles, map->map_size);
         free(map);
 }

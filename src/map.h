@@ -33,7 +33,7 @@ typedef struct {
         Tiles ** tiles;
 } Map;
 
-Map * map_new(size_t const map_size, Direction const finish_dir);
+Map * map_new(size_t const map_size, Direction const finish_dir, int offset);
 void map_clean(Map * map);
 
 Direction opposite_direction(Direction const dir);

@@ -21,7 +21,7 @@ main(void)
                 player_init();
 
                 size_t solution_size = 8;
-                size_t nr_of_maps = 1;
+                size_t nr_of_maps = 2;
                 size_t map_size = 16;
 
                 Level * level = level_new(solution_size, nr_of_maps, map_size);
@@ -31,7 +31,8 @@ main(void)
                 }
 
                 while (player_is_alive()) {
-                        input_get(level->maps[0]);
+                        /* Get the player's input and process it in all maps */
+                        input_get(level->maps, level->nr_of_maps);
                         /* Clear the screen */
                         SDL_RenderClear(gfx_get_renderer());
 

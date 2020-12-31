@@ -112,7 +112,8 @@ void
 gfx_render_player(Map * map)
 {
         /* multiply with tilesize to move a tile instead of pixel */
-        gfx_render((map->player.x * TILE_SIZE), (map->player.y * TILE_SIZE),
+        gfx_render((map->player.x * TILE_SIZE) + map->offset,
+                   (map->player.y * TILE_SIZE) + map->offset,
                    &sprite_clips[TEX_sprite]);
 }
 
@@ -129,7 +130,8 @@ gfx_draw(Map * map)
         for (size_t x = 0; x < map->map_size; x++) {
                 for (size_t y = 0; y < map->map_size; y++) {
                         map_set_tile_type(&map->tiles[x][y]);
-                        gfx_render(map->tiles[x][y].x, map->tiles[x][y].y,
+                        gfx_render(map->tiles[x][y].x + map->offset,
+                                   map->tiles[x][y].y + map->offset,
                                    &sprite_clips[map->tiles[x][y].type]);
                 }
         }
