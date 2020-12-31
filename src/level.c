@@ -6,6 +6,8 @@
 #include "map.h"
 #include "solver.h"
 
+#define MAX_RETRIES 4
+
 static void
 generate_solution(unsigned int * solution, size_t const solution_size)
 {
@@ -46,6 +48,7 @@ create_maps(size_t const nr_of_maps, size_t const map_size,
         /* Initialize and test each map for solvability */
         for (size_t i = 0; i < nr_of_maps; ++i) {
                 bool solvable = false;
+                unsigned int tries = MAX_RETRIES;
                 do {
                         maps[i] = map_new(map_size, solution[0]);
                         if (maps[i] == NULL) {
@@ -53,10 +56,14 @@ create_maps(size_t const nr_of_maps, size_t const map_size,
                         }
                         solvable = solver_run(maps[i], solution, solution_size);
                         if (!solvable) {
-                                puts("Map not solvable.. retrying");
                                 map_clean(maps[i]);
                         }
-                } while (!solvable);
+                } while (!solvable && --tries);
+
+                if (tries == 0) {
+                        printf("Failed %i times to solve map, create new solution\n", MAX_RETRIES);
+                        maps = NULL;
+                }
         }
         return maps;
 }
@@ -78,7 +85,7 @@ level_new(size_t const solution_size, size_t const nr_of_maps,
         }
         level->maps = create_maps(nr_of_maps, map_size, level->solution, solution_size);
         if (level->maps == NULL) {
-                puts("Failed to allocate memory for maps.");
+                puts("Failed to create maps.");
                 free((void *)level->solution);
                 free(level);
                 return NULL;

@@ -9,7 +9,7 @@ solver_prepare_step(Map * map, Direction const dir)
         if (move_position(map, dir)) {
                 set_flag(&map->tiles[map->player.x][map->player.y], F_BORDER);
         } else {
-                puts("failed to prepare");
+                puts("Failed to prepare");
         }
 }
 

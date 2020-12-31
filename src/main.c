@@ -27,7 +27,7 @@ main(void)
                 Level * level = level_new(solution_size, nr_of_maps, map_size);
                 if (level == NULL) {
                         puts("Failed to create new level");
-                        exit(1);
+                        continue;
                 }
 
                 while (player_is_alive()) {
