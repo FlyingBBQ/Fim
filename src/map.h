@@ -7,7 +7,7 @@
 #define MAP_SIZE 16
 
 enum Flags {
-        F_BORDER   = (1 << 0),
+        F_OBSTACLE = (1 << 0),
         F_SOLUTION = (1 << 1),
         F_FINISH   = (1 << 2)
 };
@@ -42,3 +42,4 @@ bool has_flag(Tiles const * tile, unsigned int const flags);
 void set_flag(Tiles * tile, unsigned int const flags);
 void unset_flag(Tiles * tile, unsigned int const flags);
 void map_set_tile_type(Tiles * tile);
+void map_generate_random_obstacles(Map * map, int nr_of_obstacles);

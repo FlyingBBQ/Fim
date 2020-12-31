@@ -32,8 +32,10 @@ map_set_tile_type(Tiles * tile)
 {
         if (has_flag(tile, F_FINISH)) {
                 tile->type = TEX_water;
-        } else if (has_flag(tile, F_BORDER)) {
+        } else if (has_flag(tile, F_OBSTACLE)) {
                 tile->type = TEX_grass;
+        } else if (has_flag(tile, F_SOLUTION)) {
+                tile->type = TEX_bg;
         } else {
                 tile->type = TEX_bg;
         }
@@ -77,6 +79,24 @@ map_set_finish_tile(Map * map, Direction const finish_dir)
         set_flag(&map->tiles[map->player.x][map->player.y], F_FINISH);
 }
 
+void
+map_generate_random_obstacles(Map * map, int nr_of_obstacles)
+{
+        int const map_size = (int)map->map_size;
+        if (nr_of_obstacles > map_size) {
+                nr_of_obstacles = map_size;
+        }
+        for (int i = 0; i < nr_of_obstacles; ++i) {
+                int tile_to_mark = rand() % (map_size * map_size);
+                int x = tile_to_mark / map_size;
+                int y = tile_to_mark % map_size;
+                Tiles * tile = &map->tiles[x][y];
+                if (!has_flag(tile, (F_SOLUTION | F_FINISH))) {
+                        set_flag(tile, F_OBSTACLE);
+                }
+        }
+}
+
 static Tiles **
 tiles_new(size_t const map_size)
 {
@@ -94,7 +114,7 @@ tiles_new(size_t const map_size)
         return tiles;
 }
 
-void
+static void
 tiles_clean(Tiles ** tiles, size_t const map_size)
 {
         for (size_t i = 0; i < map_size; ++i) {

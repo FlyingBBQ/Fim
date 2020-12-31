@@ -55,7 +55,7 @@ move_check_free_space(Map map_copy, Direction const dir)
 
         while (move_position(&map_copy, dir)) {
                 Tiles * tile = &map_copy.tiles[map_copy.player.x][map_copy.player.y];
-                if (has_flag(tile, (F_BORDER | F_FINISH))) {
+                if (has_flag(tile, (F_OBSTACLE | F_FINISH))) {
                         break;
                 } else {
                         space++;

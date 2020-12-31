@@ -7,7 +7,7 @@ static void
 solver_prepare_step(Map * map, Direction const dir)
 {
         if (move_position(map, dir)) {
-                set_flag(&map->tiles[map->player.x][map->player.y], F_BORDER);
+                set_flag(&map->tiles[map->player.x][map->player.y], F_OBSTACLE);
         } else {
                 puts("Failed to prepare");
         }
@@ -76,5 +76,6 @@ solver_run(Map * map, unsigned int const * solution, size_t const solution_size)
 {
         solver_initialize(map, solution[0]);
         solver_step_multiple(map, solution, solution_size);
+        map_generate_random_obstacles(map, (int)solution_size);
         return solver_sanity_check(*map, solution, solution_size);
 }
