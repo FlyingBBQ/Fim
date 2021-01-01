@@ -7,8 +7,8 @@ Written in C with the SDL2 library
 ## Features
 - [x] Basic graphics
 - [x] Generate random solvable maps
-- [ ] Increase complexity as player proceeds
-- [ ] Solve multiple maps in parallel
+- [x] Increase complexity as player proceeds
+- [x] Solve multiple maps in parallel
 
 ## Ships with
 - `cmocka` unit test framework
@@ -21,12 +21,10 @@ Written in C with the SDL2 library
 - `make`
 - `sdl2` and `sdl2_image` library
 
-### June 2018 - v1.0.0
+### Januari 2021 - v0.4
+![](docs/screenshots/fim_v0.4.gif)
+
+### June 2018 - v0.1
 ![](docs/screenshots/2018-06-25_25_scrot.png)
 ![](docs/screenshots/2018-06-25_46_scrot.png)
 ![](docs/screenshots/2018-06-25_55_scrot.png)
-
-### Versioning
-Fim uses [Semantic Versioning](https://semver.org/) for versions and releases.
-
-MAJOR.MINOR.PATCH
