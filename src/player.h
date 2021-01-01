@@ -12,4 +12,5 @@ bool player_is_alive(void);
 void player_game_over(void);
 void player_quit_game(void);
 bool player_is_quitting(void);
-
+void player_win(void);
+bool player_has_won(void);

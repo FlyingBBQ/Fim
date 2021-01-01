@@ -36,6 +36,28 @@ new_solution(size_t const solution_size)
         return solution;
 }
 
+static Pos
+calculate_map_offset(size_t const map, size_t const map_size,
+                     size_t const nr_of_maps)
+{
+        Pos offset_pos = {0};
+        int offset_pixels = (int)((map_size * TILE_SIZE) + map_size);
+
+        if (nr_of_maps <= 4) {
+                if (map == 1) {
+                        offset_pos.x = offset_pixels;
+                }
+                if (map == 2) {
+                        offset_pos.y = offset_pixels;
+                }
+                if (map == 3) {
+                        offset_pos.x = offset_pixels;
+                        offset_pos.y = offset_pixels;
+                }
+        }
+        return offset_pos;
+}
+
 static Map **
 create_maps(size_t const nr_of_maps, size_t const map_size,
             unsigned int const * solution, size_t const solution_size)
@@ -49,20 +71,23 @@ create_maps(size_t const nr_of_maps, size_t const map_size,
         for (size_t i = 0; i < nr_of_maps; ++i) {
                 bool solvable = false;
                 unsigned int tries = MAX_RETRIES;
-                int offset = (int)((map_size * TILE_SIZE) + map_size);
+                Pos offset = calculate_map_offset(i, map_size, nr_of_maps);
                 do {
-                        maps[i] = map_new(map_size, solution[0], (i == 1) ? offset : 0);
-                        if (maps[i] == NULL) {
-                                continue;
+                        maps[i] = map_new(map_size, solution[0], offset);
+                        if (maps[i] != NULL) {
+                                solvable = solver_run(maps[i], solution, solution_size);
                         }
-                        solvable = solver_run(maps[i], solution, solution_size);
                         if (!solvable) {
                                 map_clean(maps[i]);
+                                maps[i] = NULL;
                         }
                 } while (!solvable && --tries);
 
                 if (tries == 0) {
-                        printf("Failed %i times to solve map, create new solution\n", MAX_RETRIES);
+                        printf("Failed %i times to solve map %li\n", MAX_RETRIES, i);
+                        while (i > 0) {
+                                map_clean(maps[--i]);
+                        }
                         maps = NULL;
                         break;
                 }

@@ -127,7 +127,7 @@ tiles_clean(Tiles ** tiles, size_t const map_size)
 }
 
 Map *
-map_new(size_t const map_size, Direction const finish_dir, int offset)
+map_new(size_t const map_size, Direction const finish_dir, Pos const offset)
 {
         Map * map = malloc(sizeof(Map));
         if (map == NULL) {

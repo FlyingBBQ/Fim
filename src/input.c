@@ -7,10 +7,10 @@
 static void
 input_handle_movement(Map ** maps, size_t const nr_of_maps, Direction const dir)
 {
-        for (size_t i = 0; i < nr_of_maps; ++i) { 
+        for (size_t i = 0; i < nr_of_maps; ++i) {
                 move_in_direction(maps[i], dir);
                 if (move_get_collision(*maps[i], dir) & F_FINISH) {
-                        puts("Win");
+                        player_win();
                         player_game_over();
                 }
         }

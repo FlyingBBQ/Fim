@@ -28,12 +28,13 @@ typedef struct {
 
 typedef struct {
         Pos player;
-        int offset;
+        Pos offset;
         size_t map_size;
         Tiles ** tiles;
 } Map;
 
-Map * map_new(size_t const map_size, Direction const finish_dir, int offset);
+Map * map_new(size_t const map_size, Direction const finish_dir,
+              Pos const offset);
 void map_clean(Map * map);
 
 Direction opposite_direction(Direction const dir);

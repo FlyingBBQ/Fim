@@ -4,8 +4,8 @@
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_image.h"
 
-#define SCREEN_WIDTH    640
-#define SCREEN_HEIGHT   640
+#define SCREEN_WIDTH    528
+#define SCREEN_HEIGHT   528
 //#define SCREEN_WIDTH    (MAP_SIZE * TILE_SIZE)
 //#define SCREEN_HEIGHT   (MAP_SIZE * TILE_SIZE)
 

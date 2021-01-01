@@ -16,20 +16,19 @@ main(void)
         /* Set the random level generation seed */
         srand((unsigned int)time(NULL));
 
+        size_t nr_of_maps = 1;
+        size_t solution_size = 8;
+        size_t map_size = 16;
+
         for (;;) {
                 /* Start a new level */
                 player_init();
-
-                size_t solution_size = 8;
-                size_t nr_of_maps = 2;
-                size_t map_size = 16;
-
                 Level * level = level_new(solution_size, nr_of_maps, map_size);
                 if (level == NULL) {
                         puts("Failed to create new level");
                         continue;
                 }
-
+                puts("=== New Level ===");
                 while (player_is_alive()) {
                         /* Get the player's input and process it in all maps */
                         input_get(level->maps, level->nr_of_maps);
@@ -49,6 +48,9 @@ main(void)
                 }
                 level_clean(level);
 
+                if (player_has_won() && (nr_of_maps < 4)) {
+                        nr_of_maps++;
+                }
                 if (player_is_quitting()) {
                         break;
                 }
