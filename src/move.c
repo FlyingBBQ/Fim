@@ -72,8 +72,8 @@ move_get_collision(Map map_copy, Direction const dir)
         if (move_position(&map_copy, dir)) {
                 collision = map_copy.tiles[map_copy.player.x][map_copy.player.y].flags;
         } else {
-                /* if player could not move, it reached the border = dead */
-                player_game_over();
+                /* If player could not move, it reached the border = dead */
+                collision = F_BORDER;
         }
         return collision;
 }

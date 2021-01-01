@@ -9,7 +9,8 @@
 enum Flags {
         F_OBSTACLE = (1 << 0),
         F_SOLUTION = (1 << 1),
-        F_FINISH   = (1 << 2)
+        F_FINISH   = (1 << 2),
+        F_BORDER   = (1 << 3)
 };
 
 typedef enum {

@@ -22,13 +22,14 @@ main(void)
 
         for (;;) {
                 /* Start a new level */
-                player_init();
                 Level * level = level_new(solution_size, nr_of_maps, map_size);
                 if (level == NULL) {
                         puts("Failed to create new level");
                         continue;
+                } else {
+                        player_init();
+                        puts("=== New Level ===");
                 }
-                puts("=== New Level ===");
                 while (player_is_alive()) {
                         /* Get the player's input and process it in all maps */
                         input_get(level->maps, level->nr_of_maps);

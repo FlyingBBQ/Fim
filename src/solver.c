@@ -63,7 +63,11 @@ solver_sanity_check(Map map_copy, unsigned int const * solution,
 
         for (size_t i = solution_size - 1; i < solution_size; --i) {
                 move_in_direction(&map_copy, solution[i]);
-                if (move_get_collision(map_copy, solution[i]) & F_FINISH) {
+                unsigned int collision = move_get_collision(map_copy, solution[i]);
+                if (collision & F_BORDER) {
+                        /* Border hit, map not solvable */
+                        break;
+                } else if (collision & F_FINISH) {
                         solvable = true;
                         break;
                 }

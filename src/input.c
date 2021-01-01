@@ -9,7 +9,10 @@ input_handle_movement(Map ** maps, size_t const nr_of_maps, Direction const dir)
 {
         for (size_t i = 0; i < nr_of_maps; ++i) {
                 move_in_direction(maps[i], dir);
-                if (move_get_collision(*maps[i], dir) & F_FINISH) {
+                unsigned int collision = move_get_collision(*maps[i], dir);
+                if (collision & F_BORDER) {
+                        player_game_over();
+                } else if (collision & F_FINISH) {
                         player_win();
                         player_game_over();
                 }
