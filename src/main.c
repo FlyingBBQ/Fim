@@ -43,6 +43,7 @@ main(void)
                         SDL_Delay(16);
                 }
                 level_clean(level);
+                SDL_Delay(300);
 
                 /* Level finished, process game state for next level */
                 if (player_is_alive()) {
