@@ -10,13 +10,13 @@ test_has_flag(void ** state)
 {
         Tiles tile = {0};
 
-        tile.flags |= F_BORDER;
-        assert_true(has_flag(&tile, F_BORDER));
+        tile.flags |= F_OBSTACLE;
+        assert_true(has_flag(&tile, F_OBSTACLE));
         assert_false(has_flag(&tile, F_SOLUTION));
 
         tile.flags |= F_SOLUTION;
         assert_true(has_flag(&tile, F_SOLUTION));
-        assert_true(has_flag(&tile, F_BORDER));
+        assert_true(has_flag(&tile, F_OBSTACLE));
 }
 
 static void
@@ -24,11 +24,11 @@ test_set_flag(void ** state)
 {
         Tiles tile = {0};
 
-        set_flag(&tile, F_BORDER);
-        assert_int_equal(tile.flags, F_BORDER);
+        set_flag(&tile, F_OBSTACLE);
+        assert_int_equal(tile.flags, F_OBSTACLE);
 
         set_flag(&tile, F_SOLUTION);
-        assert_int_equal(tile.flags, (F_SOLUTION | F_BORDER));
+        assert_int_equal(tile.flags, (F_SOLUTION | F_OBSTACLE));
 }
 
 static void
@@ -36,8 +36,8 @@ test_unset_flag(void ** state)
 {
         Tiles tile = {0};
 
-        set_flag(&tile, (F_BORDER | F_SOLUTION));
-        unset_flag(&tile, F_BORDER);
+        set_flag(&tile, (F_OBSTACLE | F_SOLUTION));
+        unset_flag(&tile, F_OBSTACLE);
         assert_int_equal(tile.flags, F_SOLUTION);
 }
 
@@ -76,7 +76,6 @@ test_map_generate_xy(void ** state)
         Map map = {
                 .map_size = map_size,
                 .tiles = tiles_new(map_size),
-                .offset = 0,
         };
 
         map_generate_xy(&map);

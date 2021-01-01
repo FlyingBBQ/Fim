@@ -117,8 +117,8 @@ test_move_check_free_space_flag(void ** state)
         map.tiles = tiles_new(map.map_size);
         Tiles * tile = &map.tiles[0][8];
 
-        set_flag(tile, F_BORDER);
-        assert_int_equal(tile->flags, F_BORDER);
+        set_flag(tile, F_OBSTACLE);
+        assert_int_equal(tile->flags, F_OBSTACLE);
 
         assert_int_equal(move_check_free_space(map, SOUTH), 7);
 
