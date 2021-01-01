@@ -13,6 +13,12 @@ solver_run(Map * map, unsigned int const * solution,
 {
         return true;
 }
+/* Mock player_is_quitting() */
+bool
+player_is_quitting(void)
+{
+        return false;
+}
 
 static void
 test_level_generate_solution(void ** state)
