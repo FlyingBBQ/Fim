@@ -5,13 +5,11 @@
 
 static bool is_alive = true;
 static bool quit_game = false;
-static bool win = false;
 
 void
 player_init(void)
 {
         is_alive = true;
-        win = false;
 }
 
 bool
@@ -36,17 +34,4 @@ bool
 player_is_quitting(void)
 {
         return quit_game;
-}
-
-void
-player_win(void)
-{
-        puts("Win");
-        win = true;
-}
-
-bool
-player_has_won(void)
-{
-        return win;
 }

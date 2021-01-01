@@ -8,13 +8,16 @@ static void
 input_handle_movement(Map ** maps, size_t const nr_of_maps, Direction const dir)
 {
         for (size_t i = 0; i < nr_of_maps; ++i) {
+                if (maps[i]->finished) {
+                        continue;
+                }
                 move_in_direction(maps[i], dir);
                 unsigned int collision = move_get_collision(*maps[i], dir);
                 if (collision & F_BORDER) {
                         player_game_over();
+                        maps[i]->finished = true;
                 } else if (collision & F_FINISH) {
-                        player_win();
-                        player_game_over();
+                        maps[i]->finished = true;
                 }
         }
 }
@@ -36,7 +39,6 @@ input_handle_keydown(Map ** maps, size_t const nr_of_maps)
                 dir = EAST;
         } else if (key_state[SDL_SCANCODE_ESCAPE]) {
                 player_quit_game();
-                player_game_over();
         } else {
                 /* nothing */
         }

@@ -135,6 +135,7 @@ map_new(size_t const map_size, Direction const finish_dir, Pos const offset)
                 return NULL;
         }
         memset(map, 0, sizeof(Map));
+        map->finished = false;
         map->offset = offset;
         map->map_size = map_size;
         map->tiles = tiles_new(map_size);

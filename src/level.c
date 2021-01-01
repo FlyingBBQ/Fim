@@ -135,3 +135,22 @@ level_clean(Level * level)
         free(level->maps);
         free(level);
 }
+
+bool
+level_is_finished(Level * level)
+{
+        bool finished = false;
+        unsigned int maps_finished = 0;
+
+        if (player_is_quitting()) {
+                return true;
+        }
+
+        for (unsigned int i = 0; i < level->nr_of_maps; ++i) {
+                maps_finished += level->maps[i]->finished ? 1 : 0;
+        }
+        if (maps_finished == level->nr_of_maps) {
+                finished = true;
+        }
+        return finished;
+}

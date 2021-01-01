@@ -32,6 +32,7 @@ typedef struct {
         Pos offset;
         size_t map_size;
         Tiles ** tiles;
+        bool finished;
 } Map;
 
 Map * map_new(size_t const map_size, Direction const finish_dir,
