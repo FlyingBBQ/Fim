@@ -3,14 +3,7 @@
 #include <setjmp.h>
 #include <cmocka.h>
 
-#include "../src/move.c"
-
-/* mock player_gamer_over() for move_get_collision() */
-void
-player_game_over(void)
-{
-        return;
-}
+#include "move.h"
 
 /* static implementations of tile functions */
 static Tiles **
