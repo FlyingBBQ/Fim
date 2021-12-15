@@ -9,7 +9,8 @@ TEST = $(addsuffix _test, $(EXE))
 
 CC = gcc -std=c99
 OPT ?= -O2
-CFLAGS = -Wall -Werror -Wextra -Wshadow -Wundef -Wconversion -Wpedantic \
+CFLAGS = $(OPT) -MMD -MP
+#CFLAGS = -Wall -Werror -Wextra -Wshadow -Wundef -Wconversion -Wpedantic \
 		 -Wformat=2 -Wnull-dereference -Wlogical-op \
 		 $(OPT) -MMD -MP
 LFLAGS := $(shell sdl2-config --libs) -lSDL2_image
@@ -20,8 +21,14 @@ DOCDIR   = docs
 TESTDIR  = test
 BUILDIR ?= build
 
+VPATH = $(SRCDIR)
+
+TARGET = $(foreach t, $(EXE), $(addprefix $(BUILDIR)/, $(t)))
+SOURCEDIRS = $(foreach directory, $(TARGET), $(addsuffix /$(SRCDIR), $(directory)))
+
 SRCS = $(wildcard $(SRCDIR)/*.c)
-OBJS = $(SRCS:%.c=$(BUILDIR)/%.o)
+OBJS = $(addsuffix .o, $(subst $(SRCDIR),$(SOURCEDIRS),$(SRCS)))
+
 TEST_SRCS = $(wildcard $(TESTDIR)/*.c)
 TEST_OBJS = $(TEST_SRCS:%.c=$(BUILDIR)/%.o)
 
@@ -29,9 +36,8 @@ DEPS = $(OBJS:.o=.d)
 
 MAKEFLAGS := --jobs=$(shell nproc)
 
-mkdir_check = $(if $(wildcard $(@D)),,mkdir -p $(@D))
 
-$(BUILDIR)/$(EXE): $(OBJS)
+$(TARGET)/$(EXE): $(OBJS)
 	$(CC) $(OBJS) -o $@ $(LFLAGS)
 
 $(BUILDIR)/$(LIB): $(OBJS)
@@ -40,11 +46,19 @@ $(BUILDIR)/$(LIB): $(OBJS)
 $(BUILDIR)/$(TEST): $(TEST_OBJS) | $(BUILDIR)/$(LIB)
 	$(CC) $(TEST_OBJS) -o $@ -L$(BUILDIR) -l$(EXE) $(TFLAGS)
 
-$(BUILDIR)/%.o: %.c
-	$(mkdir_check)
-	$(CC) $(CFLAGS) -c $< -o $@ -I$(SRCDIR)
+define generate_rules =
+$(1):
+	@echo Creating directory $$@
+	@mkdir -p $$@
+
+$(1)/%.c.o: %.c | $(1)
+	@echo Building $$@
+	@$(CC) $(CFLAGS) -c $$< -o $$@ -I$(SRCDIR)
+endef
 
 -include $(DEPS)
+
+$(foreach targetdir, $(SOURCEDIRS), $(eval $(call generate_rules, $(targetdir))))
 
 .PHONY: clean run test docs format release
 
