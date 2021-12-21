@@ -3,69 +3,115 @@
 # Author: FlyingBBQ
 #
 
-EXE  = fim
-LIB  = $(addprefix lib, $(addsuffix .a, $(EXE)))
-TEST = $(addsuffix _test, $(EXE))
+# Targets:
+EXE    = fim
+TEST   = $(addsuffix _test, $(EXE))
+TARGET = $(EXE) $(TEST)
 
-CC = gcc -std=c99
+# Compile and linker flags:
+CC   = gcc -std=c99
 OPT ?= -O2
-CFLAGS = -Wall -Werror -Wextra -Wshadow -Wundef -Wconversion -Wpedantic \
-		 -Wformat=2 -Wnull-dereference -Wlogical-op \
-		 $(OPT) -MMD -MP
+
+CCFLAGS = -Wall -Werror -Wextra -Wshadow -Wundef -Wconversion -Wpedantic \
+		  -Wformat=2 -Wnull-dereference -Wlogical-op \
+		  $(OPT) -MMD -MP
 LFLAGS := $(shell sdl2-config --libs) -lSDL2_image
 TFLAGS := -lcmocka
 
-SRCDIR   = src
-DOCDIR   = docs
-TESTDIR  = test
-BUILDIR ?= build
+# Directories:
+BUILD_DIR ?= build
+SRC_DIR    = src
+TEST_DIR   = test
+DOC_DIR    = docs
 
-SRCS = $(wildcard $(SRCDIR)/*.c)
-OBJS = $(SRCS:%.c=$(BUILDIR)/%.o)
-TEST_SRCS = $(wildcard $(TESTDIR)/*.c)
-TEST_OBJS = $(TEST_SRCS:%.c=$(BUILDIR)/%.o)
+# The VPATH is searched for sources when compiling the objects.
+VPATH = $(SRC_DIR) $(TEST_DIR)
 
+# Define the sources that are used for the targets.
+$(EXE)_SRCS = $(wildcard $(SRC_DIR)/*.c)
+
+FILTER = %main.c
+$(TEST)_SRCS = $(filter-out $(FILTER),$($(EXE)_SRCS))
+$(TEST)_SRCS += $(wildcard $(TEST_DIR)/*.c)
+
+# Create object list that will be filled during target creation.
+OBJS =
+
+# Define generic functions to compile sources for a target:
+# Arguments:
+# 1. target
+# 2. list of sources
+define create_target =
+$(1)_DIR = $(BUILD_DIR)/$(1)
+$(1)_OBJS = $(addprefix $$($(1)_DIR)/, $(addsuffix .o, $(notdir $($(1)_SRCS))))
+OBJS += $$($(1)_OBJS)
+
+$(call compile_objects,$$($(1)_DIR))
+
+.PHONY: $(1)
+$(1)_T: $$($(1)_OBJS)
+	@echo Linking $(1)
+	$(HIDE)$(CC) $$($(1)_OBJS) -o $(1) $$(LFLAGS)
+endef
+
+# Arguments:
+# 1. (target) build directory
+define compile_objects =
+$(1):
+	@echo Creating directory $$@
+	$(HIDE)mkdir -p $$@
+
+$(1)/%.c.o: %.c | $(1)
+	@echo Compiling $$@
+	$(HIDE)$(CC) $$(CCFLAGS) -c $$< -o $$@ -I$(SRC_DIR)
+endef
+
+# Create dependencies (needs CCFLAGS += -MMD -MP).
 DEPS = $(OBJS:.o=.d)
-
-MAKEFLAGS := --jobs=$(shell nproc)
-
-mkdir_check = $(if $(wildcard $(@D)),,mkdir -p $(@D))
-
-$(BUILDIR)/$(EXE): $(OBJS)
-	$(CC) $(OBJS) -o $@ $(LFLAGS)
-
-$(BUILDIR)/$(LIB): $(OBJS)
-	$(AR) rcs $@ $(filter-out %main.o, $(OBJS))
-
-$(BUILDIR)/$(TEST): $(TEST_OBJS) | $(BUILDIR)/$(LIB)
-	$(CC) $(TEST_OBJS) -o $@ -L$(BUILDIR) -l$(EXE) $(TFLAGS)
-
-$(BUILDIR)/%.o: %.c
-	$(mkdir_check)
-	$(CC) $(CFLAGS) -c $< -o $@ -I$(SRCDIR)
-
 -include $(DEPS)
 
-.PHONY: clean run test docs format release
+# Verbose mode. Enable with 'make V=1'
+HIDE ?= @
+ifeq ($(V),1)
+	HIDE =
+else
+	# Enable parallel builds when verbose mode is disabled.
+	MAKEFLAGS := --jobs=$(shell nproc)
+endif
 
+# Invoke the function to create all targets.
+$(foreach t,$(TARGET),$(eval $(call create_target,$(t))))
+
+# Add dependencies and custom compiler/linker flags for each target.
+$(EXE): $(EXE)_T
+
+$(TEST): OPT = -O0
+$(TEST): CCFLAGS += -Wno-unused-parameter
+#$(TEST): CCFLAGS += -DUNIT_TESTING
+$(TEST): LFLAGS += $(TFLAGS)
+$(TEST): $(TEST)_T
+
+# Set de default goal.
+.DEFAULT_GOAL := $(EXE)
+
+# Define custom targets:
+.PHONY: all
+all: $(TARGET)
+
+.PHONY: test
+test: $(TEST)
+	./$(TEST)
+
+.PHONY: clean
 clean:
-	rm -rf $(BUILDIR)
+	rm -rf $(BUILD_DIR)
+	rm -f $(EXE)
+	rm -f $(TEST)
 
-run: $(BUILDIR)/$(EXE)
-	./$(BUILDIR)/$(EXE)
+.PHONY: docs
+docs: | $(DOC_DIR)/Doxyfile
+	doxygen $(DOC_DIR)/Doxyfile
 
-build_test: OPT = -O0
-build_test: CFLAGS += -Wno-unused-parameter
-build_test: $(BUILDIR)/$(TEST)
-
-test: build_test
-	./$(BUILDIR)/$(TEST)
-
-docs: | $(DOCDIR)/Doxyfile
-	doxygen $(DOCDIR)/Doxyfile
-
+.PHONY: format
 format:
-	astyle --project=astylerc $(SRCDIR)/*.c $(SRCDIR)/*.h $(TESTDIR)/*.c
-
-release:
-	CMOCKA_XML_FILE=$(BUILDIR)/%g.xml CMOCKA_MESSAGE_OUTPUT=xml ./$(BUILDIR)/$(TEST)
+	astyle --project=astylerc $(SRC_DIR)/*.c $(SRC_DIR)/*.h $(TEST_DIR)/*.c

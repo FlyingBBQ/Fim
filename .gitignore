@@ -2,3 +2,5 @@ build/
 docs/doxygen/
 src/*.orig
 test/*.orig
+fim
+fim_test
