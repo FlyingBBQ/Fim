@@ -3,9 +3,6 @@
 #include "player.h"
 #include "sprites.h"
 
-/* size of a map */
-#define MAP_SIZE 16
-
 enum Flags {
         F_OBSTACLE = (1 << 0),
         F_SOLUTION = (1 << 1),
