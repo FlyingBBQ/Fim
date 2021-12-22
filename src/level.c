@@ -1,10 +1,12 @@
 #include "level.h"
 
+#include "map.h"
+#include "mem_leak_test.h"
+#include "solver.h"
+
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
-#include "map.h"
-#include "solver.h"
 
 #define MAX_RETRIES 4
 

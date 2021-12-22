@@ -1,5 +1,6 @@
 #include "map.h"
 
+#include "mem_leak_test.h"
 #include <stdbool.h>
 #include <stddef.h>
 

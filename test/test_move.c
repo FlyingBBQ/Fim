@@ -1,9 +1,9 @@
+#include "move.h"
+
 #include <stdarg.h>
 #include <stddef.h>
 #include <setjmp.h>
 #include <cmocka.h>
-
-#include "move.h"
 
 /* static implementations of tile functions */
 static Tiles **

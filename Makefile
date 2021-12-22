@@ -87,7 +87,7 @@ $(EXE): $(EXE)_T
 
 $(TEST): OPT = -O0
 $(TEST): CCFLAGS += -Wno-unused-parameter
-#$(TEST): CCFLAGS += -DUNIT_TESTING
+$(TEST): CCFLAGS += -DUNIT_TESTING
 $(TEST): LFLAGS += $(TFLAGS)
 $(TEST): $(TEST)_T
 
