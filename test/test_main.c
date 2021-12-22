@@ -11,7 +11,7 @@ main(void)
 {
         int failed_tests = 0;
 
-        /* run all the test functions */
+        // Run all the test functions.
         failed_tests += run_test_move();
         failed_tests += run_test_map();
         return failed_tests;

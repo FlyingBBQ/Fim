@@ -25,7 +25,7 @@ input_handle_movement(Map ** maps, size_t const nr_of_maps, Direction const dir)
 static void
 input_handle_keydown(Map ** maps, size_t const nr_of_maps)
 {
-        /* Uint8 is a type from the SDL lib */
+        // Uint8 is a type from the SDL lib.
         const Uint8 * key_state = SDL_GetKeyboardState(NULL);
         Direction dir = 0xDEAD;
 
@@ -40,7 +40,7 @@ input_handle_keydown(Map ** maps, size_t const nr_of_maps)
         } else if (key_state[SDL_SCANCODE_ESCAPE]) {
                 player_quit_game();
         } else {
-                /* nothing */
+                // Nothing.
         }
 
         if (dir != 0xDEAD) {
@@ -53,12 +53,12 @@ input_get(Map ** maps, size_t const nr_of_maps)
 {
         SDL_Event event;
 
-        /* Loop through waiting messages and process them */
+        // Loop through waiting messages and process them.
         while (SDL_PollEvent(&event)) {
                 if (event.type == SDL_QUIT) {
                         player_quit_game();
                 }
-                /* Only check for key down states, otherwise double execution */
+                // Only check for key down states, otherwise double execution.
                 if (event.type == SDL_KEYDOWN) {
                         input_handle_keydown(maps, nr_of_maps);
                 }

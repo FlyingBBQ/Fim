@@ -13,7 +13,7 @@
 static void
 generate_solution(unsigned int * solution, size_t const solution_size)
 {
-        /* The first direction can be anywhere */
+        // The first direction can be anywhere.
         solution[0] = (unsigned int)rand() % 4u;
         for (unsigned int i = 1; i < solution_size; ++i) {
                 unsigned int r;
@@ -21,7 +21,7 @@ generate_solution(unsigned int * solution, size_t const solution_size)
                 do {
                         r = (unsigned int)rand() % 4;
                         invalid_direction = (r == opposite_direction(solution[i - 1]));
-                        /* Re-roll if an invalid solution is generated */
+                        // Re-roll if an invalid solution is generated.
                 } while (invalid_direction);
                 solution[i] = r;
         }
@@ -64,12 +64,12 @@ static Map **
 create_maps(size_t const nr_of_maps, size_t const map_size,
             unsigned int const * solution, size_t const solution_size)
 {
-        /* Create the array of maps */
+        // Create the array of maps.
         Map ** maps = calloc(nr_of_maps, sizeof(Map *));
         if (maps == NULL) {
                 return NULL;
         }
-        /* Initialize and test each map for solvability */
+        // Initialize and test each map for solvability.
         for (size_t i = 0; i < nr_of_maps; ++i) {
                 bool solvable = false;
                 unsigned int tries = MAX_RETRIES;

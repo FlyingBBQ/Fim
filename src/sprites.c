@@ -1,6 +1,6 @@
 #include "sprites.h"
 
-/* the array containing the clip of each sprite */
+// The array containing the clip of each sprite.
 SDL_Rect sprite_clips[MAX_SPRITES];
 
 void

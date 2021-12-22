@@ -25,7 +25,6 @@ test_move_pos_x(void ** state)
         assert_true(move_position(&map, WEST));
         assert_true(move_position(&map, SOUTH));
 
-        /* default case */
         assert_false(move_position(&map, 42));
 }
 

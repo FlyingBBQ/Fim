@@ -67,13 +67,13 @@ map_set_finish_tile(Map * map, Direction const finish_dir)
         int const map_size = (int)map->map_size;
         int finish_pos = rand() % map_size;
 
-        /* Check if the first position in the solution is odd */
+        // Check if the first position in the solution is odd.
         if (finish_dir & 1u) {
-                /* east || west */
+                // east || west
                 map->player.x = (EAST == finish_dir) ? (map_size - 1) : 0;
                 map->player.y = finish_pos;
         } else {
-                /* north || south */
+                // north || south
                 map->player.y = (NORTH == finish_dir) ? 0 : (map_size - 1);
                 map->player.x = finish_pos;
         }

@@ -44,10 +44,10 @@ void
 solver_step_multiple(Map * map, unsigned int const * solution,
                      size_t const solution_size)
 {
-        /* The first step is already prepared */
+        // The first step is already prepared.
         solver_step(map, solution[0]);
         for (unsigned int i = 1; i < solution_size; ++i) {
-                /* Do not prepare if the direction is the same as the previous */
+                // Do not prepare if the direction is the same as the previous.
                 if (solution[i] != solution[i - 1]) {
                         solver_prepare_step(map, solution[i]);
                 }
@@ -65,7 +65,7 @@ solver_sanity_check(Map map_copy, unsigned int const * solution,
                 move_in_direction(&map_copy, solution[i]);
                 unsigned int collision = move_get_collision(map_copy, solution[i]);
                 if (collision & F_BORDER) {
-                        /* Border hit, map not solvable */
+                        // Border hit, map not solvable.
                         break;
                 } else if (collision & F_FINISH) {
                         solvable = true;
