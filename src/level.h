@@ -1,7 +1,7 @@
 #pragma once
 
-#include <stddef.h>
 #include "map.h"
+#include <stddef.h>
 
 typedef struct {
         unsigned int const * solution;

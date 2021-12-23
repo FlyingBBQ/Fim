@@ -1,7 +1,7 @@
 #include "solver.h"
 
-#include <assert.h>
 #include "move.h"
+#include <assert.h>
 
 static void
 solver_prepare_step(Map * map, Direction const dir)

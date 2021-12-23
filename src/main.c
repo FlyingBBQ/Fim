@@ -1,8 +1,8 @@
-#include <stdlib.h>
-#include <time.h>
 #include "gfx.h"
 #include "input.h"
 #include "level.h"
+#include <stdlib.h>
+#include <time.h>
 
 int
 main(void)
