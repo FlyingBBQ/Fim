@@ -9,14 +9,15 @@ TEST   = $(addsuffix _test, $(EXE))
 TARGET = $(EXE) $(TEST)
 
 # Compile and linker flags:
-CC   = gcc -std=c99
+CC   = gcc -std=c17
 OPT ?= -O2
 
-CCFLAGS = -Wall -Werror -Wextra -Wshadow -Wundef -Wconversion -Wpedantic \
-		  -Wformat=2 -Wnull-dereference -Wlogical-op \
-		  $(OPT) -MMD -MP
+CCFLAGS = $(OPT) -MMD -MP
+CCFLAGS += -Wall -Wextra -Wpedantic
+CCFLAGS += -Wshadow -Wformat=2 -Wconversion
+CCFLAGS += -Wmissing-include-dirs
+CCFLAGS += -Werror
 LFLAGS := $(shell sdl2-config --libs) -lSDL2_image
-TFLAGS := -lcmocka
 
 # Directories:
 BUILD_DIR ?= build
