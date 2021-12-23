@@ -89,6 +89,7 @@ create_maps(size_t const nr_of_maps, size_t const map_size,
                         while (i > 0) {
                                 map_clean(maps[--i]);
                         }
+                        free(maps);
                         maps = NULL;
                         break;
                 }
