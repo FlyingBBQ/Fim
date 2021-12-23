@@ -1,5 +1,6 @@
 #include "map.h"
 
+#include "log.h"
 #include "mem_leak_test.h"
 #include <stdbool.h>
 #include <stddef.h>
@@ -132,7 +133,7 @@ map_new(size_t const map_size, Direction const finish_dir, Pos const offset)
 {
         Map * map = malloc(sizeof(Map));
         if (map == NULL) {
-                puts("Failed to allocate memory for map");
+                LOG_ERROR("Failed to allocate memory for map");
                 return NULL;
         }
         memset(map, 0, sizeof(Map));
@@ -141,7 +142,7 @@ map_new(size_t const map_size, Direction const finish_dir, Pos const offset)
         map->map_size = map_size;
         map->tiles = tiles_new(map_size);
         if (map->tiles == NULL) {
-                puts("Failed to allocate memory for map tiles");
+                LOG_ERROR("Failed to allocate memory for map tiles");
                 free(map);
                 return NULL;
         }

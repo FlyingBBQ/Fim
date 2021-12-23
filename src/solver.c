@@ -1,7 +1,7 @@
 #include "solver.h"
 
+#include "log.h"
 #include "move.h"
-#include <assert.h>
 
 static void
 solver_prepare_step(Map * map, Direction const dir)
@@ -9,7 +9,7 @@ solver_prepare_step(Map * map, Direction const dir)
         if (move_position(map, dir)) {
                 set_flag(&map->tiles[map->player.x][map->player.y], F_OBSTACLE);
         } else {
-                puts("Failed to prepare");
+                LOG_DEBUG("Failed to prepare step.");
         }
 }
 

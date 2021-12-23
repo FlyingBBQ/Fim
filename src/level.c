@@ -1,9 +1,9 @@
 #include "level.h"
 
+#include "log.h"
 #include "map.h"
 #include "mem_leak_test.h"
 #include "solver.h"
-#include <assert.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -85,7 +85,7 @@ create_maps(size_t const nr_of_maps, size_t const map_size,
                 } while (!solvable && --tries);
 
                 if (tries == 0) {
-                        printf("Failed %i times to solve map %li\n", MAX_RETRIES, i);
+                        LOG_DEBUG("Failed %i times to solve map %li", MAX_RETRIES, i);
                         while (i > 0) {
                                 map_clean(maps[--i]);
                         }
@@ -103,18 +103,18 @@ level_new(size_t const solution_size, size_t const nr_of_maps,
 {
         Level * level = malloc(sizeof(Level));
         if (level == NULL) {
-                puts("Failed to allocate memory for level");
+                LOG_ERROR("Failed to allocate memory for level");
                 return NULL;
         }
         level->solution = new_solution(solution_size);
         if (level->solution == NULL) {
-                puts("Failed to allocate memory for solution.");
+                LOG_ERROR("Failed to allocate memory for solution.");
                 free(level);
                 return NULL;
         }
         level->maps = create_maps(nr_of_maps, map_size, level->solution, solution_size);
         if (level->maps == NULL) {
-                puts("Failed to create maps.");
+                LOG_DEBUG("Failed to create maps.");
                 free((void *)level->solution);
                 free(level);
                 return NULL;

@@ -1,5 +1,8 @@
 #include "gfx.h"
 
+#include "log.h"
+#include <assert.h>
+
 static SDL_Texture * spritemap;
 static SDL_Window * window;
 static SDL_Renderer * renderer;
@@ -11,7 +14,7 @@ gfx_load_image(void)
         // Load the image.
         SDL_Surface * loaded_image = IMG_Load(image_name);
         if (loaded_image == NULL) {
-                printf("Unable to load image %s SDL_image error: %s\n", image_name,
+                LOG_ERROR("Unable to load image %s SDL_image error: %s", image_name,
                        IMG_GetError());
         }
 
@@ -22,7 +25,7 @@ gfx_load_image(void)
         // Create texture from surface pixels.
         spritemap = SDL_CreateTextureFromSurface(renderer, loaded_image);
         if (spritemap == NULL) {
-                printf("Couldn't create texture %s\n", SDL_GetError());
+                LOG_ERROR("Couldn't create texture %s", SDL_GetError());
         }
 
         // Set the clips for every texture.
@@ -37,7 +40,7 @@ gfx_init(char * title)
 {
         // Initialise SDL Video.
         if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-                printf("Could not initialize SDL: %s\n", SDL_GetError());
+                LOG_ERROR("Could not initialize SDL: %s", SDL_GetError());
                 exit(1);
         }
 
@@ -48,14 +51,14 @@ gfx_init(char * title)
                                   SCREEN_WIDTH, SCREEN_HEIGHT,
                                   SDL_WINDOW_SHOWN);
         if (window == NULL) {
-                printf("Couldn't create window: %s\n", SDL_GetError());
+                LOG_ERROR("Couldn't create window: %s", SDL_GetError());
                 exit(1);
         }
 
         // Initialize PNG loading.
         int imgFlag = IMG_INIT_PNG;
         if (!(IMG_Init(imgFlag) & imgFlag)) {
-                printf("Couldn't initialize IMG_INIT_PNG: %s\n", IMG_GetError());
+                LOG_ERROR("Couldn't initialize IMG_INIT_PNG: %s", IMG_GetError());
                 exit(1);
         }
 
@@ -63,7 +66,7 @@ gfx_init(char * title)
         unsigned int rndrFlag = SDL_RENDERER_ACCELERATED;
         renderer = SDL_CreateRenderer(window, -1, rndrFlag);
         if (renderer == NULL) {
-                printf("Window could not be rendered %s\n", SDL_GetError());
+                LOG_ERROR("Window could not be rendered %s", SDL_GetError());
                 exit(1);
         }
         SDL_SetRenderDrawColor(renderer, 10, 10, 10, 255);
@@ -91,15 +94,14 @@ gfx_cleanup(void)
 void
 gfx_render(int x, int y, SDL_Rect * clip)
 {
-        SDL_Rect dest;
+        assert(clip != NULL);
 
-        if (clip == NULL) {
-                printf("Couldn't create clip %s\n", SDL_GetError());
-        }
-        dest.x = x;
-        dest.y = y;
-        dest.w = clip->w;
-        dest.h = clip->h;
+        SDL_Rect dest = {
+                .x = x,
+                .y = y,
+                .w = clip->w,
+                .h = clip->h,
+        };
         // Render function to put texture (clip) from the spritemap at
         // position (dest) on the screen (renderer).
         SDL_RenderCopy(renderer, spritemap, clip, &dest);
