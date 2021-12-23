@@ -73,6 +73,10 @@ TEST_COVR_FILTER = $(foreach f,$(TEST_SRCS),$(subst $(TEST_DIR)/test_,-f $(SRC_D
 covr: test
 	$(HIDE)gcovr $(BUILD_DIR)/$(TEST) -r $(SRC_DIR) -s $(TEST_COVR_FILTER)
 
+.PHONY: covr_html
+covr_html: test
+	$(HIDE)gcovr $(BUILD_DIR)/$(TEST) -r $(SRC_DIR) $(TEST_COVR_FILTER) --html-details -o $(BUILD_DIR)/$(TEST).html
+
 .PHONY: docs
 docs: | $(DOC_DIR)/Doxyfile
 	doxygen $(DOC_DIR)/Doxyfile
