@@ -85,10 +85,12 @@ $(foreach t,$(TARGET),$(eval $(call create_target,$(t))))
 # Add dependencies and custom compiler/linker flags for each target.
 $(EXE): $(EXE)_T
 
-$(TEST): OPT = -O0
+$(TEST): OPT = -O0 -g
 $(TEST): CCFLAGS += -Wno-unused-parameter
 $(TEST): CCFLAGS += -DUNIT_TESTING
-$(TEST): LFLAGS += $(TFLAGS)
+$(TEST): CCFLAGS += --coverage
+$(TEST): LFLAGS  += --coverage
+$(TEST): LFLAGS  += -lcmocka
 $(TEST): $(TEST)_T
 
 # Set de default goal.
@@ -107,6 +109,13 @@ clean:
 	rm -rf $(BUILD_DIR)
 	rm -f $(EXE)
 	rm -f $(TEST)
+
+# Report coverage for the files that have unit tests.
+TEST_SRCS = $(filter-out %main.c,$(wildcard $(TEST_DIR)/*.c))
+TEST_COVR_FILTER = $(foreach f,$(TEST_SRCS),$(subst $(TEST_DIR)/test_,-f $(SRC_DIR)/,$(f)))
+.PHONY: covr
+covr: test
+	$(HIDE)gcovr $(BUILD_DIR)/$(TEST) -r $(SRC_DIR) -s $(TEST_COVR_FILTER)
 
 .PHONY: docs
 docs: | $(DOC_DIR)/Doxyfile
