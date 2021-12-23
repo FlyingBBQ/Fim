@@ -45,13 +45,13 @@ map_set_tile_type(Tiles * tile)
 static void
 map_generate_xy(Map * map)
 {
-        int const map_size = (int)map->map_size;
+        size_t const map_size = map->map_size;
         Tiles ** tiles = map->tiles;
         int clip_x = 0;
         int clip_y = 0;
 
-        for (int x = 0; x < map_size; ++x) {
-                for (int y = 0; y < map_size; ++y) {
+        for (size_t x = 0; x < map_size; ++x) {
+                for (size_t y = 0; y < map_size; ++y) {
                         tiles[x][y].x = clip_x;
                         tiles[x][y].y = clip_y;
                         clip_y += TILE_SIZE;
