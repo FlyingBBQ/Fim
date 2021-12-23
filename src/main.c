@@ -50,10 +50,14 @@ main(void)
                 if (player_is_alive()) {
                         levels_solved++;
                         LOG_INFO("[%i] levels solved!", levels_solved);
-                        if (nr_of_maps < 4) nr_of_maps++;
+                        if (nr_of_maps < 4) {
+                                nr_of_maps++;
+                        }
                 } else {
                         LOG_INFO("You lost.");
-                        if (nr_of_maps > 1) nr_of_maps--;
+                        if (nr_of_maps > 1) {
+                                nr_of_maps--;
+                        }
                 }
         }
         exit(0);

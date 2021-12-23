@@ -15,7 +15,7 @@ gfx_load_image(void)
         SDL_Surface * loaded_image = IMG_Load(image_name);
         if (loaded_image == NULL) {
                 LOG_ERROR("Unable to load image %s SDL_image error: %s", image_name,
-                       IMG_GetError());
+                          IMG_GetError());
         }
 
         // Color key the image.

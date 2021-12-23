@@ -9,13 +9,9 @@ static LogLevel g_log_level = L_INFO;
 static char const *
 log_level_to_string(LogLevel level)
 {
-    const char * log_level_names[] = {
-            "DEBUG",
-            "INFO",
-            "ERROR"
-    };
-    assert(level < sizeof(log_level_names));
-    return log_level_names[level];
+        const char * log_level_names[] = {"DEBUG", "INFO", "ERROR"};
+        assert(level < sizeof(log_level_names));
+        return log_level_names[level];
 }
 
 void
