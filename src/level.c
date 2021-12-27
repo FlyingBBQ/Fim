@@ -76,7 +76,9 @@ create_maps(size_t const nr_of_maps, size_t const map_size,
                 do {
                         maps[i] = map_new(map_size, solution[0], offset);
                         if (maps[i] != NULL) {
-                                solvable = solver_run(maps[i], solution, solution_size);
+                                solver_solve_map(maps[i], solution, solution_size);
+                                map_generate_random_obstacles(maps[i], (int)solution_size);
+                                solvable = solver_is_solvable(*maps[i], solution, solution_size);
                         }
                         if (!solvable) {
                                 map_clean(maps[i]);

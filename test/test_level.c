@@ -33,8 +33,8 @@ test_level_is_finished(void ** state)
 
         // Test finished map.
         test_level = level_new(8, 1, 32);
-        test_level->maps[0]->finished = true;
         if (test_level != NULL) {
+                test_level->maps[0]->finished = true;
                 assert_true(level_is_finished(test_level));
                 level_clean(test_level);
         }
@@ -56,8 +56,8 @@ test_level_is_finished(void ** state)
 
         // Test player quitting.
         test_level = level_new(4, 1, 10);
-        player_quit_game();
         if (test_level != NULL) {
+                player_quit_game();
                 assert_true(level_is_finished(test_level));
                 level_clean(test_level);
         }
