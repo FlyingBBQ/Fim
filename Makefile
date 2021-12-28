@@ -3,76 +3,87 @@
 # Author: FlyingBBQ
 #
 
-EXE  = fim
-LIB  = $(addprefix lib, $(addsuffix .a, $(EXE)))
-TEST = $(addsuffix _test, $(EXE))
+# Targets:
+EXE    = fim
+TEST   = $(addsuffix _test, $(EXE))
+TARGET = $(EXE) $(TEST)
 
-CC = gcc -std=c99
+# Compile and linker flags:
+CC   = gcc -std=c17
 OPT ?= -O2
-CFLAGS = -Wall -Werror -Wextra -Wshadow -Wundef -Wconversion -Wpedantic \
-		 -Wformat=2 -Wnull-dereference -Wlogical-op \
-		 $(OPT) -MMD -MP
+
+CCFLAGS = $(OPT) -MMD -MP
+CCFLAGS += -Wall -Wextra -Wpedantic
+CCFLAGS += -Wshadow -Wformat=2 -Wconversion
+CCFLAGS += -Wmissing-include-dirs
+CCFLAGS += -Werror
 LFLAGS := $(shell sdl2-config --libs) -lSDL2_image
-TFLAGS := -lcmocka
 
-SRCDIR   = src
-DOCDIR   = docs
-TESTDIR  = test
-BUILDIR ?= build
+# Directories:
+BUILD_DIR ?= build
+SRC_DIR    = src
+TEST_DIR   = test
+DOC_DIR    = docs
 
-SRCS = $(wildcard $(SRCDIR)/*.c)
-OBJS = $(SRCS:%.c=$(BUILDIR)/%.o)
-TEST_SRCS = $(wildcard $(TESTDIR)/*.c)
-TEST_OBJS = $(TEST_SRCS:%.c=$(BUILDIR)/%.o)
+# Define the sources that are used for the targets.
+$(EXE)_SRCS = $(wildcard $(SRC_DIR)/*.c)
 
-DEPS = $(OBJS:.o=.d)
+FILTER = %main.c
+$(TEST)_SRCS = $(filter-out $(FILTER),$($(EXE)_SRCS))
+$(TEST)_SRCS += $(wildcard $(TEST_DIR)/*.c)
 
-MAKEFLAGS := --jobs=$(shell nproc)
+# Include makefile with functions to create target rules.
+include target.mk
 
-mkdir_check = $(if $(wildcard $(@D)),,mkdir -p $(@D))
+# Invoke the function to create all targets.
+$(foreach t,$(TARGET),$(eval $(call create_target,$(t))))
 
-$(BUILDIR)/$(EXE): $(BUILDIR)/$(LIB)
-	$(CC) $(filter %main.o, $(OBJS)) -o $@ -L$(BUILDIR) -l$(EXE) $(LFLAGS)
+# Add dependencies and custom compiler/linker flags for each target.
+$(EXE): $(EXE)_T
 
-$(BUILDIR)/$(LIB): $(OBJS)
-	$(AR) rcs $@ $(filter-out %main.o, $(OBJS))
+$(TEST): OPT = -O0 -g
+$(TEST): CCFLAGS += -Wno-unused-parameter
+$(TEST): CCFLAGS += -DUNIT_TESTING
+$(TEST): CCFLAGS += --coverage
+$(TEST): LFLAGS  += --coverage
+$(TEST): LFLAGS  += -lcmocka
+$(TEST): $(TEST)_T
 
-$(BUILDIR)/$(TEST): $(TEST_OBJS)
-	$(CC) $(TEST_OBJS) -o $@ $(TFLAGS)
+# Set de default goal.
+.DEFAULT_GOAL := $(EXE)
 
-$(BUILDIR)/%.o: %.c
-	$(mkdir_check)
-	$(CC) $(CFLAGS) -c $< -o $@
+# Define custom targets:
+.PHONY: all
+all: $(TARGET)
 
--include $(DEPS)
+.PHONY: test
+test: $(TEST)
+	./$(TEST)
 
-.PHONY: clean run test docs covr format release
-
+.PHONY: clean
 clean:
-	rm -rf $(BUILDIR)
+	rm -rf $(BUILD_DIR)
+	rm -f $(EXE)
+	rm -f $(TEST)
 
-run: $(BUILDIR)/$(EXE)
-	./$(BUILDIR)/$(EXE)
+# Report coverage for the files that have unit tests.
+TEST_SRCS = $(filter-out %main.c,$(wildcard $(TEST_DIR)/*.c))
+TEST_COVR_FILTER = $(foreach f,$(TEST_SRCS),$(subst $(TEST_DIR)/test_,-f $(SRC_DIR)/,$(f)))
+.PHONY: covr
+covr: $(TEST)
+	$(HIDE)./$(TEST) 1>/dev/null && \
+		gcovr $(BUILD_DIR)/$(TEST) -r $(SRC_DIR) -s $(TEST_COVR_FILTER)
 
-build_test: OPT = -O0
-build_test: CFLAGS += -ftest-coverage -fprofile-arcs -Wno-unused-parameter
-build_test: LFLAGS += -lgcov
-build_test: TFLAGS += -lgcov
-build_test: $(BUILDIR)/$(TEST)
+.PHONY: docs
+docs: | $(DOC_DIR)/Doxyfile
+	doxygen $(DOC_DIR)/Doxyfile
 
-test: build_test
-	./$(BUILDIR)/$(TEST)
-
-docs: | $(DOCDIR)/Doxyfile
-	doxygen $(DOCDIR)/Doxyfile
-
-covr: build_test
-	./$(BUILDIR)/$(TEST) > /dev/null
-	gcovr $(BUILDIR)/$(TESTDIR) -r $(SRCDIR)
-
+.PHONY: format
 format:
-	astyle --project=astylerc $(SRCDIR)/*.c $(SRCDIR)/*.h $(TESTDIR)/*.c
+	$(HIDE)astyle --project=astylerc $(SRC_DIR)/*.c $(SRC_DIR)/*.h $(TEST_DIR)/*.c
 
+.PHONY: release
 release: covr
-	CMOCKA_XML_FILE=$(BUILDIR)/%g.xml CMOCKA_MESSAGE_OUTPUT=xml ./$(BUILDIR)/$(TEST)
-	gcovr $(BUILDIR)/$(TESTDIR) -r $(SRCDIR) --html-details -o $(BUILDIR)/test.html
+	$(HIDE)CMOCKA_XML_FILE=$(BUILD_DIR)/%g.xml CMOCKA_MESSAGE_OUTPUT=xml ./$(TEST)
+	$(HIDE)gcovr $(BUILD_DIR)/$(TEST) -r $(SRC_DIR) $(TEST_COVR_FILTER) \
+		--html-details -o $(BUILD_DIR)/$(TEST).html

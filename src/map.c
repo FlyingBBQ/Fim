@@ -1,5 +1,7 @@
 #include "map.h"
 
+#include "log.h"
+#include "mem_leak_test.h"
 #include <stdbool.h>
 #include <stddef.h>
 
@@ -44,13 +46,13 @@ map_set_tile_type(Tiles * tile)
 static void
 map_generate_xy(Map * map)
 {
-        int const map_size = (int)map->map_size;
+        size_t const map_size = map->map_size;
         Tiles ** tiles = map->tiles;
         int clip_x = 0;
         int clip_y = 0;
 
-        for (int x = 0; x < map_size; ++x) {
-                for (int y = 0; y < map_size; ++y) {
+        for (size_t x = 0; x < map_size; ++x) {
+                for (size_t y = 0; y < map_size; ++y) {
                         tiles[x][y].x = clip_x;
                         tiles[x][y].y = clip_y;
                         clip_y += TILE_SIZE;
@@ -66,13 +68,13 @@ map_set_finish_tile(Map * map, Direction const finish_dir)
         int const map_size = (int)map->map_size;
         int finish_pos = rand() % map_size;
 
-        /* Check if the first position in the solution is odd */
+        // Check if the first position in the solution is odd.
         if (finish_dir & 1u) {
-                /* east || west */
+                // east || west
                 map->player.x = (EAST == finish_dir) ? (map_size - 1) : 0;
                 map->player.y = finish_pos;
         } else {
-                /* north || south */
+                // north || south
                 map->player.y = (NORTH == finish_dir) ? 0 : (map_size - 1);
                 map->player.x = finish_pos;
         }
@@ -131,7 +133,7 @@ map_new(size_t const map_size, Direction const finish_dir, Pos const offset)
 {
         Map * map = malloc(sizeof(Map));
         if (map == NULL) {
-                puts("Failed to allocate memory for map");
+                LOG_ERROR("Failed to allocate memory for map");
                 return NULL;
         }
         memset(map, 0, sizeof(Map));
@@ -140,7 +142,7 @@ map_new(size_t const map_size, Direction const finish_dir, Pos const offset)
         map->map_size = map_size;
         map->tiles = tiles_new(map_size);
         if (map->tiles == NULL) {
-                puts("Failed to allocate memory for map tiles");
+                LOG_ERROR("Failed to allocate memory for map tiles");
                 free(map);
                 return NULL;
         }

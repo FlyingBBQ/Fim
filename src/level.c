@@ -1,17 +1,18 @@
 #include "level.h"
 
-#include <assert.h>
+#include "log.h"
+#include "map.h"
+#include "mem_leak_test.h"
+#include "solver.h"
 #include <stdlib.h>
 #include <string.h>
-#include "map.h"
-#include "solver.h"
 
 #define MAX_RETRIES 4
 
 static void
 generate_solution(unsigned int * solution, size_t const solution_size)
 {
-        /* The first direction can be anywhere */
+        // The first direction can be anywhere.
         solution[0] = (unsigned int)rand() % 4u;
         for (unsigned int i = 1; i < solution_size; ++i) {
                 unsigned int r;
@@ -19,7 +20,7 @@ generate_solution(unsigned int * solution, size_t const solution_size)
                 do {
                         r = (unsigned int)rand() % 4;
                         invalid_direction = (r == opposite_direction(solution[i - 1]));
-                        /* Re-roll if an invalid solution is generated */
+                        // Re-roll if an invalid solution is generated.
                 } while (invalid_direction);
                 solution[i] = r;
         }
@@ -62,12 +63,12 @@ static Map **
 create_maps(size_t const nr_of_maps, size_t const map_size,
             unsigned int const * solution, size_t const solution_size)
 {
-        /* Create the array of maps */
+        // Create the array of maps.
         Map ** maps = calloc(nr_of_maps, sizeof(Map *));
         if (maps == NULL) {
                 return NULL;
         }
-        /* Initialize and test each map for solvability */
+        // Initialize and test each map for solvability.
         for (size_t i = 0; i < nr_of_maps; ++i) {
                 bool solvable = false;
                 unsigned int tries = MAX_RETRIES;
@@ -75,7 +76,10 @@ create_maps(size_t const nr_of_maps, size_t const map_size,
                 do {
                         maps[i] = map_new(map_size, solution[0], offset);
                         if (maps[i] != NULL) {
-                                solvable = solver_run(maps[i], solution, solution_size);
+                                solver_solve_map(maps[i], solution, solution_size);
+                                // TODO: able to 'toggle' random obstacles.
+                                map_generate_random_obstacles(maps[i], (int)solution_size);
+                                solvable = solver_is_solvable(*maps[i], solution, solution_size);
                         }
                         if (!solvable) {
                                 map_clean(maps[i]);
@@ -84,10 +88,11 @@ create_maps(size_t const nr_of_maps, size_t const map_size,
                 } while (!solvable && --tries);
 
                 if (tries == 0) {
-                        printf("Failed %i times to solve map %li\n", MAX_RETRIES, i);
+                        LOG_DEBUG("Failed %i times to solve map %li", MAX_RETRIES, i);
                         while (i > 0) {
                                 map_clean(maps[--i]);
                         }
+                        free(maps);
                         maps = NULL;
                         break;
                 }
@@ -101,18 +106,18 @@ level_new(size_t const solution_size, size_t const nr_of_maps,
 {
         Level * level = malloc(sizeof(Level));
         if (level == NULL) {
-                puts("Failed to allocate memory for level");
+                LOG_ERROR("Failed to allocate memory for level");
                 return NULL;
         }
         level->solution = new_solution(solution_size);
         if (level->solution == NULL) {
-                puts("Failed to allocate memory for solution.");
+                LOG_ERROR("Failed to allocate memory for solution.");
                 free(level);
                 return NULL;
         }
         level->maps = create_maps(nr_of_maps, map_size, level->solution, solution_size);
         if (level->maps == NULL) {
-                puts("Failed to create maps.");
+                LOG_DEBUG("Failed to create maps.");
                 free((void *)level->solution);
                 free(level);
                 return NULL;

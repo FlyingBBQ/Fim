@@ -6,8 +6,6 @@
 
 #define SCREEN_WIDTH    528
 #define SCREEN_HEIGHT   528
-//#define SCREEN_WIDTH    (MAP_SIZE * TILE_SIZE)
-//#define SCREEN_HEIGHT   (MAP_SIZE * TILE_SIZE)
 
 void gfx_init(char * title);
 void gfx_cleanup(void);
