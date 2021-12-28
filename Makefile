@@ -70,12 +70,9 @@ clean:
 TEST_SRCS = $(filter-out %main.c,$(wildcard $(TEST_DIR)/*.c))
 TEST_COVR_FILTER = $(foreach f,$(TEST_SRCS),$(subst $(TEST_DIR)/test_,-f $(SRC_DIR)/,$(f)))
 .PHONY: covr
-covr: test
-	$(HIDE)gcovr $(BUILD_DIR)/$(TEST) -r $(SRC_DIR) -s $(TEST_COVR_FILTER)
-
-.PHONY: covr_html
-covr_html: test
-	$(HIDE)gcovr $(BUILD_DIR)/$(TEST) -r $(SRC_DIR) $(TEST_COVR_FILTER) --html-details -o $(BUILD_DIR)/$(TEST).html
+covr: $(TEST)
+	$(HIDE)./$(TEST) 1>/dev/null && \
+		gcovr $(BUILD_DIR)/$(TEST) -r $(SRC_DIR) -s $(TEST_COVR_FILTER)
 
 .PHONY: docs
 docs: | $(DOC_DIR)/Doxyfile
@@ -83,4 +80,10 @@ docs: | $(DOC_DIR)/Doxyfile
 
 .PHONY: format
 format:
-	astyle --project=astylerc $(SRC_DIR)/*.c $(SRC_DIR)/*.h $(TEST_DIR)/*.c
+	$(HIDE)astyle --project=astylerc $(SRC_DIR)/*.c $(SRC_DIR)/*.h $(TEST_DIR)/*.c
+
+.PHONY: release
+release: covr
+	$(HIDE)CMOCKA_XML_FILE=$(BUILD_DIR)/%g.xml CMOCKA_MESSAGE_OUTPUT=xml ./$(TEST)
+	$(HIDE)gcovr $(BUILD_DIR)/$(TEST) -r $(SRC_DIR) $(TEST_COVR_FILTER) \
+		--html-details -o $(BUILD_DIR)/$(TEST).html

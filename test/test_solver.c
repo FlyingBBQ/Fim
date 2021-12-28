@@ -12,7 +12,7 @@ static void
 test_solver_solvable(void ** state)
 {
         // Create a simple solution with a very high probability to be solvable.
-        unsigned int solution[] = {WEST, NORTH, EAST};
+        unsigned int solution[] = {SOUTH, EAST};
         size_t const solution_size = sizeof(solution) / sizeof(unsigned int);
         unsigned int const map_size = 8;
         Pos init_pos = {0};
