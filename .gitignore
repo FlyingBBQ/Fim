@@ -4,3 +4,6 @@ src/*.orig
 test/*.orig
 fim
 fim_test
+
+subprojects/*
+!subprojects/*.wrap
