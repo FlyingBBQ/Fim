@@ -2,6 +2,7 @@ src_game = files([
   'gfx.c',
   'input.c',
   'level.c',
+  'log.c',
   'map.c',
   'move.c',
   'player.c',
