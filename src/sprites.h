@@ -2,10 +2,10 @@
 
 #include "SDL2/SDL.h"
 
-/* texture size per tile */
+// Texture size per tile.
 #define TILE_SIZE 16
 
-/* total sprites taken from single texture */
+// Total sprites taken from single texture.
 #define MAX_SPRITES 4
 
 enum Textures {
