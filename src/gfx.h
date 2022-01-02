@@ -4,13 +4,14 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
-#define SCREEN_WIDTH    528
-#define SCREEN_HEIGHT   528
+#define FONT_SIZE       18
+#define SCREEN_WIDTH    (512 + TILE_SIZE)
+#define SCREEN_HEIGHT   (SCREEN_WIDTH + FONT_SIZE)
 
 void gfx_init(char * title);
 void gfx_cleanup(void);
-void gfx_render(int x, int y, SDL_Rect * clip);
-void gfx_render_player(Map * map);
+void gfx_draw_player(Map * map);
+void gfx_draw_map(Map * map);
+void gfx_draw_text(char * text, int x, int y);
 SDL_Renderer * gfx_get_renderer(void);
-void gfx_draw(Map * map);
 

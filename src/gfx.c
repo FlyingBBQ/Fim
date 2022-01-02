@@ -7,7 +7,6 @@
 
 // Can hold an entire ASCII table of font glyphs.
 #define NUM_GLYPHS 128
-#define FONT_SIZE 10
 #define FONT_TEXTURE_SIZE (NUM_GLYPHS * (FONT_SIZE / 2))
 
 static SDL_Texture * g_sprite_map;
@@ -155,18 +154,20 @@ gfx_cleanup(void)
         SDL_DestroyRenderer(g_renderer);
         SDL_DestroyWindow(g_window);
         SDL_DestroyTexture(g_sprite_map);
+        SDL_DestroyTexture(g_font_map);
 
         g_renderer = NULL;
         g_window = NULL;
         g_sprite_map = NULL;
+        g_font_map = NULL;
 
         TTF_Quit();
         IMG_Quit();
         SDL_Quit();
 }
 
-void
-gfx_render(int x, int y, SDL_Rect * clip)
+static void
+gfx_render(int x, int y, SDL_Texture * texture, SDL_Rect * clip)
 {
         assert(clip != NULL);
 
@@ -178,26 +179,21 @@ gfx_render(int x, int y, SDL_Rect * clip)
         };
         // Render function to put texture (clip) from the spritemap at
         // position (dest) on the screen (renderer).
-        SDL_RenderCopy(g_renderer, g_sprite_map, clip, &dest);
+        SDL_RenderCopy(g_renderer, texture, clip, &dest);
 }
 
 void
-gfx_render_player(Map * map)
+gfx_draw_player(Map * map)
 {
         // Multiply with tilesize to move a tile instead of pixel.
         gfx_render((map->player.x * TILE_SIZE) + map->offset.x,
                    (map->player.y * TILE_SIZE) + map->offset.y,
+                   g_sprite_map,
                    &sprite_clips[TEX_sprite]);
 }
 
-SDL_Renderer *
-gfx_get_renderer(void)
-{
-        return g_renderer;
-}
-
 void
-gfx_draw(Map * map)
+gfx_draw_map(Map * map)
 {
         // Loop through all tiles and draw them.
         for (size_t x = 0; x < map->map_size; x++) {
@@ -205,7 +201,28 @@ gfx_draw(Map * map)
                         map_set_tile_type(&map->tiles[x][y]);
                         gfx_render(map->tiles[x][y].x + map->offset.x,
                                    map->tiles[x][y].y + map->offset.y,
+                                   g_sprite_map,
                                    &sprite_clips[map->tiles[x][y].type]);
                 }
         }
+}
+
+void
+gfx_draw_text(char * text, int x, int y)
+{
+        int i = 0;
+        char character = text[i++];
+
+        while (character) {
+                SDL_Rect * glyph = &g_font_glyphs[(int)character];
+                gfx_render(x, y, g_font_map, glyph);
+                x += glyph->w;
+                character = text[i++];
+        }
+}
+
+SDL_Renderer *
+gfx_get_renderer(void)
+{
+        return g_renderer;
 }

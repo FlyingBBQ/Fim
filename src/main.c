@@ -2,6 +2,7 @@
 #include "input.h"
 #include "level.h"
 #include "log.h"
+#include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 
@@ -12,6 +13,7 @@ main(void)
         size_t nr_of_maps = 1;
         size_t solution_size = 8;
         size_t map_size = 16;
+        char game_status[128];
 
         // Start up SDL.
         gfx_init("Fim the game");
@@ -29,15 +31,19 @@ main(void)
                         player_init();
                         LOG_INFO("=== New Level ===");
                 }
+                sprintf(game_status,
+                        "Stage: %lu        Moves: %lu        Solved: %i",
+                        nr_of_maps, solution_size, levels_solved);
                 while (!level_is_finished(level)) {
                         // Get the player's input and process it in all maps.
                         input_get(level->maps, level->nr_of_maps);
 
                         SDL_RenderClear(gfx_get_renderer());
                         for (size_t i = 0; i < nr_of_maps; ++i) {
-                                gfx_draw(level->maps[i]);
-                                gfx_render_player(level->maps[i]);
+                                gfx_draw_map(level->maps[i]);
+                                gfx_draw_player(level->maps[i]);
                         }
+                        gfx_draw_text(game_status, 128, SCREEN_WIDTH);
                         SDL_RenderPresent(gfx_get_renderer());
 
                         // Sleep briefly to stop sucking up all the CPU time.
