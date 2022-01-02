@@ -22,11 +22,11 @@ c_flags = [
 subdir('src')
 subdir('test')
 
-sdl2_dep = [dependency('sdl2'), dependency('sdl2_image')] 
+sdl2_dep = [dependency('sdl2'), dependency('sdl2_image'), dependency('sdl2_ttf')] 
 cmocka_dep = [dependency('cmocka')]
 
 # This only runs at configuration.
-run_command('bash', '-c', 'cp -r $MESON_SOURCE_ROOT/gfx $MESON_BUILD_ROOT/gfx')
+run_command('bash', '-c', 'cp -r $MESON_SOURCE_ROOT/assets $MESON_BUILD_ROOT/assets')
 
 executable('fim',
   [src_game, src_main],

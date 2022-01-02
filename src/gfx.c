@@ -2,19 +2,30 @@
 
 #include "log.h"
 #include <assert.h>
+#include <SDL2/SDL_pixels.h>
+#include <SDL2/SDL_ttf.h>
 
-static SDL_Texture * spritemap;
-static SDL_Window * window;
-static SDL_Renderer * renderer;
-static char * image_name = "gfx/sprite.png";
+// Can hold an entire ASCII table of font glyphs.
+#define NUM_GLYPHS 128
+#define FONT_SIZE 10
+#define FONT_TEXTURE_SIZE (NUM_GLYPHS * (FONT_SIZE / 2))
+
+static SDL_Texture * g_sprite_map;
+static SDL_Texture * g_font_map;
+static SDL_Window * g_window;
+static SDL_Renderer * g_renderer;
+static SDL_Rect g_font_glyphs[NUM_GLYPHS];
+static TTF_Font * g_font;
+static char * g_image_name = "assets/gfx/sprite.png";
+static char * g_font_name = "assets/fonts/DS-DIGI.TTF";
 
 static void
 gfx_load_image(void)
 {
         // Load the image.
-        SDL_Surface * loaded_image = IMG_Load(image_name);
+        SDL_Surface * loaded_image = IMG_Load(g_image_name);
         if (loaded_image == NULL) {
-                LOG_ERROR("Unable to load image %s SDL_image error: %s", image_name,
+                LOG_ERROR("Unable to load image %s SDL_image error: %s", g_image_name,
                           IMG_GetError());
         }
 
@@ -23,8 +34,8 @@ gfx_load_image(void)
                         0));
 
         // Create texture from surface pixels.
-        spritemap = SDL_CreateTextureFromSurface(renderer, loaded_image);
-        if (spritemap == NULL) {
+        g_sprite_map = SDL_CreateTextureFromSurface(g_renderer, loaded_image);
+        if (g_sprite_map == NULL) {
                 LOG_ERROR("Couldn't create texture %s", SDL_GetError());
         }
 
@@ -33,6 +44,60 @@ gfx_load_image(void)
 
         // Remove old loaded surface.
         SDL_FreeSurface(loaded_image);
+}
+
+static void
+gfx_load_font(void)
+{
+        SDL_Color white = {.r = 0xff, .g = 0xff, .b = 0xff, .a = 0xff};
+        memset(g_font_glyphs, 0, sizeof(SDL_Rect) * NUM_GLYPHS);
+
+        g_font = TTF_OpenFont(g_font_name, FONT_SIZE);
+        if (g_font == NULL) {
+                LOG_ERROR("Unable to open font %s", g_font_name);
+        }
+
+        // Create the surface to draw the glyphs on.
+        SDL_Surface * rgb_surface = SDL_CreateRGBSurface(0, FONT_TEXTURE_SIZE,
+                                    FONT_SIZE, 32, 0, 0, 0, 0xff);
+        uint32_t rgb_map = SDL_MapRGBA(rgb_surface->format, 0, 0, 0, 0);
+        SDL_SetColorKey(rgb_surface, SDL_TRUE, rgb_map);
+
+        SDL_Rect dest;
+        dest.x = dest.y = 0;
+        for (char i = ' ' ; i <= 'z' ; i++) {
+                char c[2];
+                c[0] = i; // ASCII character.
+                c[1] = 0; // Zero terminator.
+
+                // Render the font to a surface and get the size.
+                SDL_Surface * text = TTF_RenderUTF8_Blended(g_font, c, white);
+                TTF_SizeText(g_font, c, &dest.w, &dest.h);
+
+                // Check if the next character fits in the font texture.
+                if (dest.x + dest.w >= FONT_TEXTURE_SIZE) {
+                        LOG_ERROR("Out of glyph space %i", FONT_TEXTURE_SIZE);
+                        exit(1);
+                }
+
+                SDL_BlitSurface(text, NULL, rgb_surface, &dest);
+                SDL_Rect * glyph = &g_font_glyphs[(int)i];
+                glyph->x = dest.x;
+                glyph->y = dest.y;
+                glyph->w = dest.w;
+                glyph->h = dest.h;
+                SDL_FreeSurface(text);
+
+                // Increment the texture x pos with the character width.
+                dest.x += dest.w;
+        }
+        LOG_DEBUG("Font texture usage %i of %i", dest.x, FONT_TEXTURE_SIZE);
+
+        g_font_map = SDL_CreateTextureFromSurface(g_renderer, rgb_surface);
+        if (g_font_map == NULL) {
+                LOG_ERROR("Couldn't create texture %s", SDL_GetError());
+        }
+        SDL_FreeSurface(rgb_surface);
 }
 
 void
@@ -45,12 +110,12 @@ gfx_init(char * title)
         }
 
         // Open a 640 x 480 screen.
-        window = SDL_CreateWindow(title,
-                                  SDL_WINDOWPOS_UNDEFINED,
-                                  SDL_WINDOWPOS_UNDEFINED,
-                                  SCREEN_WIDTH, SCREEN_HEIGHT,
-                                  SDL_WINDOW_SHOWN);
-        if (window == NULL) {
+        g_window = SDL_CreateWindow(title,
+                                    SDL_WINDOWPOS_UNDEFINED,
+                                    SDL_WINDOWPOS_UNDEFINED,
+                                    SCREEN_WIDTH, SCREEN_HEIGHT,
+                                    SDL_WINDOW_SHOWN);
+        if (g_window == NULL) {
                 LOG_ERROR("Couldn't create window: %s", SDL_GetError());
                 exit(1);
         }
@@ -62,31 +127,40 @@ gfx_init(char * title)
                 exit(1);
         }
 
+        // Initialize font loading.
+        if (TTF_Init() < 0) {
+                LOG_ERROR("Couldn't initialize SDL TTF: %s", SDL_GetError());
+                exit(1);
+        }
+
         // Initialze renderer.
         unsigned int rndrFlag = SDL_RENDERER_ACCELERATED;
-        renderer = SDL_CreateRenderer(window, -1, rndrFlag);
-        if (renderer == NULL) {
+        g_renderer = SDL_CreateRenderer(g_window, -1, rndrFlag);
+        if (g_renderer == NULL) {
                 LOG_ERROR("Window could not be rendered %s", SDL_GetError());
                 exit(1);
         }
-        SDL_SetRenderDrawColor(renderer, 10, 10, 10, 255);
+        SDL_SetRenderDrawColor(g_renderer, 10, 10, 10, 255);
 
         // Load the image containing all the sprites.
         gfx_load_image();
+        // Load the font for text.
+        gfx_load_font();
 }
 
 void
 gfx_cleanup(void)
 {
         // Shut down SDL.
-        SDL_DestroyRenderer(renderer);
-        SDL_DestroyWindow(window);
-        SDL_DestroyTexture(spritemap);
+        SDL_DestroyRenderer(g_renderer);
+        SDL_DestroyWindow(g_window);
+        SDL_DestroyTexture(g_sprite_map);
 
-        renderer = NULL;
-        window = NULL;
-        spritemap = NULL;
+        g_renderer = NULL;
+        g_window = NULL;
+        g_sprite_map = NULL;
 
+        TTF_Quit();
         IMG_Quit();
         SDL_Quit();
 }
@@ -104,7 +178,7 @@ gfx_render(int x, int y, SDL_Rect * clip)
         };
         // Render function to put texture (clip) from the spritemap at
         // position (dest) on the screen (renderer).
-        SDL_RenderCopy(renderer, spritemap, clip, &dest);
+        SDL_RenderCopy(g_renderer, g_sprite_map, clip, &dest);
 }
 
 void
@@ -119,7 +193,7 @@ gfx_render_player(Map * map)
 SDL_Renderer *
 gfx_get_renderer(void)
 {
-        return renderer;
+        return g_renderer;
 }
 
 void

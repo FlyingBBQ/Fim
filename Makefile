@@ -17,7 +17,7 @@ CCFLAGS += -Wall -Wextra -Wpedantic
 CCFLAGS += -Wshadow -Wformat=2 -Wconversion
 CCFLAGS += -Wmissing-include-dirs
 CCFLAGS += -Werror
-LFLAGS := $(shell sdl2-config --libs) -lSDL2_image
+LFLAGS := $(shell sdl2-config --libs) -lSDL2_image -lSDL2_ttf
 
 # Directories:
 BUILD_DIR ?= build
